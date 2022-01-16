@@ -3,9 +3,8 @@ title:               Proof
 tagline:             a Jekyll Theme for Mathematical Writings
 description:         >- # this means to ignore newlines until "url:"
   Proof is a minimal Jekyll theme for collaborating and documenting mathematics.
-url:                 https://mahrud.github.io
-baseurl:             '/proof' # the subpath of your site, e.g. /blog
-gtag:                UA-131373039-2 # Google Analytics Tag
+url:                 https://chinmayhegde.github.io
+baseurl:             '/fodl' # the subpath of your site, e.g. /blog
 
 # Color scheme. Options: red, orange, magenta, cyan, blue, brown
 color-scheme:
