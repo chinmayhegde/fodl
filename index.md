@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Proof
+title: Foundations of Deep Learning
 ---
 
 # hi.
