@@ -1,13 +1,13 @@
 # Setup
 title:               Foundations of Deep Learning
-tagline:             a Jekyll Theme for Mathematical Writings
+tagline:             NYU Tandon, Spring 2022
 description:         >- # this means to ignore newlines until "url:"
   Proof is a minimal Jekyll theme for collaborating and documenting mathematics.
 url:                 https://chinmayhegde.github.io
 baseurl:             '/fodl' # the subpath of your site, e.g. /blog
 
 # Color scheme. Options: red, orange, magenta, cyan, blue, brown
-color-scheme:
+color-scheme: blue
 
 # Permalinks
 permalink: pretty
