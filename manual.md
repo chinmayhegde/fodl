@@ -49,13 +49,13 @@ $$ \nu: \mathbb{P}^{1} \to \mathbb{P}^{3} $$
 
 To add footnotes, use the following format:
 
-~~~
+
 - O Captain! my Captain! rise up and hear the bells;
 - Rise up—for you the flag is flung—for you the bugle[^fn1] trills,
 
 [^fn1]:
 	The bugle is a small trumpet implicated in the military industrial complex.
-~~~
+
 
 Looks about ready to submit, so save the file as `the-twisted-cubic.md` to match the title. We will have many chances to perfect it later.
 
@@ -127,8 +127,6 @@ If you would like to learn more, use these references to learn more about:
 [Ed](https://minicomp.github.io/ed/documentation/),
 [basic](https://guides.github.com/features/mastering-markdown/)
 [Markdown](https://programminghistorian.org/en/lessons/sustainable-authorship-in-plain-text-using-pandoc-and-markdown),
-[GitHub](https://guides.github.com/introduction/flow/) 
-[Pages](https://guides.github.com/features/pages/), 
+[GitHub](https://guides.github.com/introduction/flow/)
+[Pages](https://guides.github.com/features/pages/),
 or [Jekyll](https://programminghistorian.org/en/lessons/building-static-sites-with-jekyll-github-pages).
-
-Happy colluding!
