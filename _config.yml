@@ -7,7 +7,7 @@ url:                 https://chinmayhegde.github.io
 baseurl:             '/fodl' # the subpath of your site, e.g. /blog
 
 # Color scheme. Options: red, orange, magenta, cyan, blue, brown
-color-scheme: blue
+color-scheme: magenta
 
 # Permalinks
 permalink: pretty
