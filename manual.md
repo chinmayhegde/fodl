@@ -6,11 +6,11 @@ toc: [background, write, review, publish]
 repository: https://github.com/mahrud/proof
 ---
 
-This manual is based on a documentation written by [Alex Gil](http://laic.columbia.edu/author/2728293031/) with beginners in mind, but has the necessary information for more seasoned conspirators. We will walk through writing a sample blog post titled *The Twisted Cubic*.
+This manual is based on a documentation written by [Alex Gil](http://laic.columbia.edu/author/2728293031/) with beginners in mind.
 
 ## Background
 
-The {{ site.title }} is backed by [Jekyll](https://jekyllrb.com/), the static site generator, and uses the minimal [Ed](https://github.com/minicomp/ed) theme and [$$\KaTeX$$](https://katex.org) for displaying math. The content of the site is hosted on its own GitHub [repository]({{ page.repository }}), so in order to collude you will need a GitHub account. While this process is a bit more involved than Wordpress and other similar tools, the payoff in the long term is worth the effort to learn it.
+The {{ site.title }} site is backed by [Jekyll](https://jekyllrb.com/), the static site generator, and uses the minimal [Ed](https://github.com/minicomp/ed) theme and [$$\KaTeX$$](https://katex.org) for displaying math. The content of the site is hosted on its own GitHub [repository]({{ page.repository }}), so in order to collude you will need a GitHub account. While this process is a bit more involved than Wordpress and other similar tools, the payoff in the long term is worth the effort to learn it.
 
 ---
 
