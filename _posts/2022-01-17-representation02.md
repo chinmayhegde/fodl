@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Universal approximation
+title: Universal approximation theorems
 categories: representation
 date: 2022-01-17
 ---

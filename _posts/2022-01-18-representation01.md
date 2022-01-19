@@ -1,12 +1,11 @@
 ---
 layout: page
-title: Memorization
+title: Memorization capacity
 categories: representation
 date: 2022-01-18
 ---
 
 
-**Under construction**.
 
 ## Basics
 

@@ -8,9 +8,9 @@ date: 2022-01-19
 
 Our goal is to reason about (deep) neural networks from the lens of *theory*.
 
-Unlike many other scientific fields, there currently exists a wide gap between what the best available tools in theoretical computer science can tell us about modern neural networks, and the actual ways in which modern neural network models work in practice. This gap between theory and practice can be unsatisfactory.
+Unlike many other scientific fields, there currently exists a wide gap between what the best available tools in theoretical computer science can tell us about modern neural networks, and the actual ways in which modern neural network models work in practice. This gap between theory and practice is, in my view, unsatisfactory. Yann LeCun invokes the ["streetlight effect"](https://www.youtube.com/watch?v=gG5NCkMerHU&t=3210s): we search for lost keys where we can, not where they really lie.
 
-By asking carefully crafted (but precise) questions, the hope is that one can shed light on why certain aspects of neural networks work (or don't), and what is in the realm of the possible (versus what isn't). A major motivation behind these course notes is to identify the landscape of how wide exactly these gaps are at present, and how to bridge them.
+Here is why theory matters: by asking carefully crafted (but precise) questions about deep networks, one can precisely answer why certain aspects of neural networks work (or don't), and what is in the realm of the possible (versus what isn't). A major motivation behind these course notes is to identify the landscape of how wide exactly these gaps are at present, and how to bridge them.
 
 These notes are by no means the first attempt to do so. Other excellent courses/lecture notes/surveys include:
 
