@@ -97,9 +97,9 @@ is small then $R$ and $\hat{R}$ are not too different for $\hat{f}$. In other wo
 ## Outline
 {:.label}
 
-The above narrative is all rather classical, and can be found in any introductory text on statistical machine learning. For simple cases (such as linear models) fairly precise bounds can be derived for all three quantities.   
+The above narrative is all very classical and can be found in any introductory text on statistical machine learning. For simple cases (such as linear models), good bounds can be derived for all three quantities.   
 
-The main difference lies in how we address these questions in the context of deep learning. Somewhat troublingly, clean answers to each of the above foundational problems do not seem to (yet) exist for deep neural network models. It is likely that these problems cannot be studied in isolation, and that positive answers to these problems interact in mysterious ways[^fn2].
+For us, the main difference lies in how we address these questions in the context of deep learning. Somewhat troublingly, clean answers to each of the above foundational problems do not seem to (yet) exist for deep neural network models. It is likely that these problems cannot be studied in isolation, and that theoretical results on these problems interact in mysterious ways[^fn2].
 
 Still, for the purposes of organizing the existing literature with some degree of coherence, we will follow this classical narrative. Within the context of (deep) neural network learning, we will cover:
 
@@ -109,9 +109,7 @@ Still, for the purposes of organizing the existing literature with some degree o
 
 * **Generalization**: We will study ways to obtain bounds on the number of training examples required to achieve low generalization error. In many cases, some existing techniques from classical learning theory may lead to vacuous bounds, while other techniques are more successful; our focus will be to get **non-vacuous** generalization guarantees. We will also study **double-descent** phenomena that reveal a curious relationships between the number of parameters and the generalization error.  
 
-And finally, to round things off, we will cover:
-
-* **Miscellaneous** topics: We will look at other aspects of neural networks of relevance to practice beyond just achieving good prediction. Questions surrounding the **robustness** of neural networks have already emerged. Issues such as **privacy and security** of data/models are paramount. Beyond just label prediction, neural networks are increasingly being used to solve more challenging tasks, including  **synthesis and generation** of new examples.
+* **Miscellaneous** topics:  And finally, to round things off, we will analyze other aspects of neural networks of relevance to practice beyond just achieving good prediction. Questions surrounding the **robustness** of neural networks have already emerged. Issues such as **privacy and security** of data/models are paramount. Beyond just label prediction, neural networks are increasingly being used to solve more challenging tasks, including  **synthesis and generation** of new examples.
 
 ---
 
