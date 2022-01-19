@@ -26,7 +26,7 @@ As typical in (supervised) machine learning, our starting point is a list of $n$
 \\[ X = \{(x_i, y_i)\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R} \\]
 which we will call the *training set*. This dataset is assumed to acquired via *iid sampling* with respect to some underlying probability measure $\mu$ defined over $\mathbb{R}^d \times \mathbb{R}$.
 
-Our goal will be to *predict* the label $y \in \mathbb{R}$ associated with some (hitherto unseen) data point $x \in \mathbb{R}^d$. In order to do so, we will seek a prediction function $f$ that can be expressed as a *neural network*. We will be more precise about how we define neural networks later on, but the familiar [picture](https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Neural_network_example.svg/640px-Neural_network_example.svg.png) is appropriate for now. The key point is that we want an $f$ that performs "well" on "most" input data points.
+Our goal will be to *predict* the label $y \in \mathbb{R}$ associated with some (hitherto unseen) data point $x \in \mathbb{R}^d$. In order to do so, we will seek a prediction function $f$ that can be expressed as a *neural network*. Later we will more precisely define neural networks, but the familiar [picture](https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Neural_network_example.svg/640px-Neural_network_example.svg.png) is appropriate for now. The key point is that we want an $f$ that performs "well" on "most" input data points.
 
 Let us first agree to measure "goodness" of performance via a two-argument loss function
 
