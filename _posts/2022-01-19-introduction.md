@@ -5,9 +5,9 @@ categories: intro
 date: 2022-01-19
 ---
 
-Our goal is to learn to reason about (deep) neural networks from the lens of *theory*.
+Our goal is to reason about (deep) neural networks from the lens of *theory*.
 
-Unlike many other scientific fields, there currently exists a *very* wide gap between what the best available tools in theoretical computer science can tell us about modern neural networks, and the actual ways in which modern neural network models work in practice. This gap between theory and practice can be unsatisfactory.
+Unlike many other scientific fields, there currently exists a wide gap between what the best available tools in theoretical computer science can tell us about modern neural networks, and the actual ways in which modern neural network models work in practice. This gap between theory and practice can be unsatisfactory.
 
 By asking carefully crafted (but precise) questions, the hope is that one can shed light on why certain aspects of neural networks work (or don't), and what is in the realm of the possible (versus what isn't). A major motivation behind these course notes is to identify the landscape of how wide exactly these gaps are at present, and how to bridge them.
 
@@ -25,8 +25,14 @@ As typical in (supervised) machine learning, our starting point is a list of $n$
 \\[ X = \{(x_i, y_i)\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R} \\]
 which we will call the *training set*. This dataset is assumed to acquired via *iid sampling* with respect to some underlying probability measure $\mu$ defined over $\mathbb{R}^d \times \mathbb{R}$.
 
-Our goal will be to *predict* the label $y \in \mathbb{R}$ associated with some (hitherto unseen) data point $x \in \mathbb{R}^d$. In order to do so, we will seek a prediction function $f$ that can be expressed as a *neural network* and that performs "well" on "most" input data points. Let us agree to measure "goodness" of performance via a loss function $l(\cdot,\cdot) : \mathbb{R} \times \mathbb{R} \rightarrow \mathbb{R}_{\geq 0}$ takes in a predicted label and compares with the truth. Then, quantitatively, our prediction function should be such that the population risk:
-\\[ R(f) = \mathbb{E}_{(x,y) \sim \mu} l(y, f(x)) \\]
+Our goal will be to *predict* the label $y \in \mathbb{R}$ associated with some (hitherto unseen) data point $x \in \mathbb{R}^d$. In order to do so, we will seek a prediction function $f$ that can be expressed as a *neural network* and that performs "well" on "most" input data points. Let us agree to measure "goodness" of performance via a loss function
+\\[
+l(\cdot,\cdot) : \mathbb{R} \times \mathbb{R} \rightarrow \mathbb{R}_{\geq 0}
+\\]
+takes in a predicted label and compares with the truth. Then, quantitatively, our prediction function should be such that the population risk:
+\\[
+R(f) = \mathbb{E}_{(x,y) \sim \mu} l(y, f(x))
+\\]
 is small.
 
 This immediately poses a **Major Challenge**, since the population risk $R(f)$ is not an easy object to study. For starters, the probability measure $\mu$ may not be be known. Even if magically $\mu$ is available, calculating the expected value with respect to $\mu$ can be difficult. However, we do have training data lying around. Therefore, instead of directly dealing with $R(f)$, we will instead use a proxy quantity called the *empirical risk*:
@@ -49,6 +55,7 @@ This optimization problem hides yet another **Major Challenge**, tuning weights 
 Let the final result of this training procedure be called $\hat{f}$; this network is what we end up using to perform all future predictions. Our hope is that $\hat{f}$ performs "well" on "most" data points. Quantitatively, we would like to ensure that the population risk
 \\[R(\hat{f}) \\]
 is small. But can we *prove* that this is the case? Again, the classical theory of supervised learning breaks this down into three components:
+
 \\[
 \begin{aligned}
 R(\hat{f}) = &R(\hat{f}) - \hat{R}(\hat{f}) \\
@@ -56,6 +63,7 @@ R(\hat{f}) = &R(\hat{f}) - \hat{R}(\hat{f}) \\
           &+ \hat{R}(f_b) .
 \end{aligned}
 \\]
+
 If all three components are on the right hand side are *provably* small, then we are in the clear. Let us parse these three terms in reverse order.
 
 First, if
