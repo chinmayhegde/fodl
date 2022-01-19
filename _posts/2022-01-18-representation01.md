@@ -27,7 +27,7 @@ But why should memorization be interesting? After all, machine learning folks ar
 
 Unfortunately, deep learning practice throws this classical way of ML thinking out of the window. We seldom use explicit regularizers, instead relying on standard losses. We typically train deep neural networks to achieve 100\% (train) accuracy. Later, we will try to understand why networks trained to *perfectly* interpolate the training data still generalize well, but for now let's focus on just achieving a representation that enables perfect memorization.
 
-## Basics
+### Basics
 
 First, we define what we mean by a "neural network".
 
@@ -53,7 +53,7 @@ $$
 
 Analogously, one can extend this definition to $L$ layers for any $L \geq 1$. The nomenclature is a bit funny sometimes. The above example is either called a "3-layer network" or "2-hidden-layer network"; the output $y$ is considered as its own layer and not considered as "hidden" (and notice that it doesn't have any activation).
 
-## Memorization capacity of shallow networks
+### Memorization capacity of shallow networks
 
 Let us focus our attention on the ability of *two-layer* networks (or one-hidden-layer networks) with ReLU activations to memorize data. That is, if there are $m$ hidden neurons and if $\psi$ is the ReLU then our function $f$ is of the form:
 
@@ -64,13 +64,13 @@ Let us focus our attention on the ability of *two-layer* networks (or one-hidden
 {:.theorem}
 
 **Proof**{:.label}
-  This result seems to be folklore, dating back to at least Baum[^baum] but for modern versions of this proof, see Bach[^bach] or Bubeck et al.[^bubeck1]. 
+  This result seems to be folklore, dating back to at least Baum[^baum] but for modern versions of this proof, see Bach[^bach] or Bubeck et al.[^bubeck1]. **COMPLETE**.
   The result follows.
 {:.proof}
 
-## Optimal capacity bounds
+### Optimal capacity bounds
 
-## Robust interpolation
+### Robust interpolation
 
 ---
 
