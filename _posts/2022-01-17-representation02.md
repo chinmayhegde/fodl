@@ -1,17 +1,14 @@
 ---
 layout: page
-title: Memorization
+title: Universal approximation
 categories: representation
 date: 2022-01-17
 ---
-
 
 **Under construction**.
 
 ## Basics
 
-## Memorization capacity
+## Universal approximation theorems
 
-## Optimal capacity bounds
-
-## Robust interpolation
+## The method of Barron
