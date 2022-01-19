@@ -54,7 +54,9 @@ and seek an $f$ that makes this small.
 macros["\\f"] = "\\mathscr{F}"
 </script>
 
-Now, reducing the empirical risk $\hat{R}(f)$ to as small as possible is akin to function optimization. To make this numerically tractable, we will first cook up a hypothesis class $\f$. In deep learning, this can be thought of as the set of all neural network models that obey a certain architecture[^fn1]. This now poses another **Major Challenge**: what's a good family of architectures? How do we know whether a certain architecture is rich enough to solve our prediction problem? Can it go the other way (i.e., could we somehow pick a network architecture that is far too rich for our purposes?)
+Now, reducing the empirical risk $\hat{R}(f)$ to as small as possible is akin to function optimization. To make this numerically tractable, we will first cook up a hypothesis class $\f$. In deep learning, this can be thought of as the set of all neural network models that obey a certain architecture[^fn1].
+
+But: this approach now poses another **Major Challenge*. What's a good family of architectures? How do we know whether a certain architecture is rich enough to solve our prediction problem? Can it go the other way (i.e., could we somehow pick a network architecture that is far too rich for our purposes?)
 
 Let us set aside such troubling questions for now. Once the network architecture optimization over $\f$ boils down to tuning the weights and biases of $f$ such that $\hat{R}(f)$ is as small as possible. In other words, we will wish to solve for $f_b$, the "best model" in the hypothesis class $\f$:
 
@@ -62,7 +64,7 @@ $$
 f_b = \arg \min_{f \in \f} \hat{R}(f) .
 $$  
 
-This optimization problem hides yet another **Major Challenge**. Tuning weights and biases *to optimality* is extremely difficult, except in the simplest of hypothesis classes (such as linear/affine models). In practice, we never solve this optimization problem, but rather just run some kind of incremental "training" procedure for some number of steps that iteratively decreases $\hat{R}(f)$ until everyone is satisfied. Let us assume that we are somehow able to get a decent answer. Let the final result of this training procedure be called $\hat{f}$.
+Alas, yet another **Major Challenge**. Tuning weights and biases *to optimality* is extremely difficult, except in the simplest of hypothesis classes (such as linear/affine models). In practice, we never solve this optimization problem, but rather just run some kind of incremental "training" procedure for some number of steps that iteratively decreases $\hat{R}(f)$ until everyone is satisfied. Let us assume that we are somehow able to get a decent answer. Let the final result of this training procedure be called $\hat{f}$.
 
 So, to recap: we have introduced two definitions of risk ($R, \hat{R}$), and defined two models ($f_b, \hat{f}$). This final network $\hat{f}$ is what we end up using to perform all future predictions. Our hope is that $\hat{f}$ performs "well" on "most" future data points. Quantitatively, we would like to ensure that the population risk
 \\[R(\hat{f}) \\]
