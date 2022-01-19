@@ -26,17 +26,25 @@ As typical in (supervised) machine learning, our starting point is a list of $n$
 which we will call the *training set*. This dataset is assumed to acquired via *iid sampling* with respect to some underlying probability measure $\mu$ defined over $\mathbb{R}^d \times \mathbb{R}$.
 
 Our goal will be to *predict* the label $y \in \mathbb{R}$ associated with some (hitherto unseen) data point $x \in \mathbb{R}^d$. In order to do so, we will seek a prediction function $f$ that can be expressed as a *neural network* and that performs "well" on "most" input data points. Let us agree to measure "goodness" of performance via a loss function
-\\[
+
+$$
 l(\cdot,\cdot) : \mathbb{R} \times \mathbb{R} \rightarrow \mathbb{R}_{\geq 0}
-\\]
+$$
+
 takes in a predicted label and compares with the truth. Then, quantitatively, our prediction function should be such that the population risk:
-\\[
+
+$$
 R(f) = \mathbb{E}_{(x,y) \sim \mu} l(y, f(x))
-\\]
+$$
+
 is small.
 
 This immediately poses a **Major Challenge**, since the population risk $R(f)$ is not an easy object to study. For starters, the probability measure $\mu$ may not be be known. Even if magically $\mu$ is available, calculating the expected value with respect to $\mu$ can be difficult. However, we do have training data lying around. Therefore, instead of directly dealing with $R(f)$, we will instead use a proxy quantity called the *empirical risk*:
-\\[ \hat{R}(f) = \frac{1}{n} \sum_{i=1}^n l(y_i, f(x_i)) \\]
+
+$$
+\hat{R}(f) = \frac{1}{n} \sum_{i=1}^n l(y_i, f(x_i))
+$$
+
 and seek an $f$ that makes this small.
 
 <script>
@@ -56,13 +64,13 @@ Let the final result of this training procedure be called $\hat{f}$; this networ
 \\[R(\hat{f}) \\]
 is small. But can we *prove* that this is the case? Again, the classical theory of supervised learning breaks this down into three components:
 
-\\[
+$$
 \begin{aligned}
 R(\hat{f}) = &R(\hat{f}) - \hat{R}(\hat{f}) \\
           &+ \hat{R}(\hat{f}) - \hat{R}(f_b) \\
           &+ \hat{R}(f_b) .
 \end{aligned}
-\\]
+$$
 
 If all three components are on the right hand side are *provably* small, then we are in the clear. Let us parse these three terms in reverse order.
 
