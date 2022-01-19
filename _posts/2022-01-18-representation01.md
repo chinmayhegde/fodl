@@ -74,7 +74,7 @@ Let us focus our attention on the ability of *two-layer* networks (or one-hidden
   \\[\f = \bigcup_{m \geq 0} \f_m . \\]
   The high level idea is that $\f$ forms a *vector space*. This is easy to see, since it is closed under additions and scalar multiplications. Formally, fix $x$ and consider the element $\psi_{w,b}: x \mapsto \psi(\langle w, x \rangle + b)$. Then, $\text{span}(\psi_{w,b})$ forms a vector space.  Now, consider the linear *pointwise* evaluation operator $\Psi : V \rightarrow \mathbb{R}$:
   \\[\Psi(f) = (f(x_1), f(x_2), \ldots, f(x_n)) .\\]
-  We know from classical universal approximation (Chapter 2) that *every vector* in $\mathbb{R}^n$ can be written as *some* (possibly infinite)  combination of neurons. Therefore, $\text{Range}(\Psi) = \mathbb{R}^n$, or the dimension of the range of $\Psi$ is $n$. Therefore, there *exists* some basis of size $n$ with the same span! Call this basis $\{\psi_1, \ldots,\psi_n\}$. This basis can be used to express any set of labels by choosing appropriate coefficients in a standard basis representation $y = \sum_{i=1}^n \alpha_i \psi_i$.
+  We know from classical universal approximation (Chapter 2) that *every vector* in $\mathbb{R}^n$ can be written as *some* (possibly infinite)  combination of neurons. Therefore, $\text{Range}(\Psi) = \mathbb{R}^n$, or $\text{dim(Range}(\Psi)) = n$. Therefore, there *exists* some basis of size $n$ with the same span! Call this basis $\{\psi_1, \ldots,\psi_n\}$. This basis can be used to express any set of labels by choosing appropriate coefficients in a standard basis representation $y = \sum_{i=1}^n \alpha_i \psi_i$.
   The result follows.
 {:.proof}
 
