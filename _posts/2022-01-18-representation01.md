@@ -63,8 +63,10 @@ Let us focus our attention on the ability of *two-layer* networks (or one-hidden
 
 \\[ f(x) = \sum_{i=1}^m \alpha_i \psi(\langle w_i, x \rangle + b_i) . \\]
 
+We prove:
+
 **Theorem**{:.label #MemorizationBasic}
-  Let $f$ be a two-layer ReLU network with $m$ hidden neurons. Then, for any _arbitrary_ dataset $X = \{(x_i, y_i)_{i=1}^n\} \subset \mathbb{R}^d \times \mathbb{R}$ where $x_i$ are in general position, the weights and biases of $f$ can be chosen such that $f$ exactly interpolates $X$.
+  Let $f$ be a two-layer ReLU network with $m$ hidden neurons. Then, provided $m = n$, for any _arbitrary_ dataset $X = \{(x_i, y_i)_{i=1}^n\} \subset \mathbb{R}^d \times \mathbb{R}$ where $x_i$ are in general position, the weights and biases of $f$ can be chosen such that $f$ exactly interpolates $X$.
 {:.theorem}
 
 **Proof**{:.label #MemorizationBasicProof1}
