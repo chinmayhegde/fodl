@@ -5,9 +5,6 @@ categories: intro
 date: 2022-01-19
 ---
 
-## Motivation
-{:.label}
-
 
 Our goal is to reason about (deep) neural networks from the lens of *theory*.
 
