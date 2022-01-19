@@ -17,6 +17,7 @@ These notes are by no means the first attempt to do so. Other excellent courses/
 * [Fit without Fear](https://arxiv.org/pdf/2105.14368.pdf) by Misha Belkin (UCSD).
 * [Mathematics of Deep Learning](https://www.notion.so/Mathematics-of-Deep-Learning-05cd9255f03842489083ec7cbb6338d5) by Joan Bruna (NYU).
 * [Deep Learning Theory](https://mjt.cs.illinois.edu/dlt/) by Matus Telgarsky (UIUC).
+* [Expository videos](https://blogs.princeton.edu/imabandit/2020/10/13/2020/) by Sebastian Bubeck (Microsoft).
 
 
 ## Setup
@@ -56,7 +57,7 @@ macros["\\f"] = "\\mathscr{F}"
 
 Now, reducing the empirical risk $\hat{R}(f)$ to as small as possible is akin to function optimization. To make this numerically tractable, we will first cook up a hypothesis class $\f$. In deep learning, this can be thought of as the set of all neural network models that obey a certain architecture[^fn1].
 
-But: this approach now poses another **Major Challenge*. What's a good family of architectures? How do we know whether a certain architecture is rich enough to solve our prediction problem? Can it go the other way (i.e., could we somehow pick a network architecture that is far too rich for our purposes?)
+But: this approach now poses another **Major Challenge**. What's a good family of architectures? How do we know whether a certain architecture is rich enough to solve our prediction problem? Can it go the other way (i.e., could we somehow pick a network architecture that is far too rich for our purposes?)
 
 Let us set aside such troubling questions for now. Once the network architecture optimization over $\f$ boils down to tuning the weights and biases of $f$ such that $\hat{R}(f)$ is as small as possible. In other words, we will wish to solve for $f_b$, the "best model" in the hypothesis class $\f$:
 
