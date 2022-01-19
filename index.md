@@ -11,7 +11,7 @@ Still, progress in practical applications of deep learning has considerably outp
 
 These lecture notes are an attempt to sample a growing body of work in theoretical machine learning research that address some of these questions. They supplement a graduate level course taught by [me](https://chinmayhegde.github.io/) in the Spring of 2022.
 
-All posts are under construction. Corrections, pointers to omitted results, and other feedback are welcome: just email me, or open a Github pull request at this [repository](https://github.com/chinmayhegde/fodl).
+All pages are under construction. Corrections, pointers to omitted results, and other feedback are welcome: just email me, or open a Github pull request at this [repository](https://github.com/chinmayhegde/fodl).
 
 ---
 
