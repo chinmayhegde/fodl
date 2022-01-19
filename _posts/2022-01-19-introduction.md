@@ -5,6 +5,10 @@ categories: intro
 date: 2022-01-19
 ---
 
+## Motivation
+{:.label}
+
+
 Our goal is to reason about (deep) neural networks from the lens of *theory*.
 
 Unlike many other scientific fields, there currently exists a wide gap between what the best available tools in theoretical computer science can tell us about modern neural networks, and the actual ways in which modern neural network models work in practice. This gap between theory and practice can be unsatisfactory.
@@ -54,19 +58,22 @@ macros["\\f"] = "\\mathscr{F}"
 Now, reducing the empirical risk $\hat{R}(f)$ to as small as possible is akin to function optimization. To make this numerically tractable, we will first cook up a hypothesis class $\f$. In deep learning, this can be thought of as the set of all neural network models that obey a certain architecture[^fn1]. This now poses another **Major Challenge**: what's a good family of architectures? How do we know whether a certain architecture is rich enough to solve our prediction problem? Can it go the other way (i.e., could we somehow pick a network architecture that is far too rich for our purposes?)
 
 Let us set aside such troubling questions for now. Once the network architecture optimization over $\f$ boils down to tuning the weights and biases of $f$ such that $\hat{R}(f)$ is as small as possible. In other words, we will wish to solve for $f_b$, the "best model" in the hypothesis class $\f$:
-\\[
+
+$$
 f_b = \arg \min_{f \in \f} \hat{R}(f) .
-\\]  
+$$  
 
-This optimization problem hides yet another **Major Challenge**, tuning weights and biases *to optimality* is extremely difficult, except in the simplest of cases (such as linear models). In practice, we never solve this problem exactly, but rather just run some kind of incremental "training" procedure for some number of steps that iteratively decreases $\hat{R}(f)$ until everyone is satisfied with the results.
+This optimization problem hides yet another **Major Challenge**. Tuning weights and biases *to optimality* is extremely difficult, except in the simplest of hypothesis classes (such as linear/affine models). In practice, we never solve this optimization problem, but rather just run some kind of incremental "training" procedure for some number of steps that iteratively decreases $\hat{R}(f)$ until everyone is satisfied. Let us assume that we are somehow able to get a decent answer. Let the final result of this training procedure be called $\hat{f}$.
 
-Let the final result of this training procedure be called $\hat{f}$; this network is what we end up using to perform all future predictions. Our hope is that $\hat{f}$ performs "well" on "most" data points. Quantitatively, we would like to ensure that the population risk
+So, to recap: we have introduced two definitions of risk ($R, \hat{R}$), and defined two models ($f_b, \hat{f}$). This final network $\hat{f}$ is what we end up using to perform all future predictions. Our hope is that $\hat{f}$ performs "well" on "most" future data points. Quantitatively, we would like to ensure that the population risk
 \\[R(\hat{f}) \\]
-is small. But can we *prove* that this is the case? Again, the classical theory of supervised learning breaks this down into three components:
+is small.
+
+But can we *prove* that this is the case? Again, the classical theory of supervised learning breaks this down into three components:
 
 $$
 \begin{aligned}
-R(\hat{f}) = &R(\hat{f}) - \hat{R}(\hat{f}) \\
+R(\hat{f}) = & \quad R(\hat{f}) - \hat{R}(\hat{f}) \\
           &+ \hat{R}(\hat{f}) - \hat{R}(f_b) \\
           &+ \hat{R}(f_b) .
 \end{aligned}
@@ -86,7 +93,7 @@ Third, if
 \\[R(\hat{f}) - \hat{R}(\hat{f}) \\]
 is small then $R$ and $\hat{R}$ are not too different for $\hat{f}$. In other words, we need to prove that the empirical risk is a *good proxy* for the population risk. we call this the **generalization problem** in deep learning, and a decisive solution to this problem would address the first Major Challenge identified above.
 
-### Outline
+## Outline
 {:.label}
 
 The above narrative is all rather classical, and can be found in any introductory text on statistical machine learning. For simple cases (such as linear models) fairly precise bounds can be derived for all three quantities.   
