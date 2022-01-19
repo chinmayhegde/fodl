@@ -15,13 +15,13 @@ Of course, this question is not well-posed. Enough for what? For good performanc
 
 Let us begin simple. As before, suppose all we have is a bunch of training data points:
 \\[ X = \{(x_i, y_i)\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R} \\]
-and our goal will be to *exactly* fit a neural network to $X$. That is, we will lean a function $f$ that, when evaluated on every data point $x_i$ in the training data, returns $y_i$. Thus, $f$ learns to *memorize* the data. Equivalently, if we define empirical risk via the squared error loss:
+and our goal will be to a network that *exactly* memorizes $X$. That is, we will learn a function $f$ that, when evaluated on every data point $x_i$ in the training data, returns $y_i$. Equivalently, if we define empirical risk via the squared error loss:
 
 $$
 l(y,\hat{y}) = 0.5(y - \hat{y})^2, \quad R(f) = \sum_i \frac{1}{n} l(y_i, \hat{y_i})
 $$
 
-then we seek an $f$ that achieves *zero* risk.
+then $f$ achieves *zero empirical risk*.
 
 But why should memorization be interesting? After all, machine learning folks are taught to be wary of [overfitting](https://en.wikipedia.org/wiki/Overfitting) to the training set. In introductory ML courses we spend several hours (and homework sets) covering the [bias-variance](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff) tradeoff, the importance of adding a regularizer to decrease variance (at the expense of incurring extra "bias"), etc etc.
 
@@ -72,7 +72,7 @@ Let us focus our attention on the ability of *two-layer* networks (or one-hidden
 
   Define the space of *arbitrary width* two-layer networks:
   \\[\f = \bigcup_{m \geq 0} \f_m . \\]
-  The high level idea is that $\f$ forms a *vector space*. This is easy to see, since it is closed under additions and scalar multiplications. Formally, fix $x$ and consider the element $\psi_{w,b}: x \mapsto \psi(\langle w, x \rangle + b)$. Then, $\text{span}(\psi_{w,b})$ forms a vector space.  Now, consider the linear *pointwise* evaluation operator $\Psi : V \rightarrow \mathbb{R}$:
+  The high level idea is that $\f$ forms a *vector space*. This is easy to see, since it is closed under additions and scalar multiplications. Formally, fix $x$ and consider the element $\psi_{w,b}: x \mapsto \psi(\langle w, x \rangle + b)$. Then, $\text{span}(\psi_{w,b})$ forms a vector space.  Now, consider the linear *pointwise* evaluation operator $\Psi : V \rightarrow \mathbb{R}^n$:
   \\[\Psi(f) = (f(x_1), f(x_2), \ldots, f(x_n)) .\\]
   We know from classical universal approximation (Chapter 2) that *every vector* in $\mathbb{R}^n$ can be written as *some* (possibly infinite)  combination of neurons. Therefore, $\text{Range}(\Psi) = \mathbb{R}^n$, or $\text{dim(Range}(\Psi)) = n$. Therefore, there *exists* some basis of size $n$ with the same span! Call this basis $\{\psi_1, \ldots,\psi_n\}$. This basis can be used to express any set of labels by choosing appropriate coefficients in a standard basis representation $y = \sum_{i=1}^n \alpha_i \psi_i$.
   The result follows.
