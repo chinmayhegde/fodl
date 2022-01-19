@@ -64,7 +64,7 @@ Let us focus our attention on the ability of *two-layer* networks (or one-hidden
 \\[ f(x) = \sum_{i=1}^m \alpha_i \psi(\langle w_i, x \rangle + b_i) . \\]
 
 **Theorem**{:.label #MemorizationBasic}
-  Let $f$ be a two-layer ReLU network with $m$ hidden neurons. Then, for any _arbitrary_ dataset $X = \{x_i, y_i\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R}$ where $x_i$ are in general position, the weights and biases of $f$ can be chosen such that $f$ exactly interpolates $X$.
+  Let $f$ be a two-layer ReLU network with $m$ hidden neurons. Then, for any _arbitrary_ dataset $X = \{(x_i, y_i)_{i=1}^n\} \subset \mathbb{R}^d \times \mathbb{R}$ where $x_i$ are in general position, the weights and biases of $f$ can be chosen such that $f$ exactly interpolates $X$.
 {:.theorem}
 
 **Proof**{:.label #MemorizationBasicProof1}
@@ -80,7 +80,7 @@ Let us focus our attention on the ability of *two-layer* networks (or one-hidden
 
 In fact, the above result holds for any activation function $\Psi$ that is not a polynomial. Really, we didn't do much here. Since the "information content" in $n$ labels has dimension $n$, we can extract any arbitrary basis (written in the form of neurons) and write down the expansion of the labels in terms of this basis. Since this approach may be a bit abstract, let's give an alternate *constructive* proof.
 
-**Proof**{:label #MemorizationBasicProof2}
+**Proof (Alternate.)**{:label #MemorizationBasicProof2}
   This proof can be attributed to Zhang et al.[^zhang]. **COMPLETE**.
 {:.proof}
 
