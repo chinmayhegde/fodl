@@ -37,7 +37,7 @@ $$
 z = \psi(\sum_{j=1}^d w_j x_j + b) .
 $$
 
-Here, $w_j$ are the weights, $b$ is a scalar called the *bias*, and $\psi$ is a nonlinear scalar transformation called the *activation function*.
+Here, $w_j$ are the weights, $b$ is a scalar called the *bias*, and $\psi$ is a nonlinear scalar transformation called the *activation function*; a typical activation function is the "ReLU function" $\psi(z) = \max(0,z)$ but we will also consider others.
 
 ![Structure of a deep neural network](/fodl/assets/nn.png)
 
@@ -45,17 +45,40 @@ A neural network is a *feedforward composition* of several neurons, typically ar
 
 $$
 \begin{aligned}
-z_1 &= \sigma(W^{1} x + b^{1}), \\
-z_2 &= \sigma(W^{2} z_1 + b^{2}), \\
-y &= W^{3} z_2 + b^{3} .
+z_{1} &= \sigma(W_{1} x + b_{1}), \\
+z_{2} &= \sigma(W_{2} z_{1} + b_{2}), \\
+y &= W_{3} z_{2} + b_{3} .
 \end{aligned}
 $$
 
-Analogously, one can extend this definition to $L$ layers for any $L \geq 1$. The nomenclature is a bit funny sometimes. The above example is either called a "3-layer network" or "2-hidden-layer network"; the output $y$ is considered as its own layer and not considered as "hidden" (and )
+Analogously, one can extend this definition to $L$ layers for any $L \geq 1$. The nomenclature is a bit funny sometimes. The above example is either called a "3-layer network" or "2-hidden-layer network"; the output $y$ is considered as its own layer and not considered as "hidden" (and notice that it doesn't have any activation).
 
+## Memorization capacity of shallow networks
 
-## Memorization capacity
+Let us focus our attention on the ability of *two-layer* networks (or one-hidden-layer networks) with ReLU activations to memorize data. That is, if there are $m$ hidden neurons and if $\psi$ is the ReLU then our function $f$ is of the form:
+
+\\[ f(x) = \sum_{i=1}^m \alpha_i \psi(\langle w_i, x \rangle + b_i) . \\]
+
+**Theorem**{:.label #MemorizationBasic}
+  Let $f$ be a two-layer ReLU network with $m$ hidden neurons. Then, for any _arbitrary_ dataset $X = \{x_i, y_i\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R}$ where $x_i$ are in general position, the weights and biases of $f$ can be chosen such that $f$ exactly interpolates $X$.
+{:.theorem}
+
+**Proof**{:.label}
+  This result seems to be folklore, dating back to at least Baum[^baum] but for modern versions of this proof, see Bach[^bach] or Bubeck et al.[^bubeck1]. 
+  The result follows.
+{:.proof}
 
 ## Optimal capacity bounds
 
 ## Robust interpolation
+
+---
+
+[^baum]:
+    E. Baum, [*On the capabilities of multilayer perceptrons*](https://www.sciencedirect.com/science/article/pii/0885064X88900209), 1989.
+
+[^bach]:
+    F. Bach, [*Breaking the Curse of Dimensionality with Convex Neural Networks*](https://jmlr.org/papers/v18/14-546.html), 2017.
+
+[^bubeck1]:
+    S. Bubeck, R. Eldan, Y. Lee, D. Mikulincer, [Network size and weights size for memorization with two-layers neural networks](https://arxiv.org/abs/2006.02855), 2020.
