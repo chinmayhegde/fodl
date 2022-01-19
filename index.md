@@ -18,5 +18,3 @@ All pages are under construction. Corrections, pointers to omitted results, and 
 ## Table of contents
 {% for item in site.posts %}
 * [{{ item.title }}]({{ site.baseurl }}{{ item.url }}){% if item.author %} by {{ item.author }}{% endif %}{% endfor %}
-
-* [Representation I: Universal approximation]()

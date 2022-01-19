@@ -1,8 +1,8 @@
 ---
 layout: page
-title: Representation: Memorization
-categories: representation, approximation, memorization
-date: 2022-01-21
+title: Memorization
+categories: representation
+date: 2022-01-17
 ---
 
 

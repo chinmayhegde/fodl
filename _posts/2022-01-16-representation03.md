@@ -1,8 +1,8 @@
 ---
 layout: page
-title: Representation: The Role of Depth
-categories: intro
-date: 2022-01-22
+title: The Role of Depth
+categories: representation
+date: 2022-01-16
 ---
 
 
