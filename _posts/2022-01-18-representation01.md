@@ -55,7 +55,11 @@ Analogously, one can extend this definition to $L$ layers for any $L \geq 1$. Th
 
 ### Memorization capacity of shallow networks
 
-Let us focus our attention on the ability of *two-layer* networks (or one-hidden-layer networks) with ReLU activations to memorize data. That is, if there are $m$ hidden neurons and if $\psi$ is the ReLU then our function $f$ is of the form:
+<script>
+macros["\\f"] = "\\mathscr{F}"
+</script>
+
+Let us focus our attention on the ability of *two-layer* networks (or one-hidden-layer networks) with ReLU activations to memorize data. That is, if there are $m$ hidden neurons and if $\psi$ is the ReLU then our hypothesis class $\f_m$ comprises all functions $f$ such that:
 
 \\[ f(x) = \sum_{i=1}^m \alpha_i \psi(\langle w_i, x \rangle + b_i) . \\]
 
@@ -64,9 +68,17 @@ Let us focus our attention on the ability of *two-layer* networks (or one-hidden
 {:.theorem}
 
 **Proof**{:.label}
-  This result seems to be folklore, dating back to at least Baum[^baum] but for modern versions of this proof, see Bach[^bach] or Bubeck et al.[^bubeck1]. **COMPLETE**.
+  This result is non-constructive and seems to be folklore, dating back to at least Baum[^baum]. For modern versions of this proof, see Bach[^bach] or Bubeck et al.[^bubeck1].
+
+  Define the space of *arbitrary width* two-layer networks:
+  \\[\f = \bigcup_{m \geq 0} \f_m . \\]
+  The high level idea is that $\f$ forms a *vector space*. This is easy to see, since it is closed under additions and scalar multiplications. Formally, fix $x$ and consider the element $\psi_{w,b}: x \mapsto \psi(\langle w, x \rangle + b)$. Then, $\text{span}(\psi_{w,b})$ forms a vector space.  Now, consider the linear *pointwise* evaluation operator $\Psi : V \rightarrow \mathbb{R}$:
+  \\[\Psi(f) = (f(x_1), f(x_2), \ldots, f(x_n)) .\\]
+  We know from classical universal approximation (Chapter 2) that *every vector* in $\mathbb{R}^n$ can be written as *some* (possibly infinite)  combination of neurons. Therefore, $\text{Range}(\Psi) = \mathbb{R}^n$, or the dimension of the range of $\Psi$ is $n$. Therefore, there *exists* some basis of size $n$ with the same span! Call this basis $\{\psi_1, \ldots,\psi_n\}$. This basis can be used to express any set of labels by choosing appropriate coefficients in a standard basis representation $y = \sum_{i=1}^n \alpha_i \psi_i$.
   The result follows.
 {:.proof}
+
+Really, we didn't do much here. Since the "information content" in $n$ labels has dimension $n$, we can extract any arbitrary basis (written in the form of neurons) and write down the expansion of the labels in terms of this basis. In fact, the above result holds for any activation function $\Psi$ that is not a polynomial.
 
 ### Optimal capacity bounds
 
