@@ -116,7 +116,7 @@ And finally, to round things off, we will cover:
 ---
 
 [^fn1]:
-    We will instantiate $\f$ with concrete examples in specific instances.
+    We will instantiate $\f$ with specific instances as needed.
 
 [^fn2]:
-    For example, networks that exhibit low optimization gap *also* sometimes lead to good generalization.
+    For example, funnily enough, networks that exhibit very low optimization gap *also* sometimes lead to excellent generalization, in contradiction to what we would expect from classical learning theory.
