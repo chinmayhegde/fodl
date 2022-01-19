@@ -67,7 +67,7 @@ Let us focus our attention on the ability of *two-layer* networks (or one-hidden
   Let $f$ be a two-layer ReLU network with $m$ hidden neurons. Then, for any _arbitrary_ dataset $X = \{x_i, y_i\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R}$ where $x_i$ are in general position, the weights and biases of $f$ can be chosen such that $f$ exactly interpolates $X$.
 {:.theorem}
 
-**Proof**{:.label}
+**Proof**{:.label #MemorizationBasicProof1}
   This result is non-constructive and seems to be folklore, dating back to at least Baum[^baum]. For modern versions of this proof, see Bach[^bach] or Bubeck et al.[^bubeck1].
 
   Define the space of *arbitrary width* two-layer networks:
@@ -78,7 +78,14 @@ Let us focus our attention on the ability of *two-layer* networks (or one-hidden
   The result follows.
 {:.proof}
 
-Really, we didn't do much here. Since the "information content" in $n$ labels has dimension $n$, we can extract any arbitrary basis (written in the form of neurons) and write down the expansion of the labels in terms of this basis. In fact, the above result holds for any activation function $\Psi$ that is not a polynomial.
+In fact, the above result holds for any activation function $\Psi$ that is not a polynomial. Really, we didn't do much here. Since the "information content" in $n$ labels has dimension $n$, we can extract any arbitrary basis (written in the form of neurons) and write down the expansion of the labels in terms of this basis. Since this approach may be a bit abstract, let's give an alternate *constructive* proof.
+
+**Proof**{:label #MemorizationBasicProof2}
+  This proof can be attributed to Zhang et al.[^zhang]. **COMPLETE**.
+{:.proof}
+
+
+
 
 ### Optimal capacity bounds
 
@@ -94,3 +101,6 @@ Really, we didn't do much here. Since the "information content" in $n$ labels ha
 
 [^bubeck1]:
     S. Bubeck, R. Eldan, Y. Lee, D. Mikulincer, [Network size and weights size for memorization with two-layers neural networks](https://arxiv.org/abs/2006.02855), 2020.
+
+[^zhang]:
+    C. Zhang, S. Bengio, M. Hardt, B. Recht, O. Vinyals, [Understanding deep learning requires rethinking generalization](https://arxiv.org/abs/1611.03530), 2017.
