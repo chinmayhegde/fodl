@@ -45,8 +45,8 @@ A neural network is a *feedforward composition* of several neurons, typically ar
 
 $$
 \begin{aligned}
-z_{1} &= \sigma(W_{1} x + b_{1}), \\
-z_{2} &= \sigma(W_{2} z_{1} + b_{2}), \\
+z_{1} &= \psi(W_{1} x + b_{1}), \\
+z_{2} &= \psi(W_{2} z_{1} + b_{2}), \\
 y &= W_{3} z_{2} + b_{3} .
 \end{aligned}
 $$
