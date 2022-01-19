@@ -13,12 +13,12 @@ How many neurons are enough?
 
 Of course, this question is not well-posed. Enough for what? For good performance? On what task? Do we even know if this answer is well-defined -- perhaps it depends on some hard-to-estimate quantity related to the learning problem?
 
-Let us begin simple. Again, as before, suppose all we have at our disposal is a bunch of training data points:
+Let us begin simple. As before, suppose all we have is a bunch of training data points:
 \\[ X = \{(x_i, y_i)\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R} \\]
-and our goal will be to **exactly** fit a neural network to $X$. That is, we will lean a function $f$ that, when evaluated on every data point $x_i$ in the training data, returns $y_i$. Thus, $f$ learns to *memorize* the data. Equivalently, if we define empirical risk via the squared error loss:
+and our goal will be to *exactly* fit a neural network to $X$. That is, we will lean a function $f$ that, when evaluated on every data point $x_i$ in the training data, returns $y_i$. Thus, $f$ learns to *memorize* the data. Equivalently, if we define empirical risk via the squared error loss:
 
 $$
-l(y,\hat{y}) = 0.5(y - \hat{y})^2
+l(y,\hat{y}) = 0.5(y - \hat{y})^2, \quad R(f) = \sum_i \frac{1}{n} l(y_i, \hat{y_i})
 $$
 
 then we seek an $f$ that achieves *zero* risk.
