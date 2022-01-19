@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Introduction
-categories: intro
+categories: Notes
 date: 2022-01-19
 ---
 
