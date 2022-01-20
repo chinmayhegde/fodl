@@ -5,17 +5,17 @@ categories: representation
 date: 2022-01-18
 ---
 
-Let us begin by trying to mathematically frame a very simple question:
+Let us begin by trying to rigorously answer a very simple question:
 
 ~~~
 How many neurons are enough?
 ~~~
 
-Of course, this question is not well-posed. Enough for what? For good performance? On what task? Do we even know if this answer is well-defined -- perhaps it depends on some hard-to-estimate quantity related to the learning problem?
+This question isn't well-posed. Enough for what? For good performance? On what task? Do we even know if this answer is well-defined -- perhaps it depends on some hard-to-estimate quantity related to the learning problem?
 
-Let us begin simple. As before, suppose all we have is a bunch of training data points:
+Let us begin simple. Suppose all we have is a bunch of training data points:
 \\[ X = \{(x_i, y_i)\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R} \\]
-and our goal will be to a network that *exactly* memorizes $X$. That is, we will learn a function $f$ that, when evaluated on every data point $x_i$ in the training data, returns $y_i$. Equivalently, if we define empirical risk via the squared error loss:
+and our goal will be to discover a network that *exactly* memorizes $X$. That is, we will learn a function $f$ that, when evaluated on every data point $x_i$ in the training data, returns $y_i$. Equivalently, if we define empirical risk via the squared error loss:
 
 $$
 l(y,\hat{y}) = 0.5(y - \hat{y})^2, \quad R(f) = \sum_i \frac{1}{n} l(y_i, \hat{y_i})
