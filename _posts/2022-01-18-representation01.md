@@ -85,7 +85,7 @@ We prove:
 In fact, the above result holds for any activation function $\Psi$ that is not a polynomial. Really, we didn't do much here. Since the "information content" in $n$ labels has dimension $n$, we can extract any arbitrary basis (written in the form of neurons) and write down the expansion of the labels in terms of this basis. Since this approach may be a bit abstract, let's give an alternate *constructive* proof.
 
 **Proof (Alternate.)**{:label #MemorizationBasicProof2}
-  This proof can be attributed to Zhang et al.[^zhang]. Suppose $m = n$. Since all $x_i$'s are distinct and in general position, we can pick a $w$ such that if define $z_i := \langle w, x_i \rangle$ then without loss of generality (or by re-indexing the data points):
+  This proof can be attributed to Zhang et al[^zhang]. Suppose $m = n.$ Since all $x_i$'s are distinct and in general position, we can pick a $w$ such that if define $z_i := \langle w, x_i \rangle$ then without loss of generality (or by re-indexing the data points):
   \\[ z_1 < z_2 < \ldots z_n . \\]
   One way to pick $w$ is by random projection: pick $w$ from a standard $d$-variate Gaussian distribution; then the above holds with high probability. If the above relation between $z_i$ holds, we can find some sequence of $b_i$ such that:
   \\[ b_1 < z_1 < b_2 < z_2 < \ldots < b_n < z_n . \\]
