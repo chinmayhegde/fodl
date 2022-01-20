@@ -90,7 +90,7 @@ In fact, the above result holds for any activation function $\Psi$ that is not a
   One way to pick $w$ is by random projection: pick $w$ from a standard $d$-variate Gaussian distribution; then the above holds with high probability. If the above relation between $z_i$ holds, we can find some sequence of $b_i$ such that:
   \\[ b_1 < z_1 < b_2 < z_2 < \ldots < b_n < z_n . \\]
   Now, let's define an $n \times n$ matrix $A$ such that
-  \\[ A_{ij} := ReLU(z_i - b_j) \max(z_i - b_j, 0) . \\]
+  \\[ A_{ij} := ReLU(z_i - b_j) = \max(z_i - b_j, 0) . \\]
   Since by definition, each $z_i$ is only bigger than all $b_j$ for $1 \leq j \leq i$, we have that $A$ is a *lower triangular* matrix with positive entries on the diagonal, and therefore full rank. Moreover, for any $\alpha \in \mathbb{R}^n$, the product $A \alpha$ is the superposition of exactly $n$ ReLU neurons (the weights are the same for all of them, but the biases are distinct). The proof can be completed by setting $\alpha = A^{-1} y$.  
 {:.proof}
 
