@@ -98,7 +98,7 @@ In fact, the above result holds for any activation function $\Psi$ that is not a
 The above proofs used biases, but if we restrict our attention to *bias-free* networks, that's fine too, we just need to use different weights for the $n$ hidden neurons. Such a network is called a *random feature model*; see [here](https://people.eecs.berkeley.edu/~brecht/papers/07.rah.rec.nips.pdf) and [here](https://arxiv.org/abs/1810.04374).
 {:.remark}
 
-The above result shows that $m = n$ neurons are sufficient to memorize pretty much any dataset. Can we get away with fewer neurons? Notice that really the network has to "remember" only the $n$ labels; but since there are $n$ neurons, each with $d$ input edges, the number of *parameters* is $nd$.  (*Actually, not technically correct; the second proof only uses $n$ **distinct** weights and $n$ biases.*) It turns out that we can indeed do better.
+The above result shows that $m = n$ neurons are sufficient to memorize pretty much any dataset. Can we get away with fewer neurons? Notice that really the network has to "remember" only the $n$ labels; but since there are $n$ neurons, each with $d$ input edges, the number of *parameters* is $nd$.  (*Note: not technically correct; the second proof only uses $n$ **distinct** weights and $n$ biases.*) It turns out that we can indeed do better.
 
 **Theorem**{:.label #MemorizationBetter}
   For any dataset of $n$ points in general position, $m = 4 \lceil \frac{n}{d} \rceil$ neurons suffice to memorize it.
@@ -106,7 +106,28 @@ The above result shows that $m = n$ neurons are sufficient to memorize pretty mu
 
 **Proof**{:.label #MemorizationBetterProof}
   This is due to Bubeck et al[^bubeck1]. **Complete**.
-{.proof}
+{:.proof}
+
+
+**Remark**{:.label #MemorizationRem1}
+The above construction is somewhat wacky/combinatorial. The weights of each neuron was picked myopically (we never revisited data points) and locally (each neuron only depended on a small subset of data points).
+{:.remark}
+
+**Remark**{:.label #MemorizationRem2}
+Since the network has $O(n)$ parameters and we need to memorize $n$ labels, this construction is essentially optimal. For a formal proof, see Sontag[^sontag]. *Note: not technically correct; we can get better by "bit stuffing", see below.*
+{:.remark}
+
+**Remark**{:.label #MemorizationRem3}
+The above construction says very little about how large typical networks need to be for "typical" learning algorithms (such as SGD) to succeed. We will revisit this in the Optimization chapters.
+{:.remark}
+
+**Remark**{:.label #MemorizationRem4}
+Using only one hidden layer of neurons, we got (essentially) best-possible memorization. So does depth buy us anything at all? We will revisit this in Chapter 3.
+{:.remark}
+
+**Remark**{:.label #MemorizationRem4}
+All the above results used a standard dense feedforward architecture. Analogous memorization results have been shown for other architectures commonly used in practice today: convnets[^cnn], ResNets[^resnet], transformers[^xformers], etc.
+{:.remark}
 
 
 ## Optimal capacity bounds
@@ -129,3 +150,15 @@ The above result shows that $m = n$ neurons are sufficient to memorize pretty mu
 
 [^zhang]:
     C. Zhang, S. Bengio, M. Hardt, B. Recht, O. Vinyals, [Understanding deep learning requires rethinking generalization](https://arxiv.org/abs/1611.03530), 2017.
+
+[^sontag]:
+    E. Sontag, [Shattering All Sets of k Points in “General Position” Requires (k − 1)/2 Parameters](http://www.sontaglab.org/FTPDIR/generic.pdf), 1997.
+
+[^cnn]:
+    Q. Nguyen and M. Hein, [Optimization Landscape and Expressivity of Deep CNNs](https://arxiv.org/abs/1710.10928), 2018.
+
+[^resnet]:
+    M. Hardt and T. Ma, [Identity Matters in Deep Learning](https://openreview.net/forum?id=ryxB0Rtxx), 2017.
+
+[^xformers]:
+    C. Yun, Y. Chang, S. Bhojanapalli, A. Rawat, S. Reddi, S. Kumar, [$O(n)$ Connections are Expressive Enough: Universal Approximability of Sparse Transformers](https://proceedings.neurips.cc/paper/2020/hash/9ed27554c893b5bad850a422c3538c15-Abstract.html), 2020.
