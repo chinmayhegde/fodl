@@ -18,7 +18,7 @@ Let us begin simple. Suppose all we have is a bunch of training data points:
 and our goal will be to discover a network that *exactly* memorizes $X$. That is, we will learn a function $f$ that, when evaluated on every data point $x_i$ in the training data, returns $y_i$. Equivalently, if we define empirical risk via the squared error loss:
 
 $$
-l(y,\hat{y}) = 0.5(y - \hat{y})^2, \quad R(f) = \sum_i \frac{1}{n} l(y_i, \hat{y_i})
+\hat{y} = f(x), \quad l(y,\hat{y}) = 0.5(y - \hat{y})^2, \quad R(f) = \sum_i \frac{1}{n} l(y_i, \hat{y_i}),
 $$
 
 then $f$ achieves *zero empirical risk*.
