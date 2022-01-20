@@ -21,9 +21,9 @@ $$
 \hat{y} = f(x), \quad l(y,\hat{y}) = 0.5(y - \hat{y})^2, \quad R(f) = \sum_i \frac{1}{n} l(y_i, \hat{y_i}),
 $$
 
-then $f$ achieves *zero empirical risk*.
+then $f$ achieves *zero empirical risk*. A very large (either very wide or very deep or both) network is likely enough to fit basically anything we like, so we would like to get reasonably tight upper bounds on the number of neurons needed for exact memorization.
 
-But why should we care about memorization? After all, machine learning folks are taught to be wary of [overfitting](https://en.wikipedia.org/wiki/Overfitting) to the training set. In introductory ML courses we spend several hours (and homework sets) covering the [bias-variance](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff) tradeoff, the importance of adding a regularizer to decrease variance (at the expense of incurring extra "bias"), etc etc.
+But why should we care about memorization anyway? After all, machine learning folks are taught to be wary of [overfitting](https://en.wikipedia.org/wiki/Overfitting) to the training set. In introductory ML courses we spend several hours (and homework sets) covering the [bias-variance](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff) tradeoff, the importance of adding a regularizer to decrease variance (at the expense of incurring extra "bias"), etc etc.
 
 Unfortunately, deep learning practice throws this classical way of ML thinking out of the window. We seldom use explicit regularizers, instead relying on standard losses. We typically train deep neural networks to achieve 100\% (train) accuracy. Later, we will try to understand why networks trained to *perfectly* interpolate the training data still generalize well, but for now let's focus on just achieving a representation that enables perfect memorization.
 
@@ -61,14 +61,14 @@ Analogously, one can extend this definition to $L$ layers for any $L \geq 1$. Th
 macros["\\f"] = "\\mathscr{F}"
 </script>
 
-Let us focus our attention on the ability of *two-layer* networks (or one-hidden-layer networks) with ReLU activations to memorize data. That is, if there are $m$ hidden neurons and if $\psi$ is the ReLU then our hypothesis class $\f_m$ comprises all functions $f$ such that:
+Let us focus our attention on the ability of *two-layer* networks (or one-hidden-layer networks) with ReLU activations to memorize $n$ data points. That is, if there are $m$ hidden neurons and if $\psi$ is the ReLU then our hypothesis class $\f_m$ comprises all functions $f$ such that:
 
 \\[ f(x) = \sum_{i=1}^m \alpha_i \psi(\langle w_i, x \rangle + b_i) . \\]
 
-We prove:
+We start with a fairly intuitive upper bound on $m$. We prove:
 
 **Theorem**{:.label #MemorizationBasic}
-  Let $f$ be a two-layer ReLU network with $m$ hidden neurons. Then, provided $m = n$, for any _arbitrary_ dataset $X = \{(x_i, y_i)_{i=1}^n\} \subset \mathbb{R}^d \times \mathbb{R}$ where $x_i$ are in general position, the weights and biases of $f$ can be chosen such that $f$ exactly interpolates $X$.
+  Let $f$ be a two-layer ReLU network with $m = n$ hidden neurons. For any _arbitrary_ dataset $X = \{(x_i, y_i)_{i=1}^n\} \subset \mathbb{R}^d \times \mathbb{R}$ where $x_i$ are in general position, the weights and biases of $f$ can be chosen such that $f$ exactly interpolates $X$.
 {:.theorem}
 
 **Proof**{:.label #MemorizationBasicProof1}
