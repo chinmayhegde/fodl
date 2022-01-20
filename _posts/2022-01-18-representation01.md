@@ -90,11 +90,23 @@ In fact, the above result holds for any activation function $\Psi$ that is not a
   One way to pick $w$ is by random projection: pick $w$ from a standard $d$-variate Gaussian distribution; then the above holds with high probability. If the above relation between $z_i$ holds, we can find some sequence of $b_i$ such that:
   \\[ b_1 < z_1 < b_2 < z_2 < \ldots < b_n < z_n . \\]
   Now, let's define an $n \times n$ matrix $A$ such that
-  \\[ A_{ij} := ReLU(z_i - b_j) = \max(z_i - b_j, 0) . \\]
+  \\[ A_{ij} := \text{ReLU}(z_i - b_j) = \max(z_i - b_j, 0) . \\]
   Since by definition, each $z_i$ is only bigger than all $b_j$ for $1 \leq j \leq i$, we have that $A$ is a *lower triangular* matrix with positive entries on the diagonal, and therefore full rank. Moreover, for any $\alpha \in \mathbb{R}^n$, the product $A \alpha$ is the superposition of exactly $n$ ReLU neurons (the weights are the same for all of them, but the biases are distinct). Set $\alpha = A^{-1} y$ and we are done.  
 {:.proof}
 
+**Remark**{:.label #MemorizationBasic2}
+The above proofs used biases, but if we restrict our attention to *bias-free* networks, that's fine too, we just need to use different weights for the $n$ hidden neurons. Such a network is called a *random feature model*; see [here](https://people.eecs.berkeley.edu/~brecht/papers/07.rah.rec.nips.pdf) and [here](https://arxiv.org/abs/1810.04374).
+{:.remark}
 
+The above result shows that $m = n$ neurons are sufficient to memorize pretty much any dataset. Can we get away with fewer neurons? Notice that really the network has to "remember" only the $n$ labels; but since there are $n$ neurons, each with $d$ input edges, the number of *parameters* is $nd$.  (*Actually, not technically correct; the second proof only uses $n$ **distinct** weights and $n$ biases.*) It turns out that we can indeed do better.
+
+**Theorem**{:.label #MemorizationBetter}
+  For any dataset of $n$ points in general position, $m = 4 \lceil \frac{n}{d} \rceil$ neurons suffice to memorize it.
+{:.theorem}
+
+**Proof**{:.label #MemorizationBetterProof}
+  This is due to Bubeck et al[^bubeck1]. **Complete**.
+{.proof}
 
 
 ## Optimal capacity bounds
