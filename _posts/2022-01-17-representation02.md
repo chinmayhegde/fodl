@@ -110,6 +110,13 @@ First, we have to define Lipschitzness for $d$-variate functions.
   where $x_j$ is the $j$-th coordinate of $x$. There is one such $h$ for every rectangle, and the output edge from this neuron is assigned a constant value approximating $g$ within that rectangle. This completes the proof.
 {:.proof}
 
+**Remark**{:.label #MultivariateRem1}
+Would the answer change if we used ReLU activations? (Hint: no, up to constants; prove this.)
+{:.remark}
+
+Before proceeding, let's just reflect on the bound (and the nature of the network) that we constructed in the proof. Each neuron in the first layer looks at the right "interval" independently each input coordinate; there are $d$ such coordinates, and therefore $O(\frac{dL}{\varepsilon})$ intervals. The second layer is where the real complexity lies: each neuron picks exactly the right set of intervals to define a unique hyper-rectangle. There are $O(\frac{1}{\varepsilon^d})$ such rectangles. Therefore, the last layer becomes very, very wide with increasing $d$.
+
+So the next natural question is: can we do better? Curiously, the answer is a qualified *yes*, but first we need to gather a few more tools.
 
 ## Universal approximation theorems
 {:.label}
