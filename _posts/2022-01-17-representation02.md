@@ -107,6 +107,7 @@ First, we have to define Lipschitzness for $d$-variate functions.
   $$
   h(x) = \psi(\sum_{j=1}^d h_j(x_j) - (d-1)),
   $$
+  
   where $x_j$ is the $j$-th coordinate of $x$. There is one such $h$ for every rectangle, and the output edge from this neuron is assigned a constant value approximating $g$ within that rectangle. This completes the proof.
 {:.proof}
 
@@ -127,7 +128,7 @@ The idea of defining succinct hypothesis classes to approximate functions had be
   (*Weierstrass, 1865.*) Let $g : [0,1] \rightarrow \R$ be any continuous function. Then, $g$ can be  $\varepsilon$-approximated in the sup-norm by some polynomial of sufficiently high degree.
 {:.theorem}
 
-Let us generalize this concept using the following definition. 
+Let us generalize this concept using the following definition.
 
 ## The method of Barron
 {:.label}
