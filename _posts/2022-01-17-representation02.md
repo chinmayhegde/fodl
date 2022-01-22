@@ -43,12 +43,23 @@ If our target function $f$ is Lipschitz continuous with small $L$, then we can e
 **Proof**{:label #univariatesimpleproof}
   The proof follows from the same picture we might have seen while first learning about integrals and Riemann sums. The high level idea is to tile the interval $[0,1]$ using "buildings" of appropriate height. Since the derivatives are bounded (due to Lipschitzness), the top of each "building" cannot be too far away from the corresponding function value.
 
-  Specifically, divide $[0,1]$ into equal intervals of size $\varepsilon/L$. For the $i$-th interval, define the function:
+  Specifically, partition $[0,1]$ into equal intervals of size $\varepsilon/L$. Let the $i$-th interval be $[u_i,u_{i+1})$. Define a sequence of functions $f_i(x)$; each $f$ is zero everywhere, except that within this interval it attains the value $g(u_i)$. Then $f_i$ is the difference of two threshold functions:
 
   $$
-  f_i(x) = g(i \varepsilon/L ())
+  f_i(x) = g(u_i) \left(\psi(x - u_i) - \psi(x - u_{i+1})\right).
   $$
 
+  Our network will be the sum of all the $f_i$'s (there are $L/\varepsilon$ of them). Moreover, it is clear that for any $x \in [0,1]$, if $u_i$ is the left end of the interval corresponding to $x$, then we have:
+
+  $$
+  \begin{aligned}
+  |f(x) - g(x)| &= |g(x) - g(u_i)| \\
+  &\leq L |u - u_i | \\
+  &\leq L \frac{\varepsilon}{L} = \varepsilon,
+  \end{aligned}
+  $$
+
+  Taking the supremum over all $x$ completes the proof.
 {:.proof}
 
 
