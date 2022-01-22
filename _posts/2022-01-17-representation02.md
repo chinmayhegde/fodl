@@ -7,9 +7,9 @@ date: 2022-01-17
 
 Previously, we visited several results that showed how (shallow) neural networks can effectively memorize training data. However, memorization of a finite dataset may not the end goal[^fn1]. In the ideal case, we would like to our network to simulate a (possibly complicated) prediction function that works well on most input data points. Is a given architecture good enough?
 
-In this note we will describe the representation power of (shallow) neural networks in terms of their ability to approximate continuous functions. This line of work has a long and rich history (and function approximation itself, independent of the context of neural networks, is a vast body of work which we only barely touch upon). See here[^devore] for a recent (and fantastic) survey of this area.
+In this note we will describe the representation power of (shallow) neural networks in terms of their ability to approximate continuous functions. This line of work has a long and rich history. The field of function approximation, independent of the context of neural networks, is a vast body of work which we can only barely touch upon. See here[^devore] for a recent (and fantastic) survey.
 
-As before, intuition tells us that an infinite number of neurons should be good enough for approximating pretty much anything. Therefore, our guiding principle will be to achieve as *succinct* a neural representation as possible. Moreover, if there is an *efficient computational* routine that gives this representation, that would put the icing on the cake.
+As before, intuition tells us that an infinite number of neurons should be good enough to approximate pretty much anything. Therefore, our guiding principle will be to achieve as *succinct* a neural representation as possible. Moreover, if there is an *efficient computational* routine that gives this representation, that would be the icing on the cake.
 
 ## Warmup: Function approximation
 {:.label}
@@ -36,24 +36,24 @@ Let us first define a useful property to characterize univariate functions.
   A function $g : \R \rightarrow \R$ is $L$-Lipschitz if for all $u,v \in \R$, we have that $|f(u) - f(v) | \leq L |u - v|$.
 {:.definition}
 
-Why is this an interesting property? Any smooth function with bounded derivative is Lipschitz; actually, certain non-smooth functions (such as the ReLU) are also Lipschitz. Lipschitz-ness does not quite capture everything we care about (e.g. discontinuous functions are not Lipschitz, which can be somewhat problematic if there are "jumps" in the label space) but it serves as a large enough class of functions to prove interesting results.
+Why is this an interesting property? Any smooth function with bounded derivative is Lipschitz; in fact, certain non-smooth functions (such as the ReLU) are also Lipschitz. Lipschitz-ness does not quite capture everything we care about (e.g. discontinuous functions are not Lipschitz, which can be somewhat problematic if there are "jumps" in the label space). But it serves as a large enough class of functions to prove interesting results.
 
-An additional benefit is because of approximability. If our target function $f$ is Lipschitz continuous with small $L$, then we can easily show that it can be well-approximated by a two-layer network with threshold activations: $\psi(z) = \mathbb{I}(z \geq 0)$.
+An additional benefit of Lipschitzness is due to approximability. If our target function $f$ is Lipschitz continuous with small $L$, then we can easily show that it can be well-approximated by a two-layer network with threshold activations: $\psi(z) = \mathbb{I}(z \geq 0)$. We prove:
 
 **Theorem**{:.label #univariatesimple}
   Let $g : [0,1] \rightarrow \R$ be $L$-Lipschitz. Then, it can be  $\varepsilon$-approximated in the sup-norm by a two-layer network with $O(\frac{L}{\varepsilon})$ hidden threshold neurons.
 {:.theorem}
 
-**Proof**{:label #univariatesimpleproof}
-  A more careful derivation of this fact (and the next one below) can be found in Telgarsky[^mjt]. The proof follows from the same picture we might have seen while first learning about integrals and Riemann sums. The high level idea is to tile the interval $[0,1]$ using "buildings" of appropriate height. Since the derivatives are bounded (due to Lipschitzness), the top of each "building" cannot be too far away from the corresponding function value.
+**Proof.**{:label #univariatesimpleproof}
+  A more careful derivation of this fact (and the next one below) can be found in Telgarsky[^mjt]. The proof follows from the same picture we might have seen while first learning about integrals and Riemann sums. The high level idea is to tile the interval $[0,1]$ using "buildings" of appropriate height. Since the derivatives are bounded (due to Lipschitzness), the top of each "building" cannot be too far away from the corresponding function value. Here is a picture:
 
-  Specifically, partition $[0,1]$ into equal intervals of size $\varepsilon/L$. Let the $i$-th interval be $[u_i,u_{i+1})$. Define a sequence of functions $f_i(x)$; each $f$ is zero everywhere, except that within this interval it attains the value $g(u_i)$. Then $f_i$ is the difference of two threshold functions:
+  More formally: partition $[0,1]$ into equal intervals of size $\varepsilon/L$. Let the $i$-th interval be $[u_i,u_{i+1})$. Define a sequence of functions $f_i(x)$ where each $f_i$ is zero everywhere, except within the $i$-th interval where it attains the value $g(u_i)$. Then $f_i$ can be written down as the difference of two threshold functions:
 
   $$
   f_i(x) = g(u_i) \left(\psi(x - u_i) - \psi(x - u_{i+1})\right).
   $$
 
-  Our network will be the sum of all the $f_i$'s (there are $L/\varepsilon$ of them). Moreover, it is clear that for any $x \in [0,1]$, if $u_i$ is the left end of the interval corresponding to $x$, then we have:
+  Our network will be the sum of all the $f_i$'s (and there are $L/\varepsilon$ of them). Moreover, for any $x \in [0,1]$, if $u_i$ is the left end of the interval corresponding to $x$, then we have:
 
   $$
   \begin{aligned}
@@ -85,7 +85,7 @@ First, we have to define Lipschitzness for $d$-variate functions.
   Let $g : [0,1]^d \rightarrow \R$ be $L$-Lipschitz. Then, $g$ can be  $\varepsilon$-approximated in the $L_1$-norm by a three-layer network $f$ with $O(\frac{L}{\varepsilon^d})$ hidden threshold neurons.
 {:.theorem}
 
-**Proof sketch**{:label #multivariateproof}
+**Proof sketch.**{:label #multivariateproof}
   The proof follows the above construction for univariate functions. We will tile $[0,1]^d$ with equally spaced multidimensional rectangles; there are $O(\frac{1}{\varepsilon}^d)$ of them. The value of the function $f$ within each rectangle will be held constant (and due to the definition of Lipschitzness, the error with respect to $g$ cannot be too large). If we can figure out how to approximate $g$ within each rectangle, then we are done.
 
   The key idea is to figure out how to realize "indicator functions" for every rectangle. We have seen that in the univariate case, indicators can be implemented using the difference of two threshold neurons. In the $d$-variate case, an indicator over a rectangle is the *Cartesian product* over the $d$ axis. however, Boolean/Cartesian products can be implemented by a layer of threshold activations *on top* of these differences.
@@ -114,12 +114,20 @@ First, we have to define Lipschitzness for $d$-variate functions.
 Would the answer change if we used ReLU activations? (Hint: no, up to constants; prove this.)
 {:.remark}
 
-Before proceeding, let's just reflect on the bound (and the nature of the network) that we constructed in the proof. Each neuron in the first layer looks at the right "interval" independently each input coordinate; there are $d$ such coordinates, and therefore $O(\frac{dL}{\varepsilon})$ intervals. The second layer is where the real complexity lies: each neuron picks exactly the right set of intervals to define a unique hyper-rectangle. There are $O(\frac{1}{\varepsilon^d})$ such rectangles. Therefore, the last layer becomes very, very wide with increasing $d$.
+Before proceeding, let's just reflect on the bound (and the nature of the network) that we constructed in the proof. Each neuron in the first layer looks at the right "interval" independently each input coordinate; there are $d$ such coordinates, and therefore $O(\frac{dL}{\varepsilon})$ intervals. The second layer is where the real complexity lies: each neuron picks exactly the right set of intervals to define a unique hyper-rectangle. There are $O(\frac{1}{\varepsilon^d})$ such rectangles. Therefore, the last layer becomes very, very wide with increasing $d$. This is unfortunate, since we desire succinct representations.
 
-So the next natural question is: can we do better? Curiously, the answer is a qualified *yes*, but first we need to gather a few more tools.
+So the next natural question is: can we get better upper bounds? Curiously, the answer is a qualified *yes*, but first we need to gather a few more tools.
 
-## Universal approximation theorems
+## Universal approximation
 {:.label}
+
+The idea of defining succinct hypothesis classes to approximate functions had been well studied well before neural networks were introduced. In fact, we can go all the way back to:
+
+**Theorem**{:.label #multivariatesimple}
+  (*Weierstrass, 1865.*) Let $g : [0,1] \rightarrow \R$ be any continuous function. Then, $g$ can be  $\varepsilon$-approximated in the sup-norm by some polynomial of sufficiently high degree.
+{:.theorem}
+
+Let us generalize this concept using the following definition. 
 
 ## The method of Barron
 {:.label}
