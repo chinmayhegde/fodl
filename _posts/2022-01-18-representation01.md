@@ -121,30 +121,48 @@ The above result shows that $m = n$ neurons are sufficient to memorize pretty mu
   Notice that $d = \Omega(1)$ is actually beneficial here; higher input dimension implies *easier* memorization. In some ways this is a *blessing of dimensionality* phenomenon.
 
   We will prove Baum's result first. Suppose we have threshold activations (i.e., $\psi(z) = \mathbb{I}(z \geq 0)$) and binary labels $y_i \in \pm \{1\}$. We iteratively build a network as follows. Without loss of generality, we can assume that there are at least $d$ points with label equal to $y_i = 1$; index them as $x_1, x_2, \ldots, x_d$. Since the points are in general position, we can find an affine subspace that exactly interpolates these points:
-  \\( \langle w_1, x_i \rangle = b_1, \quad i \in [d]  \\)
+
+  $$
+  \langle w_1, x_i \rangle = b_1, \quad i \in [d]
+  $$
+
   and record $(w_1, b_1)$. (Importantly, again since the points are in general position no other points lie in this subspace.)
   Now, form a *very thin indicator slab* using for this affine subspace using exactly two neurons:
-  \\( x \mapsto \psi(\langle w_1,x \rangle - (b_1-\varepsilon)) \psi(\langle w_1,x \rangle - (b_1+\varepsilon)) \\)
+
+  $$
+  x \mapsto \psi(\langle w_1,x \rangle - (b_1-\varepsilon)) \psi(\langle w_1,x \rangle - (b_1+\varepsilon))
+  $$
+
   for some small enough $\varepsilon > 0$. This function is equal to 1 for exactly the points in the subspace, and zero for all other points. For this group of $d$ points we can assign the *output* weight $\alpha_1 = 1$. Iterate this argument $\lceil \frac{n}{d} \rceil$ times and we are done! Therefore, $2 \lceil \frac{n}{d} \rceil$ threshold neurons suffice if the labels are binary.
 
   The exact same argument can be extended to ReLU activations and arbitrary (scalar) labels. Again, we iteratively build the network. We pick an arbitrary set of $d$ points, through which we can interpolate an affine subspace:
-  \\( \langle u, x_i \rangle = b, \quad i \in [d] .  \\)
+
+  $$ \langle u, x_i \rangle = b, \quad i \in [d] .  $$
+
   We now show that we can fit this subspace using 4 ReLU neurons. The trick is to look at the "directional derivative" of the ReLU:
+
   $$
   g: x \mapsto \frac{\psi(\langle u + \delta v, x \rangle - b) - \psi(\langle u, v \rangle - b)}{\delta} .
   $$
+
   As $\delta \rightarrow 0$, the right hand side approaches the quantity:
+
   $$
   g: x \mapsto \psi'(\langle u, x \rangle - b) \langle v, x \rangle .
   $$
+
   But: the first part is the "derivative" of the ReLU, which is exactly the threshold function! Using the thin-slab-indicator trick in the proof above, the difference of two such functions (with slightly different $b$) forms an indicator on a thin slab around these $d$ points:
+
   $$
   f = g_{u,v,b-\varepsilon} - g_{u,v,b+\varepsilon} .
   $$
+
   Since we are using differences-of-differences, we need 4 ReLUs to realize $f$. It now remains to pick $v$. But this is easy: since the data are in general position, just solve for $v$ such that
+
   $$
   \langle v, x_i \rangle = y_i .
   $$
+
   Repeat this fitting procedure $\lceil \frac{n}{d} \rceil$ times and we are done.
 {:.proof}
 
