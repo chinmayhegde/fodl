@@ -14,7 +14,11 @@ As before, intuition tells us that an infinite number of neurons should be good 
 ## Warmup: Function approximation
 {:.label}
 
-We will keep things simple. This time, we don't have any training data to work with; let's just assume we seek some (purported) prediction function $g(x)$. To approximate $g$, we have a candidate hypothesis class of shallow (two-layer) neural networks of the form:
+<script>
+macros["\\f"] = "\\mathscr{F}"
+</script>
+
+Let's start simple. This time, we don't have any training data to work with; let's just assume we seek some (purported) prediction function $g(x)$. To approximate $g$, we have a candidate hypothesis class $\f$ of shallow (two-layer) neural networks of the form:
 
 \\[ f(x) = \sum_{i=1}^m \alpha_i \psi(\langle w_i, x \rangle + b_i) . \\]
 
@@ -28,13 +32,13 @@ where $\mu$ is some measure defined over $\text{dom}(g)$. Likewise for the $L_\i
 
 Let us first define a useful property to characterize univariate functions.
 
-**Definition**{:.label #Lipschitz}
+**Definition (univariate Lipschitz)**{:.label #Lipschitz}
   A function $g : \R \rightarrow \R$ is $L$-Lipschitz if for all $u,v \in \R$, we have that $|f(u) - f(v) | \leq L |u - v|$.
 {:.definition}
 
-Any smooth function with bounded derivative is Lipschitz; actually, certain non-smooth functions (such as the ReLU) are also Lipschitz. Lipschitz-ness does not quite capture everything we care about (e.g. discontinuous functions are not Lipschitz, which can be somewhat problematic if there are "jumps" in the label space) but it serves as a large enough class of functions to prove interesting results.
+Why is this an interesting property? Any smooth function with bounded derivative is Lipschitz; actually, certain non-smooth functions (such as the ReLU) are also Lipschitz. Lipschitz-ness does not quite capture everything we care about (e.g. discontinuous functions are not Lipschitz, which can be somewhat problematic if there are "jumps" in the label space) but it serves as a large enough class of functions to prove interesting results.
 
-If our target function $f$ is Lipschitz continuous with small $L$, then we can easily show that it can be well-approximated by a two-layer network with threshold activations: $\psi(z) = \mathbb{I}(z \geq 0)$.
+An additional benefit is because of approximability. If our target function $f$ is Lipschitz continuous with small $L$, then we can easily show that it can be well-approximated by a two-layer network with threshold activations: $\psi(z) = \mathbb{I}(z \geq 0)$.
 
 **Theorem**{:.label #univariatesimple}
   Let $g : [0,1] \rightarrow \R$ be $L$-Lipschitz. Then, it can be  $\varepsilon$-approximated in the sup-norm by a two-layer network with $O(L/\varepsilon)$ hidden threshold neurons.
@@ -54,12 +58,56 @@ If our target function $f$ is Lipschitz continuous with small $L$, then we can e
   $$
   \begin{aligned}
   |f(x) - g(x)| &= |g(x) - g(u_i)| \\
-  &\leq L |u - u_i | \\
+  &\leq L |x - u_i | \qquad \text{(Lipschitzness)} \\
   &\leq L \frac{\varepsilon}{L} = \varepsilon,
   \end{aligned}
   $$
 
-  Taking the supremum over all $x$ completes the proof.
+  Taking the supremum over all $x \in [0,1]$ completes the proof.
+{:.proof}
+
+**Remark**{:.label #UnivarianteRem1}
+So we can approximate $L$-Lipschitz functions with $O(L/\varepsilon)$ threshold neurons. Would the answer change if we used ReLU activations? (Hint: no, up to constants; prove this.)
+{:.remark}
+
+Of course, in deep learning we rarely care about univariate functions (i.e., where the input is 1-dimensional). We can ask a similar question in the more general case. Suppose we have $L$-Lipschitz functions over $d$ input variables and we want to approximate it using shallow neural networks. How many neurons do we need?
+
+We answer this question using two approaches. First, we give a construction using standard real analysis that uses *two* hidden layers of neurons. Then, with some more mathematical powerful machinery we will get better (and much more general) results with only one hidden layer (i.e., using the hypothesis class $\f$).
+
+First, we have to define Lipschitzness for $d$-variate functions.
+
+**Definition (multivariate Lipschitz)**{:.label #Lipschitz}
+  A function $g : \R^d \rightarrow \R$ is $L$-Lipschitz if for all $u,v \in \R$, we have that $|f(u) - f(v) | \leq L \|u - v\|_\infty$.
+{:.definition}
+
+
+**Theorem**{:.label #multivariatesimple}
+  Let $g : [0,1]^d \rightarrow \R$ be $L$-Lipschitz. Then, $g$ can be  $\varepsilon$-approximated in the $L_1$-norm by a three-layer network $f$ with $O(\frac{L}{\varepsilon^d})$ hidden threshold neurons.
+{:.theorem}
+
+**Proof sketch**{:label #multivariateproof}
+  The proof follows the above construction for univariate functions. We will tile $[0,1]^d$ with equally spaced multidimensional rectangles; there are $O(\frac{1}{\varepsilon}^d)$ of them. The value of the function $f$ within each rectangle will be held constant (and due to the definition of Lipschitzness, the error with respect to $g$ cannot be too large). If we can figure out how to approximate $g$ within each rectangle, then we are done.
+
+  The key idea is to figure out how to realize "indicator functions" for every rectangle. We have seen that in the univariate case, indicators can be implemented using the difference of two threshold neurons. In the $d$-variate case, an indicator over a rectangle is the *Cartesian product* over the $d$ axis. however, Boolean/Cartesian products can be implemented by a layer of threshold activations *on top* of these differences.
+
+  Formally, consider any arbitrary piece with $[u_j,v_j], j=1,2,\ldots,d$ as sides. The domain can be written as the Cartesian product:
+
+  $$
+  S = \times_{j=1}^d (u_j, v_j).
+  $$
+
+  Therefore, we can realize an indicator function over this domain as follows. Localize within each coordinate by the "difference-of-threshold neurons":
+
+  $$
+  h_j(z) = \psi(z-v_j) - \psi(z - u_j)
+  $$
+
+  and implement the entire rectangle is implemented via a "Boolean AND":
+
+  $$
+  h(x) = \psi(\sum_{j=1}^d h_j(x_j) - (d-1)),
+  $$
+  where $x_j$ is the $j$-th coordinate of $x$. There is one such $h$ for every rectangle, and the output edge from this neuron is assigned a constant value approximating $g$ within that rectangle. This completes the proof.
 {:.proof}
 
 
