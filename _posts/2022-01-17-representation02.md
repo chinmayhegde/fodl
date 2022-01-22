@@ -41,7 +41,14 @@ If our target function $f$ is Lipschitz continuous with small $L$, then we can e
 {:.theorem}
 
 **Proof**{:label #univariatesimpleproof}
-  This is an example where a picture suffices to show the proof. The high level idea is to 
+  The proof follows from the same picture we might have seen while first learning about integrals and Riemann sums. The high level idea is to tile the interval $[0,1]$ using "buildings" of appropriate height. Since the derivatives are bounded (due to Lipschitzness), the top of each "building" cannot be too far away from the corresponding function value.
+
+  Specifically, divide $[0,1]$ into equal intervals of size $\varepsilon/L$. For the $i$-th interval, define the function:
+
+  $$
+  f_i(x) = g(i \varepsilon/L ())
+  $$
+
 {:.proof}
 
 
