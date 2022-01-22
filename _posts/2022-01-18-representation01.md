@@ -11,10 +11,7 @@ Let us begin by trying to rigorously answer a very simple question:
 How many neurons are enough?
 ~~~
 
-This question isn't well-posed. Enough for what?
-- For good performance?
-- On what task, and for what type of data?
-- Do we even know if this answer is well-defined -- perhaps it depends on some hard-to-estimate quantity related to the learning problem?
+This question isn't well-posed. Enough for what? For good performance? On what task, and for what type of data? Do we even know if this answer is well-defined -- perhaps it depends on some hard-to-estimate quantity related to the learning problem?
 
 Let us begin simple. Suppose all we have is a bunch of training data points:
 \\[ X = \{(x_i, y_i)\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R} \\]
@@ -134,7 +131,7 @@ The above result shows that $m = n$ neurons are sufficient to memorize pretty mu
   Now, form a *very thin indicator slab* using for this affine subspace using exactly two neurons:
 
   $$
-  x \mapsto \psi(\langle w_1,x \rangle - (b_1-\varepsilon)) \psi(\langle w_1,x \rangle - (b_1+\varepsilon))
+  x \mapsto \psi(\langle w_1,x \rangle - (b_1-\varepsilon)) - \psi(\langle w_1,x \rangle - (b_1+\varepsilon))
   $$
 
   for some small enough $\varepsilon > 0$. This function is equal to 1 for exactly the points in the subspace, and zero for all other points. For this group of $d$ points we can assign the *output* weight $\alpha_1 = 1$. Iterate this argument $\lceil \frac{n}{d} \rceil$ times and we are done! Therefore, $2 \lceil \frac{n}{d} \rceil$ threshold neurons suffice if the labels are binary.
