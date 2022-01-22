@@ -61,7 +61,7 @@ $$
 
 Analogously, one can extend this definition to $L$ layers for any $L \geq 1$. The nomenclature is a bit funny sometimes. The above example is either called a "3-layer network" or "2-hidden-layer network", depending on who you ask. The output $y$ is considered as its own layer and not considered as "hidden" (also notice that it doesn't have any activation in this case; that's typical.)
 
-## Memorization capacity of shallow networks
+## Memorization capacity: Standard results
 {:.label}
 
 <script>
@@ -108,6 +108,10 @@ Really, we didn't do much here. Since the "information content" in $n$ labels ha
 **Remark**{:.label #MemorizationBasic2}
 The above proofs used biases, but if we restrict our attention to *bias-free* networks, that's fine too, we just need to use different weights for the $n$ hidden neurons. Such a network is called a *random feature model*; see [here](https://people.eecs.berkeley.edu/~brecht/papers/07.rah.rec.nips.pdf) and [here](https://arxiv.org/abs/1810.04374).
 {:.remark}
+
+
+## Memorization capacity: Improved results
+{:.label}
 
 The above result shows that $m = n$ neurons are sufficient to memorize pretty much any dataset. Can we get away with fewer neurons? Notice that really the network has to "remember" only the $n$ labels; but since there are $n$ neurons, each with $d$ input edges, the number of *parameters* is $nd$.  (*Note: not technically correct; the second proof only uses $n$ **distinct** weights and $n$ biases.*) It turns out that we can indeed do better.
 
