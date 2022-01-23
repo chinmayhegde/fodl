@@ -161,7 +161,7 @@ The Weierstrass theorem showed that that the set of *all* polynomials is a unive
 
   1. Every $f \in F$ is continuous.
   2. $\forall~x$, there exists $f \in \f$ s.t. $f(x) \neq 0$.
-  3. (*Separation*) $\forall~x, x',~x\neq x',$ there exists $f \in \F$ s.t. $f(x) \neq f(x')$.
+  3. (*Separation*) $\forall~x, x',~x\neq x',$ there exists $f \in \f$ s.t. $f(x) \neq f(x')$.
   4. (*Closure*) $\f$ is closed under additions and multiplications.
 
   then $\f$ is a universal approximator.
