@@ -151,11 +151,14 @@ Other than polynomials, what other families of "basis" functions lead to success
 The Weierstrass theorem showed that that the set of *all* polynomials is a universal approximator. In fact, a generalization of this theorem shows that other families of functions that behave like polynomials are also universal approximators. This is called the *Stone-Weierstrass* theorem, stated as follows.
 
 **Theorem**{:.label #stoneweierstrass}
-  (*Stone-Weierstrass, 1948.*) $\F$ is a universal approximator if the following hold:
+  (*Stone-Weierstrass, 1948.*) If the following hold:
+
   1. Every $f \in F$ is continuous.
   2. $\forall~x$, there exists $f \in \F$ s.t. $f(x) \neq 0$.
   3. (*Separation*) $\forall~x, x',~x\neq x',$ there exists $f \in \F$ s.t. $f(x) \neq f(x')$.
   4. (*Closure*) $\f$ is closed under additions and multiplications.
+
+  then $\F$ is a universal approximator.
 {:.theorem}
 
 
