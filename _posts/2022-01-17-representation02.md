@@ -8,7 +8,7 @@ date: 2022-01-17
 Previously, we visited several results that showed how (shallow) neural networks can effectively memorize training data. However, memorization of a finite dataset may not the end goal[^fn1]. In the ideal case, we would like to our network to simulate a (possibly complicated) prediction function that works well on most input data points. So a more pertinent question might be:
 
 ~~~
-Can a properly-tuned neural network simulate a prediction function?
+Can neural networks simulate arbitrary functions?
 ~~~
 
 
