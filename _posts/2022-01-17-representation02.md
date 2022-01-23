@@ -160,7 +160,7 @@ The Weierstrass theorem showed that that the set of *all* polynomials is a unive
   (*Stone-Weierstrass, 1948.*) If the following hold:
 
   1. Every $f \in F$ is continuous.
-  2. $\forall~x$, there exists $f \in \F$ s.t. $f(x) \neq 0$.
+  2. $\forall~x$, there exists $f \in \f$ s.t. $f(x) \neq 0$.
   3. (*Separation*) $\forall~x, x',~x\neq x',$ there exists $f \in \F$ s.t. $f(x) \neq f(x')$.
   4. (*Closure*) $\f$ is closed under additions and multiplications.
 
@@ -239,15 +239,21 @@ In a seminal paper[^barron], Barron identified an interesting class of functions
 
 **Theorem**{:.label #univapproxbarron}
   Suppose $g : \R^d \rightarrow \R$ is in $L_1$. Then, there exists a one-hidden-layer neural network $f$ with sigmoidal activations and $m$ hidden neurons such that:
-  \\( \int | f(x) - g(x) |^2 dx \leq \varepsilon \\)
+  $$
+  \int | f(x) - g(x) |^2 dx \leq \varepsilon
+  $$
   where:
-  \\( m = \frac{C_g^2}{\varepsilon^2} . \\)
+  $$
+  m = \frac{C_g^2}{\varepsilon^2} .
+  $$
   Here, $C_g$ is the $L_1$-norm of the *Fourier transform* of the *gradient* of $g$ and is called the *Barron norm* of $g$:
-  \\( C_g = = \lVert \widehat{\nabla g} \rVert_1 = \int \lVert \widehat{\nabla g} \rVert \\).
+  $$
+  C_g = = \lVert \widehat{\nabla g} \rVert_1 = \int \lVert \widehat{\nabla g} \rVert d\omega.
+  $$
 {:.theorem}
 
 
-We will prove this result below, but first some reflection on what the bound says. Notice now that $m$ does *not explicitly depend* on $d$; therefore, we escape the dreaded curse of dimensionality. As long as we control the Barron norm of $g$ to be something reasonable, we can succinctly approximate it using shallow networks.
+We will outline the proof of this theorem, but first some reflections. Notice now that $m$ does *not explicitly depend* on $d$; therefore, we escape the dreaded curse of dimensionality. As long as we control the Barron norm of $g$ to be something reasonable, we can succinctly approximate it using shallow networks.
 
 In his paper[^barron], Barron shows that indeed Barron norms can be small for a large number of interesting target function classes -- polynomials, sufficiently smooth functions, families such as Gaussian mixture models, even functions over discrete domains (such as decision trees).
 
