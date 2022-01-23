@@ -152,12 +152,10 @@ The Weierstrass theorem showed that that the set of *all* polynomials is a unive
 
 **Theorem**{:.label #stoneweierstrass}
   (*Stone-Weierstrass, 1948.*) $\F$ is a universal approximator if the following hold:
-
   1. Every $f \in F$ is continuous.
   2. $\forall~x$, there exists $f \in \F$ s.t. $f(x) \neq 0$.
   3. (*Separation*) $\forall~x, x',~x\neq x',$ there exists $f \in \F$ s.t. $f(x) \neq f(x')$.
   4. (*Closure*) $\f$ is closed under additions and multiplications.
-
 {:.theorem}
 
 
@@ -212,7 +210,7 @@ as the space of all possible single-hidden-layer networks with activation $\psi$
 **Remark**{:.label #remunivapprox3}
   Somewhat curiously, if we use $\psi(\cdot)$ to be a polynomial activation function (of a *fixed-degree*), then $\f$ is *not* a universal approximator. Can you see why this is the case? (Hint: which property of Stone-Weierstrass is violated?)
 
-  In fact, polynomial activations are the only ones which don't work; every other activation gives a universal approximator; see Leshno et al. (1993)[^leshno] for a proof.  
+  In fact, polynomial activations are the only ones which don't work! $\f$ is a universal approximator *iff $\psi$ is non-polynomial*; see Leshno et al. (1993)[^leshno] for a proof.  
 {:.remark}
 
 
