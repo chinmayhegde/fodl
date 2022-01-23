@@ -165,13 +165,13 @@ The Weierstrass theorem showed that that the set of *all* polynomials is a unive
 We will use this property to show that (in very general situations) the family of shallow neural networks with a single hidden layer are universal approximators. To be precise, let $f(x)$ be a single neuron:
 
 $$
-f : x \mapsto a \psi(\langle w, x \rangle + b)
+f : x \mapsto \alpha \psi(\langle w, x \rangle + b)
 $$
 
 and define
 
 $$
-\f = \text{span}_f \lbrace f(x) \rbrace
+\f = \text{span}_{\alpha,w,b} \lbrace f(x) \rbrace
 $$
 
 as the space of all possible single-hidden-layer networks with activation $\psi$. We prove the following several results, and follow these with several remarks.
