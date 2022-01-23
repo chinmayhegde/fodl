@@ -91,7 +91,7 @@ First, we have to define Lipschitzness for $d$-variate functions.
 {:.theorem}
 
 **Proof sketch.**{:label #multivariateproof}
-  The proof follows the above construction for univariate functions. We will tile $[0,1]^d$ with equally spaced multidimensional rectangles; there are $O(\frac{1}{\varepsilon}^d)$ of them. The value of the function $f$ within each rectangle will be held constant (and due to the definition of Lipschitzness, the error with respect to $g$ cannot be too large). If we can figure out how to approximate $g$ within each rectangle, then we are done.
+  The proof follows the above construction for univariate functions. We will tile $[0,1]^d$ with equally spaced multidimensional rectangles; there are $O(\frac{1}{\varepsilon^d})$ of them. The value of the function $f$ within each rectangle will be held constant (and due to the definition of Lipschitzness, the error with respect to $g$ cannot be too large). If we can figure out how to approximate $g$ within each rectangle, then we are done.
 
   The key idea is to figure out how to realize "indicator functions" for every rectangle. We have seen that in the univariate case, indicators can be implemented using the difference of two threshold neurons. In the $d$-variate case, an indicator over a rectangle is the *Cartesian product* over the $d$ axis. however, Boolean/Cartesian products can be implemented by a layer of threshold activations *on top* of these differences.
 
