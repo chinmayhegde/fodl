@@ -319,3 +319,6 @@ Let's now give a proof sketch of Barron's theorem [Theorem](#univapproxbarron). 
 
 [^girosi]:
     F. Girosi, [Regularization Theory, Radial Basis Functions and Networks](https://link.springer.com/chapter/10.1007/978-3-642-79119-2_8), 1994.
+
+[^recht]:
+    B. Recht, [Approximation theory](https://www.mit.edu/~9.520/spring08/Classes/recht_040708.pdf), 2008.
