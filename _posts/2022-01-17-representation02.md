@@ -305,6 +305,12 @@ Let's now give a proof sketch of Barron's [Theorem](#univapproxbarron). We will 
 [^hornik]:
     K. Hornik, M. Stinchcombe, H. White, [Multilayer feedforward networks are universal approximators](https://www.sciencedirect.com/science/article/abs/pii/0893608089900208), 1989.
 
+[^cybenko]:
+    G. Cybenko, [Approximation by superpositions of a sigmoidal function](https://link.springer.com/article/10.1007/BF02551274), 1989.
+
+[^funashashi]:
+    K. Funahashi, [On the approximate realization of continuous mappings by neural networks](https://www.sciencedirect.com/science/article/abs/pii/0893608089900038), 1989.
+
 [^siren]:
     V. Sitzmann, J. Martell, A. Bregman, D. Lindell, G. Wetzstein, [Implicit Neural Representations with Periodic Activation Functions](https://arxiv.org/abs/2006.09661), 2020.
 
