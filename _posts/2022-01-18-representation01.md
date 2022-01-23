@@ -18,7 +18,7 @@ This question, of course, isn't well-posed.
     - Do we even know if this answer is achievable? Or that perhaps it depends on some hard-to-estimate quantity related to the learning problem?
 
 Let us begin simple. Suppose all we have is a bunch of training data points:
-\\[ X = \{(x_i, y_i)\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R} \\]
+\\[ X = \lbrace (x_i, y_i)\\rbrace_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R} \\]
 and our goal will be to discover a network that *exactly* memorizes $X$. That is, we will learn a function $f$ that, when evaluated on every data point $x_i$ in the training data, returns $y_i$. Equivalently, if we define empirical risk via the squared error loss:
 
 $$
@@ -78,7 +78,7 @@ Let us focus our attention on the ability of *two-layer* networks (or one-hidden
 Intuitively, $m < \infty$ is a trivial upper bound on any dataset (we will be more rigorous about this when we prove universal approximation results). If we have infinitely many parameters then memorization should be trivial. Let us get a better upper bound for $m$. Our first result shows that $m = n$ should suffice.
 
 **Theorem**{:.label #MemorizationBasic}
-  Let $f$ be a two-layer ReLU network with $m = n$ hidden neurons. For any _arbitrary_ dataset $X = \{(x_i, y_i)_{i=1}^n\} \subset \mathbb{R}^d \times \mathbb{R}$ where $x_i$ are in general position, the weights and biases of $f$ can be chosen such that $f$ exactly interpolates $X$.
+  Let $f$ be a two-layer ReLU network with $m = n$ hidden neurons. For any _arbitrary_ dataset $X = \lbrace (x_i, y_i)_{i=1}^n\rbrace \subset \mathbb{R}^d \times \mathbb{R}$ where $x_i$ are in general position, the weights and biases of $f$ can be chosen such that $f$ exactly interpolates $X$.
 {:.theorem}
 
 **Proof**{:.label #MemorizationBasicProof1}
@@ -88,7 +88,7 @@ Intuitively, $m < \infty$ is a trivial upper bound on any dataset (we will be mo
   \\[\f = \bigcup_{m \geq 0} \f_m . \\]
   The high level idea is that $\f$ forms a *vector space*. This is easy to see, since it is closed under additions and scalar multiplications. Formally, fix $x$ and consider the element $\psi_{w,b}: x \mapsto \psi(\langle w, x \rangle + b)$. Then, $\text{span}(\psi_{w,b})$ forms a vector space.  Now, consider the linear *pointwise* evaluation operator $\Psi : V \rightarrow \mathbb{R}^n$:
   \\[\Psi(f) = (f(x_1), f(x_2), \ldots, f(x_n)) .\\]
-  We know from classical universal approximation (Chapter 2) that *every vector* in $\mathbb{R}^n$ can be written as *some* (possibly infinite)  combination of neurons. Therefore, $\text{Range}(\Psi) = \mathbb{R}^n$, or $\text{dim(Range}(\Psi)) = n$. Therefore, there *exists* some basis of size $n$ with the same span! Call this basis $\{\psi_1, \ldots,\psi_n\}$. This basis can be used to express any set of labels by choosing appropriate coefficients in a standard basis representation $y = \sum_{i=1}^n \alpha_i \psi_i$.
+  We know from classical universal approximation (Chapter 2) that *every vector* in $\mathbb{R}^n$ can be written as *some* (possibly infinite)  combination of neurons. Therefore, $\text{Range}(\Psi) = \mathbb{R}^n$, or $\text{dim(Range}(\Psi)) = n$. Therefore, there *exists* some basis of size $n$ with the same span! Call this basis $\lbrace \psi_1, \ldots,\psi_n\rbrace$. This basis can be used to express any set of labels by choosing appropriate coefficients in a standard basis representation $y = \sum_{i=1}^n \alpha_i \psi_i$.
   The result follows.
 {:.proof}
 
