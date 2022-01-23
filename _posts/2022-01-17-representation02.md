@@ -35,7 +35,10 @@ $$
 
 where $\mu$ is some measure defined over $\text{dom}(g)$. Likewise for the $L_\infty$- (or the sup-)norm, and so on.
 
-Let us first define a useful property to characterize univariate functions.
+### Univariate functions
+{:.label}
+
+We begin with the special case of $d=1$ (i.e., the prediction function $g$ is univariate). Let us first define a useful property to characterize univariate functions.
 
 **Definition (univariate Lipschitz)**{:.label #Lipschitz}
   A function $g : \R \rightarrow \R$ is $L$-Lipschitz if for all $u,v \in \R$, we have that $|f(u) - f(v) | \leq L |u - v|$.
@@ -43,7 +46,7 @@ Let us first define a useful property to characterize univariate functions.
 
 Why is this an interesting property? Any smooth function with bounded derivative is Lipschitz; in fact, certain non-smooth functions (such as the ReLU) are also Lipschitz. Lipschitz-ness does not quite capture everything we care about (e.g. discontinuous functions are not Lipschitz, which can be somewhat problematic if there are "jumps" in the label space). But it serves as a large enough class of functions to prove interesting results.
 
-An additional benefit of Lipschitzness is due to approximability. If our target function $f$ is Lipschitz continuous with small $L$, then we can easily show that it can be well-approximated by a two-layer network with threshold activations: $\psi(z) = \mathbb{I}(z \geq 0)$. We prove:
+An additional benefit of Lipschitzness is due to approximability. If our target function $f$ is $L$-Lipschitz with reasonable $L$, then we can show that it can be well-approximated by a two-layer network with threshold activations: $\psi(z) = \mathbb{I}(z \geq 0)$. We prove:
 
 **Theorem**{:.label #univariatesimple}
   Let $g : [0,1] \rightarrow \R$ be $L$-Lipschitz. Then, it can be  $\varepsilon$-approximated in the sup-norm by a two-layer network with $O(\frac{L}{\varepsilon})$ hidden threshold neurons.
@@ -74,6 +77,9 @@ An additional benefit of Lipschitzness is due to approximability. If our target 
 **Remark**{:.label #UnivarianteRem1}
 So we can approximate $L$-Lipschitz functions with $O(L/\varepsilon)$ threshold neurons. Would the answer change if we used ReLU activations? (Hint: no, up to constants; prove this.)
 {:.remark}
+
+### Multivariate functions
+{:.label}
 
 Of course, in deep learning we rarely care about univariate functions (i.e., where the input is 1-dimensional). We can ask a similar question in the more general case. Suppose we have $L$-Lipschitz functions over $d$ input variables and we want to approximate it using shallow neural networks. How many neurons do we need?
 
@@ -165,13 +171,13 @@ The Weierstrass theorem showed that that the set of *all* polynomials is a unive
 We will use this property to show that (in very general situations) the family of shallow neural networks with a single hidden layer are universal approximators. To be precise, let $f(x)$ be a single neuron:
 
 $$
-f : x \mapsto \alpha \psi(\langle w, x \rangle + b)
+f_{\alpha,w,b} : x \mapsto \alpha \psi(\langle w, x \rangle + b)
 $$
 
 and define
 
 $$
-\f = \text{span}_{\alpha,w,b} \lbrace f(x) \rbrace
+\f = \text{span}_{\alpha,w,b} \lbrace f_{\alpha,w,b} \rbrace
 $$
 
 as the space of all possible single-hidden-layer networks with activation $\psi$. We prove the following several results, and follow these with several remarks.
@@ -195,24 +201,28 @@ as the space of all possible single-hidden-layer networks with activation $\psi$
 {:.proof}
 
 **Theorem**{:.label #univapproxsigmoid}
-  If we use any sigmoidal activation $\psi(\cdot)$ that is continuous, then $\f$ is a universal approximator. Here a sigmoidal activation is a function $\psi$ such that $\lim_{z \rightarrow -\infty} = 0$ and $\lim_{z \rightarrow +\infty} = 1$.
+  If we use any sigmoidal activation $\psi(\cdot)$ that is continuous, then $\f$ is a universal approximator. Here a sigmoidal activation is a function $\psi$ such that $\lim_{z \rightarrow -\infty} = 0$ and $\lim_{z \rightarrow +\infty} = 1$. This result covers "threshold" activations, hard/soft tanh, regular sigmoids, etc.
 {:.theeorem}
 
 **Proof**{:.label #univapproxcosproof}
   This was also proved in the OG paper by Hornik et al[^hornik]. *(COMPLETE)*
 {:.proof}
 
+**Remark**{:.label #remunivapprox0}
+  Corollary: can you show that if sigmoids work, then ReLUs also work?
+{:.remark}
+
+
 **Remark**{:.label #remunivapprox1}
   The use of sinusoidal activations is not standard in deep learning, although they have found use in some fantastic new applications in the context of solving partial differential equations[^siren]. Later we will explore other (theoretical) applications of cosines.  
 {:.remark}
 
 **Remark**{:.label #remunivapprox2}
-  Notice here that these results are silent on how large $m$ needs to be in terms of $\varepsilon$. If we unpack terms carefully, we again see a scaling of $m$ with $O(\frac{1}{\varepsilon^d})$, similar to what we had before. This property arises to due to closure under products.  
+  Notice here that these results are silent on how large $m$ needs to be in terms of $\varepsilon$. If we unpack terms carefully, we again see a scaling of $m$ with $O(\frac{1}{\varepsilon^d})$, similar to what we had before. This property arises to due to closure under products. The curse of dimensionality strikes yet again.
 {:.remark}
 
 **Remark**{:.label #remunivapprox3}
   Somewhat curiously, if we use $\psi(\cdot)$ to be a polynomial activation function (of a *fixed-degree*), then $\f$ is *not* a universal approximator. Can you see why this is the case? (Hint: which property of Stone-Weierstrass is violated?)
-
   In fact, polynomial activations are the only ones which don't work! $\f$ is a universal approximator *iff $\psi$ is non-polynomial*; see Leshno et al. (1993)[^leshno] for a proof.  
 {:.remark}
 
@@ -220,6 +230,55 @@ as the space of all possible single-hidden-layer networks with activation $\psi$
 ## Barron's method
 {:.label}
 
+Universal approximation results of the form discussed above are interesting but, at the end, not very satisfactory. Recall that we wanted to know if our prediction function can be simulated via a *succinct* neural network. However, we could only muster a bound of $O(\frac{1}{\varepsilon^d})$.
+
+Can we do better than this? Maybe our original approach (trying to approximate all $L$-Lipschitz functions) was a bit too ambitious. Perhaps we want to narrow our focus down to a smaller target class (that are still rich enough to capture interesting function behavior). In any case, can we get *dimension-independent* bounds on the number of neurons needed to approximate target functions?
+
+In a seminal paper[^barron], Barron identified an interesting class of functions that can be indeed well-approximated with *small* (still shallow) neural networks. Again, we have to pick up a few extra tools to establish this, so we will first state the main result, and then break down the proof.
+
+
+**Theorem**{:.label #univapproxbarron}
+  Suppose $g : \R^d \rightarrow \R$ is in $L_1$. Then, there exists a one-hidden-layer neural network $f$ with sigmoidal activations and $m$ hidden neurons such that:
+  \\( \int | f(x) - g(x) |^2 dx \leq \varepsilon \\)
+  where:
+  \\( m = \frac{C_g^2}{\varepsilon^2} . \\)
+  Here, $C_g$ is the $L_1$-norm of the *Fourier transform* of the *gradient* of $g$ and is called the *Barron norm* of $g$:
+  \\( C_g = = \lVert \widehat{\nabla g} \rVert_1 = \int \lVert \widehat{\nabla g} \rVert \\).
+{:.theorem}
+
+
+We will prove this result below, but first some reflection on what the bound says. Notice now that $m$ does *not explicitly depend* on $d$; therefore, we escape the dreaded curse of dimensionality. As long as we control the Barron norm of $g$ to be something reasonable, we can succinctly approximate it using shallow networks.
+
+In his paper[^barron], Barron shows that indeed Barron norms can be small for a large number of interesting target function classes -- polynomials, sufficiently smooth functions, families such as Gaussian mixture models, even functions over discrete domains (such as decision trees).
+
+Second, the bound is an "existence"-style result. Somewhat interestingly, the proof will also reveal a *constructive* (although unfortunately not very computationally friendly) approach to finding $f$. We will discuss this at the very end.
+
+Third, notice that the approximation error is measured in terms of the $L_2$ (squared difference) norm. This is due to the tools used in the proof; I'm not sure if there exist results for other norms (such as $L_\infty$).
+
+Lastly, other Barron style bounds assuring "dimension-free" convergence of representation error exist, using similar analysis techniques. See Jones[^jones], Girosi[^girosi], and these lecture notes by Recht[^recht].
+
+---
+
+Let's now give a proof sketch of Barron's theorem [Theorem](#univapproxbarron). We will be somewhat handwavy, focusing on intuition and being sloppy with derivations; for a more careful treatment, see Telgarsky's notes[^mjt]. The proof follows from two observations:
+
+* Write out the function $g$ *exactly* in terms of the *Fourier* basis functions (with possibly infinitely many coefficients), and map this to an infinitely-wide neural network.
+
+* Using Maurey's empirical method (also sometimes called the "probabilistic method"), show that one can *sample* from an appropriate distribution defined on the basis functions, and get a succinct (but good enough) approximation of $g$. Specifically, to get $\varepsilon$-accurate approximation, we need $m = O(\frac{1}{\varepsilon^2})$ samples.
+
+### Proof Part 1: Fourier decomposition
+{:.label}
+
+** _COMPLETE_ **.
+
+### Proof part 2: The empirical method of Maurey
+{:.label}
+
+** _COMPLETE_ **.
+
+### Epilogue: A constructive approximation via Frank-Wolfe
+{:.label}
+
+** _COMPLETE_ **.
 
 ---
 
@@ -245,3 +304,12 @@ as the space of all possible single-hidden-layer networks with activation $\psi$
 
 [^leshno]:
     M. Leshno, V. Lin, A. Pinkus, S. Schocken, [Multilayer feedforward networks with a nonpolynomial activation function can approximate any function](https://www.sciencedirect.com/science/article/abs/pii/S0893608005801315), 1993.    
+
+[^barron]:
+    A. Barron, [Universal Approximation Bounds for Superpositions of a Sigmoidal Function](http://www.stat.yale.edu/~arb4/publications_files/UniversalApproximationBoundsForSuperpositionsOfASigmoidalFunction.pdf), 1993.
+
+[^jones]:
+    L. Jones, [A Simple Lemma on Greedy Approximation in Hilbert Space and Convergence Rates for Projection Pursuit Regression and Neural Network Training](https://projecteuclid.org/journals/annals-of-statistics/volume-20/issue-1/A-Simple-Lemma-on-Greedy-Approximation-in-Hilbert-Space-and/10.1214/aos/1176348546.full), 1992.
+
+[^girosi]:
+    F. Girosi, [Regularization Theory, Radial Basis Functions and Networks](https://link.springer.com/chapter/10.1007/978-3-642-79119-2_8), 1994.
