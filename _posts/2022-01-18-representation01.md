@@ -11,7 +11,11 @@ Let us begin by trying to rigorously answer a very simple question:
 How many neurons are enough?
 ~~~
 
-This question isn't well-posed. Enough for what? For good performance? On what task, and for what type of data? Do we even know if this answer is well-defined -- perhaps it depends on some hard-to-estimate quantity related to the learning problem?
+This question, of course, isn't well-posed.
+    - Enough for what?
+    - For good performance?
+    - On what task, and for what type of data?
+    - Do we even know if this answer is achievable? Or that perhaps it depends on some hard-to-estimate quantity related to the learning problem?
 
 Let us begin simple. Suppose all we have is a bunch of training data points:
 \\[ X = \{(x_i, y_i)\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R} \\]
@@ -88,7 +92,7 @@ Intuitively, $m < \infty$ is a trivial upper bound on any dataset (we will be mo
   The result follows.
 {:.proof}
 
-In fact, the above result holds for any activation function $\psi$ that is not a polynomial[^leshno].
+In fact, the above result holds for any activation function $\psi$ that is not a polynomial[^leshno]; we will revisit this curious property later.
 
 Really, we didn't do much here. Since the "information content" in $n$ labels has dimension $n$, we can extract any arbitrary basis (written in the form of neurons) and write down the expansion of the labels in terms of this basis. Since this approach may be a bit abstract, let's give an alternate *constructive* proof.
 

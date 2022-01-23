@@ -5,9 +5,14 @@ categories: representation
 date: 2022-01-17
 ---
 
-Previously, we visited several results that showed how (shallow) neural networks can effectively memorize training data. However, memorization of a finite dataset may not the end goal[^fn1]. In the ideal case, we would like to our network to simulate a (possibly complicated) prediction function that works well on most input data points. Is a given architecture good enough?
+Previously, we visited several results that showed how (shallow) neural networks can effectively memorize training data. However, memorization of a finite dataset may not the end goal[^fn1]. In the ideal case, we would like to our network to simulate a (possibly complicated) prediction function that works well on most input data points. So a more pertinent question might be:
 
-In this note we will describe the representation power of (shallow) neural networks in terms of their ability to approximate continuous functions. This line of work has a long and rich history. The field of function approximation, independent of the context of neural networks, is a vast body of work which we can only barely touch upon. See here[^devore] for a recent (and fantastic) survey.
+~~~
+Can a properly-tuned neural network simulate a prediction function?
+~~~
+
+
+In this note we will study the representation power of (shallow) neural networks through the lens of their ability to approximate (continuous) functions. This line of work has a long and rich history. The field of function approximation, independent of the context of neural networks, is a vast body of work which we can only barely touch upon. See here[^devore] for a recent (and fantastic) survey.
 
 As before, intuition tells us that an infinite number of neurons should be good enough to approximate pretty much anything. Therefore, our guiding principle will be to achieve as *succinct* a neural representation as possible. Moreover, if there is an *efficient computational* routine that gives this representation, that would be the icing on the cake.
 
@@ -18,7 +23,7 @@ As before, intuition tells us that an infinite number of neurons should be good 
 macros["\\f"] = "\\mathscr{F}"
 </script>
 
-Let's start simple. This time, we don't have any training data to work with; let's just assume we seek some (purported) prediction function $g(x)$. To approximate $g$, we have a candidate hypothesis class $\f$ of shallow (two-layer) neural networks of the form:
+Let's again start simple. This time, we don't have any training data to work with; let's just assume we seek some (purported) prediction function $g(x)$. To approximate $g$, we have a candidate hypothesis class $\f_m$ of shallow (two-layer) neural networks of the form:
 
 \\[ f(x) = \sum_{i=1}^m \alpha_i \psi(\langle w_i, x \rangle + b_i) . \\]
 
@@ -77,7 +82,7 @@ We answer this question using two approaches. First, we give a construction usin
 First, we have to define Lipschitzness for $d$-variate functions.
 
 **Definition (multivariate Lipschitz)**{:.label #Lipschitz}
-  A function $g : \R^d \rightarrow \R$ is $L$-Lipschitz if for all $u,v \in \R$, we have that $|f(u) - f(v) | \leq L \|u - v\|_\infty$.
+  A function $g : \R^d \rightarrow \R$ is $L$-Lipschitz if for all $u,v \in \R^d$, we have that $|f(u) - f(v) | \leq L \lVert u - v \rVert_\infty$.
 {:.definition}
 
 
@@ -102,12 +107,12 @@ First, we have to define Lipschitzness for $d$-variate functions.
   h_j(z) = \psi(z-v_j) - \psi(z - u_j)
   $$
 
-  and implement the entire rectangle is implemented via a "Boolean AND":
+  and implement the entire rectangle is implemented via a "Boolean AND" over all the coordinates:
 
   $$
   h(x) = \psi(\sum_{j=1}^d h_j(x_j) - (d-1)),
   $$
-  
+
   where $x_j$ is the $j$-th coordinate of $x$. There is one such $h$ for every rectangle, and the output edge from this neuron is assigned a constant value approximating $g$ within that rectangle. This completes the proof.
 {:.proof}
 
@@ -115,11 +120,15 @@ First, we have to define Lipschitzness for $d$-variate functions.
 Would the answer change if we used ReLU activations? (Hint: no, up to constants; prove this.)
 {:.remark}
 
-Before proceeding, let's just reflect on the bound (and the nature of the network) that we constructed in the proof. Each neuron in the first layer looks at the right "interval" independently each input coordinate; there are $d$ such coordinates, and therefore $O(\frac{dL}{\varepsilon})$ intervals. The second layer is where the real complexity lies: each neuron picks exactly the right set of intervals to define a unique hyper-rectangle. There are $O(\frac{1}{\varepsilon^d})$ such rectangles. Therefore, the last layer becomes very, very wide with increasing $d$. This is unfortunate, since we desire succinct representations.
+Before proceeding, let's just reflect on the bound (and the nature of the network) that we constructed in the proof. Each neuron in the first layer looks at the right "interval" independently each input coordinate; there are $d$ such coordinates, and therefore $O(\frac{dL}{\varepsilon})$ intervals.
 
-So the next natural question is: can we get better upper bounds? Curiously, the answer is a qualified *yes*, but first we need to gather a few more tools.
+The second layer is where the real difficulty lies. Each neuron picks exactly the right set of intervals to define a unique hyper-rectangle. There are $O(\frac{1}{\varepsilon^d})$ such rectangles. Therefore, the last layer becomes very, very wide with increasing $d$. This is unfortunate, since we desire succinct representations.
 
-## Universal approximation
+So the next natural question is: can we get better upper bounds? Also, do we really need two hidden layers (or is the hypothesis class $\f_m$ good enough for sufficiently large $m$)?
+
+The answer to both questions is a (qualified) *yes*, but first we need to gather a few more tools.
+
+## Universal approximators
 {:.label}
 
 The idea of defining succinct hypothesis classes to approximate functions had been well studied well before neural networks were introduced. In fact, we can go all the way back to:
@@ -128,13 +137,92 @@ The idea of defining succinct hypothesis classes to approximate functions had be
   (*Weierstrass, 1865.*) Let $g : [0,1] \rightarrow \R$ be any continuous function. Then, $g$ can be  $\varepsilon$-approximated in the sup-norm by some polynomial of sufficiently high degree.
 {:.theorem}
 
-Let us generalize this concept using the following definition.
+Weierstrass proved this via an interesting trick: he took the function $g$, *convolved* this with a Gaussian (which made everything smooth/analytic) and then did a Taylor series. Curiously, we will return this property much later when we study adversarial robustness of neural networks.
 
-## The method of Barron
+In fact, there is a more direct *constructive* proof of this result by Bernstein[^bernstein]; we won't go over it but see, for example [here](http://nonagon.org/ExLibris/bernstein-proves-weierstrass). The key idea is to construct a sufficiently large set of *interpolating basis functions* (in Bernstein's case, his eponymous polynomials), whose combinations densely span the entire space of continuous functions.
+
+Other than polynomials, what other families of "basis" functions lead to successful approximation? To answer this, we first define the concept of a *universal approximator*.
+
+**Definition**{:.label #univapproxdef}
+  Let $\f$ be a given hypothesis class. Then, $\f$ is a universal approximator over some domain $S$ if for every continuous function $g : S \rightarrow \R$ and approximation parameter $\varepsilon > 0$, there exists $f \in \F$ such that:
+  $$ \sup_{x \in S} |f(x) - g(x) | \leq \varepsilon .$$
+{:.definition}
+
+The Weierstrass theorem showed that that the set of *all* polynomials is a universal approximator. In fact, a generalization of this theorem shows that other families of functions that behave like polynomials are also universal approximators. This is called the *Stone-Weierstrass* theorem, stated as follows.
+
+**Theorem**{:.label #stoneweierstrass}
+  (*Stone-Weierstrass, 1948.*) $\F$ is a universal approximator if the following hold:
+
+  1. Every $f \in F$ is continuous.
+  2. $\forall~x$, there exists $f \in \F$ s.t. $f(x) \neq 0$.
+  3. (*Separation*) $\forall~x, x',~x\neq x',$ there exists $f \in \F$ s.t. $f(x) \neq f(x')$.
+  4. (*Closure*) $\f$ is closed under additions and multiplications.
+
+{:.theorem}
+
+
+We will use this property to show that (in very general situations) the family of shallow neural networks with a single hidden layer are universal approximators. To be precise, let $f(x)$ be a single neuron:
+
+$$
+f : x \mapsto a \psi(\langle w, x \rangle + b)
+$$
+
+and define
+
+$$
+\f = \text{span}_f \lbrace f(x) \rbrace
+$$
+
+as the space of all possible single-hidden-layer networks with activation $\psi$. We prove the following several results, and follow these with several remarks.
+
+**Theorem**{:.label #univapproxcos}
+  If we use the cosine activation $\psi(\cdot) = \cos(\cdot)$, then $\f$ is a universal approximator.
+{:.label}
+
+**Proof**{:.label #univapproxcosproof}
+  This result is the OG "universal approximation theorem" and can be attributed to Hornik, Stinchcombe, and White[^hornik]. Contemporary results of basically the same flavor are due to Cybenko[^cybenko] and Funahashi[^funashashi] but using techniques other than Stone-Weierstrass.
+
+  *(COMPLETE: Check conditions of Stone-Weierstrass)*.
+{:.label}
+
+**Theorem**{:.label #univapproxexp}
+  If we use the exponential activation $\psi(\cdot) = \exp(\cdot)$, then $\f$ is a universal approximator.
+{:.label}
+
+**Proof**{:.label #univapproxcosproof}
+  Even easier than $\cos$. *(COMPLETE)*
+{:.label}
+
+**Theorem**{:.label #univapproxsigmoid}
+  If we use any sigmoidal activation $\psi(\cdot)$ that is continuous, then $\f$ is a universal approximator. Here a sigmoidal activation is a function $\psi$ such that $\lim_{z \rightarrow -\infty} = 0$ and $\lim_{z \rightarrow +\infty} = 1$.
+{:.label}
+
+**Proof**{:.label #univapproxcosproof}
+  This was also proved in the OG paper by Hornik et al[^hornik]. *(COMPLETE)*
+{:.label}
+
+**Remark**{:.label #remunivapprox1}
+  The use of sinusoidal activations is not standard in deep learning, although they have found use in some fantastic new applications in the context of solving partial differential equations[^siren]. Later we will explore other (theoretical) applications of cosines.  
+{:.remark}
+
+**Remark**{:.label #remunivapprox2}
+  Notice here that these results are silent on how large $m$ needs to be in terms of $\varepsilon$. If we unpack terms carefully, we again see a scaling of $m$ with $O(\frac{1}{\varepsilon^d})$, similar to what we had before. This property arises to due to closure under products.  
+{:.remark}
+
+**Remark**{:.label #remunivapprox3}
+  Somewhat curiously, if we use $\psi(\cdot)$ to be a polynomial activation function (of a *fixed-degree*), then $\f$ is *not* a universal approximator. Can you see why this is the case? (Hint: which property of Stone-Weierstrass is violated?)
+
+  In fact, polynomial activations are the only ones which don't work; every other activation gives a universal approximator; see Leshno et al. (1993)[^leshno] for a proof.  
+{:.remark}
+
+
+## Barron's method
 {:.label}
 
 
 ---
+
+# Footnotes and references
 
 [^fn1]:
     Although: exactly interpolating training labels seems standard in modern deep networks; see [here](https://paperswithcode.com/sota/image-classification-on-cifar-10) and Fig 1a  of [this paper](https://arxiv.org/pdf/1611.03530.pdf).
@@ -144,3 +232,15 @@ Let us generalize this concept using the following definition.
 
 [^mjt]:
     M. Telgarsky, [Deep Learning Theory](https://mjt.cs.illinois.edu/dlt/), 2021.
+
+[^bernstein]:
+    Bernstein polynomials have several other practical use cases, including in computer graphics (see [Bezier curves](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)).
+
+[^hornik]:
+    K. Hornik, M. Stinchcombe, H. White, [Multilayer feedforward networks are universal approximators](https://www.sciencedirect.com/science/article/abs/pii/0893608089900208), 1989.
+
+[^siren]:
+    V. Sitzmann, J. Martell, A. Bregman, D. Lindell, G. Wetzstein, [Implicit Neural Representations with Periodic Activation Functions](https://arxiv.org/abs/2006.09661), 2020.
+
+[^leshno]:
+    M. Leshno, V. Lin, A. Pinkus, S. Schocken, [Multilayer feedforward networks with a nonpolynomial activation function can approximate any function](https://www.sciencedirect.com/science/article/abs/pii/S0893608005801315), 1993.    
