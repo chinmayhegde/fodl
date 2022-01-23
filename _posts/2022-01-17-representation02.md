@@ -265,7 +265,7 @@ Lastly, other Barron style bounds assuring "dimension-free" convergence of repre
 
 ---
 
-Let's now give a proof sketch of Barron's theorem [Theorem](#univapproxbarron). We will be somewhat handwavy, focusing on intuition and being sloppy with derivations; for a more careful treatment, see Telgarsky's notes[^mjt]. The proof follows from two observations:
+Let's now give a proof sketch of Barron's [Theorem](#univapproxbarron). We will be somewhat handwavy, focusing on intuition and being sloppy with derivations; for a more careful treatment, see Telgarsky's notes[^mjt]. The proof follows from two observations:
 
 * Write out the function $g$ *exactly* in terms of the *Fourier* basis functions (with possibly infinitely many coefficients), and map this to an infinitely-wide neural network.
 
