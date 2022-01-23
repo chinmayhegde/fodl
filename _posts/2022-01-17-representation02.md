@@ -158,7 +158,7 @@ The Weierstrass theorem showed that that the set of *all* polynomials is a unive
   3. (*Separation*) $\forall~x, x',~x\neq x',$ there exists $f \in \F$ s.t. $f(x) \neq f(x')$.
   4. (*Closure*) $\f$ is closed under additions and multiplications.
 
-  then $\F$ is a universal approximator.
+  then $\f$ is a universal approximator.
 {:.theorem}
 
 
@@ -178,29 +178,29 @@ as the space of all possible single-hidden-layer networks with activation $\psi$
 
 **Theorem**{:.label #univapproxcos}
   If we use the cosine activation $\psi(\cdot) = \cos(\cdot)$, then $\f$ is a universal approximator.
-{:.label}
+{:.theorem}
 
 **Proof**{:.label #univapproxcosproof}
   This result is the OG "universal approximation theorem" and can be attributed to Hornik, Stinchcombe, and White[^hornik]. Contemporary results of basically the same flavor are due to Cybenko[^cybenko] and Funahashi[^funashashi] but using techniques other than Stone-Weierstrass.
 
   *(COMPLETE: Check conditions of Stone-Weierstrass)*.
-{:.label}
+{:.proof}
 
 **Theorem**{:.label #univapproxexp}
   If we use the exponential activation $\psi(\cdot) = \exp(\cdot)$, then $\f$ is a universal approximator.
-{:.label}
+{:.theorem}
 
 **Proof**{:.label #univapproxcosproof}
   Even easier than $\cos$. *(COMPLETE)*
-{:.label}
+{:.proof}
 
 **Theorem**{:.label #univapproxsigmoid}
   If we use any sigmoidal activation $\psi(\cdot)$ that is continuous, then $\f$ is a universal approximator. Here a sigmoidal activation is a function $\psi$ such that $\lim_{z \rightarrow -\infty} = 0$ and $\lim_{z \rightarrow +\infty} = 1$.
-{:.label}
+{:.theeorem}
 
 **Proof**{:.label #univapproxcosproof}
   This was also proved in the OG paper by Hornik et al[^hornik]. *(COMPLETE)*
-{:.label}
+{:.proof}
 
 **Remark**{:.label #remunivapprox1}
   The use of sinusoidal activations is not standard in deep learning, although they have found use in some fantastic new applications in the context of solving partial differential equations[^siren]. Later we will explore other (theoretical) applications of cosines.  
