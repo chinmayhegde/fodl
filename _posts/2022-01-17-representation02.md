@@ -55,6 +55,8 @@ An additional benefit of Lipschitzness is due to approximability. If our target 
 **Proof.**{:label #univariatesimpleproof}
   A more careful derivation of this fact (and the next one below) can be found in Telgarsky[^mjt]. The proof follows from the same picture we might have seen while first learning about integrals and Riemann sums. The high level idea is to tile the interval $[0,1]$ using "buildings" of appropriate height. Since the derivatives are bounded (due to Lipschitzness), the top of each "building" cannot be too far away from the corresponding function value. Here is a picture:
 
+  ![Approximating Lipschitz functions](/fodl/assets/lipschitz.png)
+
   More formally: partition $[0,1]$ into equal intervals of size $\varepsilon/L$. Let the $i$-th interval be $[u_i,u_{i+1})$. Define a sequence of functions $f_i(x)$ where each $f_i$ is zero everywhere, except within the $i$-th interval where it attains the value $g(u_i)$. Then $f_i$ can be written down as the difference of two threshold functions:
 
   $$
@@ -159,8 +161,8 @@ The Weierstrass theorem showed that that the set of *all* polynomials is a unive
 **Theorem**{:.label #stoneweierstrass}
   (*Stone-Weierstrass, 1948.*) If the following hold:
 
-  1. Every $f \in F$ is continuous.
-  2. $\forall~x$, there exists $f \in \f$ s.t. $f(x) \neq 0$.
+  1. (*Continuity*) Every $f \in F$ is continuous.
+  2. (*Identity*) $\forall~x$, there exists $f \in \f$ s.t. $f(x) \neq 0$.
   3. (*Separation*) $\forall~x, x',~x\neq x',$ there exists $f \in \f$ s.t. $f(x) \neq f(x')$.
   4. (*Closure*) $\f$ is closed under additions and multiplications.
 
@@ -168,7 +170,7 @@ The Weierstrass theorem showed that that the set of *all* polynomials is a unive
 {:.theorem}
 
 
-We will use this property to show that (in very general situations) the family of shallow neural networks with a single hidden layer are universal approximators. To be precise, let $f(x)$ be a single neuron:
+We will use this property to show that (in very general situations), several families of neural networks are universal approximators. To be precise, let $f(x)$ be a single neuron:
 
 $$
 f_{\alpha,w,b} : x \mapsto \alpha \psi(\langle w, x \rangle + b)
@@ -189,7 +191,11 @@ as the space of all possible single-hidden-layer networks with activation $\psi$
 **Proof**{:.label #univapproxcosproof}
   This result is the OG "universal approximation theorem" and can be attributed to Hornik, Stinchcombe, and White[^hornik]. Contemporary results of basically the same flavor are due to Cybenko[^cybenko] and Funahashi[^funashashi] but using techniques other than Stone-Weierstrass.
 
-  *(COMPLETE: Check conditions of Stone-Weierstrass)*.
+  All we need to do is to show that the space of (possibly unbounded width) single-hidden-layer networks satisfies the four conditions of Stone-Weierstrass.
+  - (Continuity) Obvious. Check.
+  - (Identity) For every $x$, $\cos(\langle 0, x \rangle) = \cos(0) = 1 \neq 0$. Check.
+  - (Separation) For every $x \neq x'$, $f(z) = \cos(\frac{1}{\lVert x-x \rVert_2^2}\langle x-x', z-x' \rangle$ separates $x,x'$. Check.
+  - (Closure) This is the most crucial one. Closure under additions is trivial (just add more hidden units!) Closure under multiplications is due to trigonometry: we know that $\cos(u) \cos(v) = \frac{1}{2} (\cos(u+v) + \cos(u-v))$. Check and we are done.
 {:.proof}
 
 **Theorem**{:.label #univapproxexp}
