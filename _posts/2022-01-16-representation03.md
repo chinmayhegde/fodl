@@ -1,6 +1,6 @@
 ---
 layout: page
-title: The role of depth
+title: Chapter 3 - The role of depth
 categories: representation
 date: 2022-01-16
 ---
