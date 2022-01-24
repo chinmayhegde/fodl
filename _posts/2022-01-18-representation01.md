@@ -199,7 +199,7 @@ All the above results used a standard dense feedforward architecture. Analogous 
 ## Robust interpolation
 {:.label}
 
-**_Complete_**
+**_(Complete)_**
 
 ---
 

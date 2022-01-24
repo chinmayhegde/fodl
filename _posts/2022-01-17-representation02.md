@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Universal approximators
+title: Chapter 2 - Universal approximators
 categories: representation
 date: 2022-01-17
 ---
