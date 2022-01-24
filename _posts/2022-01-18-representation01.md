@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Memorization capacity
+title: Chapter 1 - Memorization
 categories: representation
 date: 2022-01-18
 ---
@@ -71,7 +71,7 @@ macros["\\f"] = "\\mathscr{F}"
 
 A lot of interesting quirks arise even in the simplest cases.
 
-Let us focus our attention on the ability of *two-layer* networks (or one-hidden-layer networks) to memorize $n$ data points. We will restrict discussion to ReLU activations but the arguments below are generally applicable. If there are $m$ hidden neurons and if $\psi$ is the ReLU then our hypothesis class $\f_m$ comprises all functions $f$ such that for suitable weight parameters $(\alpha_i, \w_i)$ and bias parameters $b_i$, we have:
+Let us focus our attention on the ability of *two-layer* networks (or one-hidden-layer networks) to memorize $n$ data points. We will restrict discussion to ReLU activations but the arguments below are generally applicable. If there are $m$ hidden neurons and if $\psi$ is the ReLU then our hypothesis class $\f_m$ comprises all functions $f$ such that for suitable weight parameters $(\alpha_i, w_i)$ and bias parameters $b_i$, we have:
 
 \\[ f(x) = \sum_{i=1}^m \alpha_i \psi(\langle w_i, x \rangle + b_i) . \\]
 
@@ -132,6 +132,9 @@ The above result shows that $m = n$ neurons are sufficient to memorize pretty mu
   $$
 
   and record $(w_1, b_1)$. (Importantly, again since the points are in general position no other points lie in this subspace.)
+
+  ![Iteratively fitting neurons to a dataset.](/fodl/assets/baum-construction.png)
+
   Now, form a *very thin indicator slab* using for this affine subspace using exactly two neurons:
 
   $$
@@ -144,7 +147,7 @@ The above result shows that $m = n$ neurons are sufficient to memorize pretty mu
 
   $$ \langle u, x_i \rangle = b, \quad i \in [d] .  $$
 
-  We now show that we can fit this subspace using 4 ReLU neurons. The trick is to look at the "directional derivative" of the ReLU:
+  We now show that we can memorize these $d$ data points using 4 ReLU neurons. The trick is to look at the "directional derivative" of the ReLU:
 
   $$
   g: x \mapsto \frac{\psi(\langle u + \delta v, x \rangle - b) - \psi(\langle u, v \rangle - b)}{\delta} .
@@ -177,18 +180,18 @@ The above construction is somewhat wacky/combinatorial. The weights of each neur
 {:.remark}
 
 **Remark**{:.label #MemorizationRem2}
-Since the network has $O(n)$ parameters and we need to memorize $n$ labels, this construction is essentially optimal. For a formal proof, see Sontag[^sontag]. *Note: not technically correct; we can get better by "bit stuffing", see below.*
-{:.remark}
-
-**Remark**{:.label #MemorizationRem3}
-The above construction says very little about how large typical networks need to be for "typical" learning algorithms (such as SGD) to succeed. We will revisit this in the Optimization chapters.
+Since the network has $O(n)$ parameters and we need to memorize $n$ labels, this construction is essentially optimal. For a formal proof, see Sontag[^sontag]. *Note: not technically correct; we can get better by "bit stuffing".*
 {:.remark}
 
 **Remark**{:.label #MemorizationRem4}
 Using only one hidden layer of neurons, we got (essentially) best-possible memorization. So does depth buy us anything at all? We will revisit this in Chapter 3.
 {:.remark}
 
-**Remark**{:.label #MemorizationRem4}
+**Remark**{:.label #MemorizationRem3}
+The above construction says very little about how large typical networks need to be for "typical" learning algorithms (such as SGD) to succeed. We will revisit this in the Optimization chapters.
+{:.remark}
+
+**Remark**{:.label #MemorizationRem5}
 All the above results used a standard dense feedforward architecture. Analogous memorization results have been shown for other architectures commonly used in practice today: convnets[^cnn], ResNets[^resnet], transformers[^xformers], etc.
 {:.remark}
 
