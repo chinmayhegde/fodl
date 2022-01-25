@@ -194,8 +194,9 @@ as the space of all possible single-hidden-layer networks with activation $\psi$
   All we need to do is to show that the space of (possibly unbounded width) single-hidden-layer networks satisfies the four conditions of Stone-Weierstrass.
   - (Continuity) Obvious. Check.
   - (Identity) For every $x$, $\cos(\langle 0, x \rangle) = \cos(0) = 1 \neq 0$. Check.
-  - (Separation) For every $x \neq x'$, $f(z) = \cos(\frac{1}{\lVert x-x \rVert_2^2}\langle x-x', z-x' \rangle$ separates $x,x'$. Check.
-  - (Closure) This is the most crucial one. Closure under additions is trivial (just add more hidden units!) Closure under multiplications is due to trigonometry: we know that $\cos(u) \cos(v) = \frac{1}{2} (\cos(u+v) + \cos(u-v))$. Check and we are done.
+  - (Separation) For every $x \neq x'$, $f(z) = \cos\left(\frac{1}{\lVert x-x' \rVert_2^2}\langle x-x', z-x' \rangle \right)$ separates $x,x'$. Check.
+  - (Closure) This is the most crucial one. Closure under additions is trivial (just add more hidden units!) Closure under multiplications is due to trigonometry: we know that $\cos(\langle u, x \rangle) \cos(\langle v, x \rangle) = \frac{1}{2} (\cos(\langle u+v, x \rangle) + \cos(\langle u-v, x \rangle))$. Therefore, products of two $\cos$ neurons can be equivalently expressed by the *sum* of two (other) $\cos$ neurons. Check.
+  This completes the proof.
 {:.proof}
 
 **Theorem**{:.label #univapproxexp}
@@ -206,12 +207,14 @@ as the space of all possible single-hidden-layer networks with activation $\psi$
   Even easier than $\cos$. *(COMPLETE)*
 {:.proof}
 
+The OG paper by Hornik et al[^hornik] showed a more general result for sigmoidal activations.  Here a sigmoidal activation is any function $\psi$ such that $\lim_{z \rightarrow -\infty} = 0$ and $\lim_{z \rightarrow +\infty} = 1$. This result covers "threshold" activations, hard/soft tanh, other regular sigmoids, etc.
+
 **Theorem**{:.label #univapproxsigmoid}
-  If we use any sigmoidal activation $\psi(\cdot)$ that is continuous, then $\f$ is a universal approximator. Here a sigmoidal activation is a function $\psi$ such that $\lim_{z \rightarrow -\infty} = 0$ and $\lim_{z \rightarrow +\infty} = 1$. This result covers "threshold" activations, hard/soft tanh, regular sigmoids, etc.
+  If we use any sigmoidal activation $\psi(\cdot)$ that is continuous, then $\f$ is a universal approximator.
 {:.theeorem}
 
 **Proof**{:.label #univapproxcosproof}
-  This was also proved in the OG paper by Hornik et al[^hornik]. *(COMPLETE)*
+  *(COMPLETE)*
 {:.proof}
 
 **Remark**{:.label #remunivapprox0}
@@ -220,11 +223,11 @@ as the space of all possible single-hidden-layer networks with activation $\psi$
 
 
 **Remark**{:.label #remunivapprox1}
-  The use of sinusoidal activations is not standard in deep learning, although they have found use in some fantastic new applications in the context of solving partial differential equations[^siren]. Later we will explore other (theoretical) applications of cosines.  
+  The use of cosine activations is not standard in deep learning, although they have found use in some fantastic new applications in the context of solving partial differential equations[^siren]. Later we will explore other (theoretical) applications of cosines.  
 {:.remark}
 
 **Remark**{:.label #remunivapprox2}
-  Notice here that these results are silent on how large $m$ needs to be in terms of $\varepsilon$. If we unpack terms carefully, we again see a scaling of $m$ with $O(\frac{1}{\varepsilon^d})$, similar to what we had before. This property arises to due to closure under products. The curse of dimensionality strikes yet again.
+  Notice here that these results are silent on how large $m$ needs to be in terms of $\varepsilon$. If we unpack terms carefully, we again see a scaling of $m$ with $O(\frac{1}{\varepsilon^d})$, similar to what we had before. (This property arises to due to the last property in Stone-Weierstass, i.e., closure under products.) The curse of dimensionality strikes yet again.
 {:.remark}
 
 **Remark**{:.label #remunivapprox3}
