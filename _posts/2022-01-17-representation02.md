@@ -152,7 +152,7 @@ In fact, there is a more direct *constructive* proof of this result by Bernstein
 Other than polynomials, what other families of "basis" functions lead to successful approximation? To answer this, we first define the concept of a *universal approximator*.
 
 **Definition**{:.label #univapproxdef}
-  Let $\f$ be a given hypothesis class. Then, $\f$ is a universal approximator over some domain $S$ if for every continuous function $g : S \rightarrow \R$ and approximation parameter $\varepsilon > 0$, there exists $f \in \F$ such that:
+  Let $\f$ be a given hypothesis class. Then, $\f$ is a universal approximator over some domain $S$ if for every continuous function $g : S \rightarrow \R$ and approximation parameter $\varepsilon > 0$, there exists $f \in \f$ such that:
   $$ \sup_{x \in S} |f(x) - g(x) | \leq \varepsilon .$$
 {:.definition}
 
