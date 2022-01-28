@@ -195,6 +195,11 @@ The above construction says very little about how large typical networks need to
 All the above results used a standard dense feedforward architecture. Analogous memorization results have been shown for other architectures commonly used in practice today: convnets[^cnn], ResNets[^resnet], transformers[^xformers], etc.
 {:.remark}
 
+## Lower bounds
+{:.label}
+
+**_(Complete)_**
+
 
 ## Robust interpolation
 {:.label}
