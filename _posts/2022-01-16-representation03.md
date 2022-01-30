@@ -5,9 +5,6 @@ categories: representation
 date: 2022-01-16
 ---
 
-## Basics
-{:.label}
-
 For *shallow networks*, we now know upper bounds on the number of neurons required to "represent" data, where representation is measured either in the sense of exact interpolation (or memorization), or in the sense of universal approximation. We will continue to revisit these bounds when other important questions such as optimization/learning and out-of-sample generalization arise. In some cases, these bounds are even *tight*, meaning that we could not hope to do any better.
 
 Which leads us to the natural question:
@@ -42,7 +39,7 @@ We will explicitly construct a (univariate) function $g$ that can be exactly rep
 **Theorem**{:.label #DepthSeparation}
   There exists a function $g : [0,1] \rightarrow \R$ that is exactly computed by a ReLU network of constant width and depth $O(L^2)$, but for *any* neural network $f$ with depth $\leq L$ and sub-exponential number of units $\leq 2^{L^\delta},~\delta <1$, is at least $\varepsilon$-far from $g$, i.e.:
   $$
-  \int_0^1 |f(x) - g(x)| dx \geq \varepsilon.
+  \int_0^1 |f(x) - g(x)| dx \geq \varepsilon
   $$
 {:.theorem}
 for some constant $\varepsilon > \frac{1}{32}$.
