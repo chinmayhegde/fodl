@@ -6,7 +6,7 @@ date: 2022-01-16
 ---
 
 ## Basics
-{.label}
+{:.label}
 
 For *shallow networks*, we now know upper bounds on the number of neurons required to "represent" data, where representation is measured either in the sense of exact interpolation (or memorization), or in the sense of universal approximation. We will continue to revisit these bounds when other important questions such as optimization/learning and out-of-sample generalization arise. In some cases, these bounds are even *tight*, meaning that we could not hope to do any better.
 
