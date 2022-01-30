@@ -8,10 +8,10 @@ date: 2022-01-18
 Let us begin by trying to rigorously answer a very simple question:
 
 ~~~
-How many neurons are enough?
+How many neurons suffice?
 ~~~
 
-This question isn't well-posed. Enough for what? For good performance? On what task? Do we even know if this answer is well-defined -- perhaps it depends on some hard-to-estimate quantity related to the learning problem?
+Upon reflection it should clear that this question isn't well-posed. Suffice for what? For good performance? On what task? Do we even know if this answer is well-defined -- perhaps it depends on some hard-to-estimate quantity related to the learning problem? Even if we were able to get a handle on this quantity, does it matter how the neurons are connected -- should the network be wide/shallow, or narrow/deep?
 
 Let us begin simple. Suppose all we have is a bunch of training data points:
 \\[ X = \{(x_i, y_i)\}_{i=1}^n \subset \mathbb{R}^d \times \mathbb{R} \\]
@@ -21,7 +21,7 @@ $$
 \hat{y} = f(x), \quad l(y,\hat{y}) = 0.5(y - \hat{y})^2, \quad R(f) = \sum_i \frac{1}{n} l(y_i, \hat{y_i}),
 $$
 
-then $f$ achieves *zero empirical risk*. A very large (either very wide or very deep or both) network is likely enough to fit basically anything we like, so we would like to get reasonably tight upper bounds on the number of neurons needed for exact memorization.
+then $f$ achieves *zero empirical risk*. Our intuition says (and we will prove more versions of this later) is that a very large (very wide, or very deep, or both) network is likely enough to fit basically anything we like. So really, we want *reasonable* upper bounds on the number of neurons needed for exact memorization.
 
 But why should we care about memorization anyway? After all, machine learning folks are taught to be wary of [overfitting](https://en.wikipedia.org/wiki/Overfitting) to the training set. In introductory ML courses we spend several hours (and homework sets) covering the [bias-variance](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff) tradeoff, the importance of adding a regularizer to decrease variance (at the expense of incurring extra "bias"), etc etc.
 
