@@ -61,7 +61,7 @@ The proof is elegant and will inform us also while proving memorization-style de
 {:.remark}
 
 **Remark**{:.label #DepthSepRem3}
-  The "hard" example function $g$ constructed in the above Theorem is highly oscillatory within $[0,1]$ (see proof below) and therefore has an unreasonably large (super-polynomial) Lipschitz constant. So, perhaps if we limited our attention to simple/natural Lipschitz functions, then it is easier to prove depth-separation results? Not so: even for "benign" functions (easy-to-compute functions with polynomially large Lipschitz constant), proving depth lower bonds would similarly imply progress in long-standing problems in computational complexity. See the recent result by Vardi et al.[^vardi2].
+  The "hard" example function $g$ constructed in the above Theorem is highly oscillatory within $[0,1]$ (see proof below) and therefore has an unreasonably large (super-polynomial) Lipschitz constant. So, perhaps if we limited our attention to simple/natural Lipschitz functions, then it is easier to prove depth-separation results? Not so: even if we only focused on "benign" functions (easy-to-compute functions with polynomially large Lipschitz constant), proving depth lower bonds would similarly imply progress in long-standing problems in computational complexity. See the recent result by Vardi et al.[^vardi2].
 {.remark}
 
 **Remark**{:.label #DepthSepRem4}
@@ -73,6 +73,14 @@ The proof is elegant and will inform us also while proving memorization-style de
   High level idea: (a) observe that any ReLU network $g$ simulates a piecewise linear function. (b) prove that the number of pieces in the range of $g$ grows polynomially with width but exponentially in depth.
   **_(COMPLETE)_.**
 {:.proof}
+
+Let us reflect a bit more on the above proof. The key ingredient was the fact that superpositions (adding units, essentially increasing the "width") only have a polynomial increase on the number of pieces in the range of $g$, but compositions (essentially increasing the "depth") have an *exponential* increase in the number of pieces.
+
+But! This "hard" function $g$, which is the sawtooth over $[0,1]$, was *very carefully constructed*. To  achieve the exponential scaling law in the number of pieces, the breakpoints in $g$ *have* to be exactly equi-spaced, and therefore the weights in every layer in the network have to be identical. Even a tiny amount of noise added to the weights of $g$ dramatically reduces the number of linear pieces in the range of the network. See the following figure illustrated in Hanin and Rolnick (2019)[^hanin]:
+
+![(left) The sawtooth function $g$, representable via a depth-$O(L^2)$, width-3 ReLU net. (right) Range of the same network as $g$ but with a tiny amount of noise added to its weights.](/fodl/assets/sawtooth.png)
+
+So even when we did get a depth-separation result, it's not "robust". All this to say: depth separation results can be rather elusive; they seem to only exist for very special cases; and progress in this direction would result in several fundamental breakthroughs in complexity theory.
 
 
 ## Depth-width tradeoffs in memorization
