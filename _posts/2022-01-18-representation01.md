@@ -174,21 +174,12 @@ The above result shows that $m = n$ neurons are sufficient to memorize pretty mu
   Repeat this fitting procedure $\lceil \frac{n}{d} \rceil$ times and we are done.
 {:.proof}
 
-
 **Remark**{:.label #MemorizationRem1}
 The above construction is somewhat wacky/combinatorial. The weights of each neuron was picked myopically (we never revisited data points) and locally (each neuron only depended on a small subset of data points).
 {:.remark}
 
-**Remark**{:.label #MemorizationRem2}
-Since the network has $O(n)$ parameters and we need to memorize $n$ labels, this construction is essentially optimal. For a formal proof, see Sontag[^sontag]. *Note: not technically correct; we can get better by "bit stuffing".*
-{:.remark}
-
-**Remark**{:.label #MemorizationRem4}
-Using only one hidden layer of neurons, we got (essentially) best-possible memorization. So does depth buy us anything at all? We will revisit this in Chapter 3.
-{:.remark}
-
 **Remark**{:.label #MemorizationRem3}
-The above construction says very little about how large typical networks need to be for "typical" learning algorithms (such as SGD) to succeed. We will revisit this in the Optimization chapters.
+The above construction says very little about how large networks need to be in order for "typical" learning algorithms (such as SGD) to succeed. We will revisit this in the Optimization chapters. For a recent result exploring the properties of "typical" gradient-based learning methods in the $O(n/d)$ regime, see here[^hong].
 {:.remark}
 
 **Remark**{:.label #MemorizationRem5}
@@ -198,8 +189,13 @@ All the above results used a standard dense feedforward architecture. Analogous 
 ## Lower bounds
 {:.label}
 
-**_(Complete)_**
+The above results show that we can memorize $n$ (scalar) labels with no more than $O(n/d)$ ReLU neurons -- each with $d$ incoming edges, which means that the number of learnable weights in this network is $O(n)$. Is this upper bound tight, or is there hope for doing any better?
 
+The answer seems to be *no*, and intuitively it makes sense from a parameter counting perspective. Sontag[^sontag] proved an early result along these lines, showing that if some function $f$ that is described with $o(n)$ parameters is *analytic* (meaning that it is smooth and has convergent power series) and *definable* (meaning that it can be expressed by some arbitrary composition of rational operations and exponents), then there exists at least one dataset of $n$ points that the network cannot memorize. This result also holds for *piecewise* analytic and definable, meaning that neural networks (of arbitrary depth! not just two layers) are applicable to this theorem.
+
+*(Note: this observation is not technically correct; we can get better by "bit stuffing". If we assume slightly more restrictive properties on the data and allow the network weights to be unbounded, then this bound can be improved to $O(\sqrt{n})$ parameters. We will revisit this later.)*
+
+So it may seem interesting that we were able to get best-possible memorization capacity using simple 2-layer networks. So does additional depth buy us anything at all? The answer for this is *yes*: we can decrease the number of *hidden neurons* in the network significantly when we move from 1- to 2-hidden-layer networks. We will revisit this in Chapter 3.
 
 ## Robust interpolation
 {:.label}
@@ -225,6 +221,9 @@ All the above results used a standard dense feedforward architecture. Analogous 
 
 [^sontag]:
     E. Sontag, [Shattering All Sets of k Points in “General Position” Requires (k − 1)/2 Parameters](http://www.sontaglab.org/FTPDIR/generic.pdf), 1997.
+
+[^hong]:
+    J. Zhang, Y. Zhang, M. Hong, R. Sun, Z.-Q. Luo, [When Expressivity Meets Trainability: Fewer than $n$ Neurons Can Work](https://proceedings.neurips.cc/paper/2021/hash/4c7a167bb329bd92580a99ce422d6fa6-Abstract.html), 2021.
 
 [^cnn]:
     Q. Nguyen and M. Hein, [Optimization Landscape and Expressivity of Deep CNNs](https://arxiv.org/abs/1710.10928), 2018.
