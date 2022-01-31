@@ -25,11 +25,11 @@ A full answer to the question that we posed above will remain elusive. See, for 
 
 Nonetheless: in this note, we will derive several interesting results that highlight the importance of depth in the representation power of neural network architectures. Let us focus on "reasonable-width" networks of depth $L > 2$ (because we already know from universal approximation that exponential-width two-layer networks can represent pretty much anything we like.) There are two angles of inquiry:
 
-* Approach 1: prove that there exist datasets of some large enough size size that can *only* be memorized by networks of depth $\Omega(L)$, but not by networks of depth $o(L)$.
+* Approach 1: prove that there exist datasets of some large enough size that can *only* be memorized by networks of depth $\Omega(L)$, but not by networks of depth $o(L)$.
 
 * Approach 2: prove that there exist classes of functions that can be $\varepsilon$-approximated *only* by networks of depth $\Omega(L)$, but not by networks of depth $o(L)$.
 
-Results of either type can be called *depth separation* results. Let us start with the latter.
+Results of either type are *depth separation* results. Let us start with the latter.
 
 ## Depth separation in function approximation
 {:.label}
@@ -40,27 +40,45 @@ We will explicitly construct a (univariate) function $g$ that can be exactly rep
 
 **Theorem**{:.label #DepthSeparation}
   There exists a function $g : [0,1] \rightarrow \R$ that is exactly realized by a ReLU network of constant width and depth $O(L^2)$, but for *any* neural network $f$ with depth $\leq L$ and sub-exponential number of units, $\leq 2^{L^\delta}$, $f$ is at least $\varepsilon$-far from $g$, i.e.:
+
   $$
   \int_0^1 |f(x) - g(x)| dx \geq \varepsilon
   $$
+
 {:.theorem}
 for constants $\varepsilon > \frac{1}{32}$ and $0 < \delta < 1$.
+
+The proof is elegant and will inform us also while proving memorization-style depth barriers. But let us make several remarks on the implications of the results.
+
+**Remark**{:.label #DepthSepRem1}
+  The "hard" example function $g$ constructed in the above Theorem is for scalar inputs. What happens for the general case of $d$-variate inputs? Eldan and Shamir[^eldan] showed that there exist 3-layer ReLU networks (and $\text{poly}(d)$ width) that cannot be $\varepsilon$-approximated by any two-layer ReLU network unless they have $\Omega(2^d)$ hidden nodes. Therefore, there is already a separation between depth=2 and depth=3 in the high-dimensional case.
+{:.remark}
+
+**Remark**{:.label #DepthSepRem2}
+  In the general $d$-variate case, can we get depth separation results for networks of depth=4 or higher? Somewhat surprisingly, the answer appears to be *no*. Vardi and Shamir[^vardi] showed that a depth separation theorem between ReLU networks of $k \geq 4$ and $k' > k$ would imply progress on long-standing open problems in *circuit lower bounds*[^razborov].  
+
+  To be precise: this (negative) result only applies to vanilla dense feedforward networks. But it is disconcerting that even for the simplest of neural networks, proving clear benefits of depth remains outside the realm of current theoretical machinery.
+{:.remark}
+
+**Remark**{:.label #DepthSepRem3}
+  The "hard" example function $g$ constructed in the above Theorem is highly oscillatory within $[0,1]$ (see proof below) and therefore has an unreasonably large (super-polynomial) Lipschitz constant. So, perhaps if we limited our attention to simple/natural Lipschitz functions, then it is easier to prove depth-separation results? Not so: even for "benign" functions (easy-to-compute functions with polynomially large Lipschitz constant), proving depth lower bonds would similarly imply progress in long-standing problems in computational complexity. See the recent result by Vardi et al.[^vardi2].
+{.remark}
+
+**Remark**{:.label #DepthSepRem4}
+  See this paper[^bengio] for an earlier depth-separation result for sum-product networks (which are somewhat less standard architectures).
+{:.remark}
+
 
 **Proof sketch**{:.label #DepthSeparationProof}
   High level idea: (a) observe that any ReLU network $g$ simulates a piecewise linear function. (b) prove that the number of pieces in the range of $g$ grows polynomially with width but exponentially in depth.
   **_(COMPLETE)_.**
 {:.proof}
 
-**Remark**{:.label #DepthSepRem1}
-  The "hard" example function constructed in the above Theorem was for scalar inputs. What happens for the general case of $d$-variate inputs? Eldan and Shamir[^eldan] showed that there exist 3-layer ReLU networks (and $\text{poly}(d)$ width) that cannot be $\varepsilon$-approximated by any two-layer ReLU network unless they have $\Omega(2^d)$ hidden nodes. Therefore, there is already a separation between depth=2 and depth=3 in the high-dimensional case.
-{:.remark}
-
-**Remark**{:.label #DepthSepRem1}
-  In the general $d$-variate case, can we get depth separation results for networks 
-{:.remark}
 
 ## Depth-width tradeoffs in memorization
 {:.label}
+
+
 
 
 ---
@@ -76,3 +94,15 @@ for constants $\varepsilon > \frac{1}{32}$ and $0 < \delta < 1$.
 
 [^eldan]:
     R. Eldan and O. Shamir, [The Power of Depth for Feedforward Neural Networks](http://proceedings.mlr.press/v49/eldan16.pdf), 2016.
+
+[^vardi]:
+    G. Vardi and O. Shamir, [Neural Networks with Small Weights and Depth-Separation Barriers](https://arxiv.org/pdf/2006.00625.pdf), 2020.
+
+[^razborov]:
+    A. Razborov and S. Rudich. [Natural proofs](https://www.sciencedirect.com/science/article/pii/S002200009791494X), 1997.
+
+[^bengio]:
+    O. Delalleau and Y. Bengio, [Shallow vs. Deep Sum-Product Networks](https://papers.nips.cc/paper/2011/file/8e6b42f1644ecb1327dc03ab345e618b-Paper.pdf), 2011.
+
+[^vardi2]:
+    G. Vardi, D. Reichmann, T. Pitassi, and O. Shamir, [Size and Depth Separation in Approximating Benign Functions with Neural Networks](http://proceedings.mlr.press/v134/vardi21a/vardi21a.pdf), 2021.
