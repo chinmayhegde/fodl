@@ -74,11 +74,13 @@ The proof is elegant and will inform us also while proving memorization-style de
 
 Let us reflect a bit more on the above proof. The key ingredient was the fact that superpositions (adding units, essentially increasing the "width") only have a polynomial increase on the number of pieces in the range of $g$, but compositions (essentially increasing the "depth") have an *exponential* increase in the number of pieces.
 
-But! This "hard" function $g$, which is the sawtooth over $[0,1]$, was *very carefully constructed*. To  achieve the exponential scaling law in the number of pieces, the breakpoints in $g$ *have* to be exactly equispaced, and therefore the weights in every layer in the network have to be identical. Even a tiny amount of noise added to the weights of $g$ dramatically reduces the number of linear pieces in the range of the network. See the following figure illustrated in Hanin and Rolnick (2019)[^hanin]:
+But! This "hard" function $g$, which is the sawtooth over $[0,1]$, was *very carefully constructed*. To  achieve the exponential scaling law in the number of pieces, the breakpoints in $g$ *have* to be exactly equispaced, and therefore the weights in every layer in the network have to be identical. Even a tiny perturbation to $g$ dramatically reduces the number of linear pieces in the range of the network. See the following figure illustrated in Hanin and Rolnick (2019)[^hanin]:
 
 ![(left) The sawtooth function $g$, representable via a depth-$O(L^2)$, width-3 ReLU net. (right) Range of the same network as $g$ but with a tiny amount of noise added to its weights.](/fodl/assets/sawtooth.png)
 
-So even when we did get a depth-separation result, it's not "robust". All this to say: depth separation results can be rather elusive; they seem to only exist for very special cases; and progress in this direction would result in several fundamental breakthroughs in complexity theory.
+The plot on the left is the sawtooth function $g$, which, as we proved earlier, is representable via a depth-$O(L^2)$, width-3 ReLU net. The plot on the right is the function implemented by the same network as $g$ but with a tiny amount of noise added to its weights. So even when we did get a depth-separation result, it's not at all "robust".
+
+All this to say: depth separation results can be rather elusive; they seem to only exist for very special cases; and progress in this direction would result in several fundamental breakthroughs in complexity theory.
 
 
 ## Depth-width tradeoffs in memorization
