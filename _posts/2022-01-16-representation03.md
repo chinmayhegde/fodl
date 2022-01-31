@@ -55,14 +55,12 @@ The proof is elegant and will inform us also while proving memorization-style de
 {:.remark}
 
 **Remark**{:.label #DepthSepRem2}
-  In the general $d$-variate case, can we get depth separation results for networks of depth=4 or higher? Somewhat surprisingly, the answer appears to be *no*. Vardi and Shamir[^vardi] showed that a depth separation theorem between ReLU networks of $k \geq 4$ and $k' > k$ would imply progress on long-standing open problems in *circuit lower bounds*[^razborov].  
-
-  To be precise: this (negative) result only applies to vanilla dense feedforward networks. But it is disconcerting that even for the simplest of neural networks, proving clear benefits of depth remains outside the realm of current theoretical machinery.
+  In the general $d$-variate case, can we get depth separation results for networks of depth=4 or higher? Somewhat surprisingly, the answer appears to be *no*. Vardi and Shamir[^vardi] showed that a depth separation theorem between ReLU networks of $k \geq 4$ and $k' > k$ would imply progress on long-standing open problems in *circuit lower bounds*[^razborov].  To be precise: this (negative) result only applies to vanilla dense feedforward networks. But it is disconcerting that even for the simplest of neural networks, proving clear benefits of depth remains outside the realm of current theoretical machinery.
 {:.remark}
 
 **Remark**{:.label #DepthSepRem3}
   The "hard" example function $g$ constructed in the above Theorem is highly oscillatory within $[0,1]$ (see proof below) and therefore has an unreasonably large (super-polynomial) Lipschitz constant. So, perhaps if we limited our attention to simple/natural Lipschitz functions, then it is easier to prove depth-separation results? Not so: even if we only focused on "benign" functions (easy-to-compute functions with polynomially large Lipschitz constant), proving depth lower bonds would similarly imply progress in long-standing problems in computational complexity. See the recent result by Vardi et al.[^vardi2].
-{.remark}
+{:.remark}
 
 **Remark**{:.label #DepthSepRem4}
   See this paper[^bengio] for an earlier depth-separation result for sum-product networks (which are somewhat less standard architectures).
@@ -76,7 +74,7 @@ The proof is elegant and will inform us also while proving memorization-style de
 
 Let us reflect a bit more on the above proof. The key ingredient was the fact that superpositions (adding units, essentially increasing the "width") only have a polynomial increase on the number of pieces in the range of $g$, but compositions (essentially increasing the "depth") have an *exponential* increase in the number of pieces.
 
-But! This "hard" function $g$, which is the sawtooth over $[0,1]$, was *very carefully constructed*. To  achieve the exponential scaling law in the number of pieces, the breakpoints in $g$ *have* to be exactly equi-spaced, and therefore the weights in every layer in the network have to be identical. Even a tiny amount of noise added to the weights of $g$ dramatically reduces the number of linear pieces in the range of the network. See the following figure illustrated in Hanin and Rolnick (2019)[^hanin]:
+But! This "hard" function $g$, which is the sawtooth over $[0,1]$, was *very carefully constructed*. To  achieve the exponential scaling law in the number of pieces, the breakpoints in $g$ *have* to be exactly equispaced, and therefore the weights in every layer in the network have to be identical. Even a tiny amount of noise added to the weights of $g$ dramatically reduces the number of linear pieces in the range of the network. See the following figure illustrated in Hanin and Rolnick (2019)[^hanin]:
 
 ![(left) The sawtooth function $g$, representable via a depth-$O(L^2)$, width-3 ReLU net. (right) Range of the same network as $g$ but with a tiny amount of noise added to its weights.](/fodl/assets/sawtooth.png)
 
@@ -115,3 +113,6 @@ So even when we did get a depth-separation result, it's not "robust". All this t
 
 [^vardi2]:
     G. Vardi, D. Reichmann, T. Pitassi, and O. Shamir, [Size and Depth Separation in Approximating Benign Functions with Neural Networks](http://proceedings.mlr.press/v134/vardi21a/vardi21a.pdf), 2021.
+
+[^hanin]:
+    B. Hanin and D. Rolnick, [Complexity of Linear Regions in Deep Networks](https://arxiv.org/pdf/1901.09021.pdf), 2019.
