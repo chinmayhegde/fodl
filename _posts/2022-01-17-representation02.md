@@ -255,10 +255,11 @@ In a seminal paper[^barron], Barron identified an interesting class of functions
   $$
   m = \frac{C_g^2}{\varepsilon^2} .
   $$
-  Here, $C_g$ is the $L_1$-norm of the *Fourier transform* of the *gradient* of $g$ and is called the *Barron norm* of $g$:
+  Here,
   $$
-  C_g = = \lVert \widehat{\nabla g} \rVert_1 = \int \lVert \widehat{\nabla g} \rVert d\omega.
+  C_g = \lVert \widehat{\nabla g} \rVert_1 = \int \lVert \widehat{\nabla g} \rVert d\omega
   $$
+  is the $L_1$-norm of the *Fourier transform* of the *gradient* of $g$, and is called the *Barron norm* of $g$:
 {:.theorem}
 
 
