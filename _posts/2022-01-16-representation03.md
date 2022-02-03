@@ -17,13 +17,15 @@ If we have already gotten (some) tight results using shallow models, should ther
 
 One, after all, this is a course on "deep" learning theory, so we cannot avoid this question.
 
-But two, for the last decade or so, a lot of folks have been trying very hard to replicate the success of deep networks with *highly* tuned shallow models (such as kernel machines), but so far have come up short. Understanding precisely why and where shallow models fall short (while deep models succeed) is therefore of importance.
+But two, for the last decade or so, a lot of folks have been trying very hard to replicate the success of deep networks with *highly* tuned shallow models (such as logistic regression, or kernel machines), but so far have come up short. Therefore, understanding precisely why and where shallow models fall short (while deep models succeed) can be of importance.
 
-A full answer to the question that we posed above will remain elusive. See, for example, the last paragraph of Belkin's monograph[^belkin] for some speculation. To quote a recent paper by Shankar et al.[^shankar]:
+Unfortunately a full answer to the question that we posed above remains elusive. The current state-of-the-art in theory does not fully illuminate why deep network models are more powerful in practice than shallow ones. See, for example, the last paragraph of Belkin's monograph[^belkin] for some speculation. To quote a recent paper by Shankar et al.[^shankar]:
 
 > "...the question remains open whether the performance gap between kernels and neural networks indicates a fundamental limitation of kernel methods or merely an engineering hurdle that can be overcome."  
 
-Nonetheless: in this note, we will derive several interesting results that highlight the importance of depth in the representation power of neural network architectures. Let us focus on "reasonable-width" networks of depth $L > 2$ (because we already know from universal approximation that exponential-width two-layer networks can represent pretty much anything we like.) There are two angles of inquiry:
+Nonetheless: in some special cases we can indeed show that depth provably helps. In this note, we will derive several interesting results that highlight the importance of depth in the representation power of neural network architectures. (We will continue to revisit the issue of depth in later modules while discussing optimization and generalization.)
+
+Let us focus on "reasonable-width" networks of depth $L > 2$, because we already know from universal approximation that exponential-width two-layer networks can represent pretty much anything we like. There are two possible angles of inquiry:
 
 * Approach 1: prove that there exist datasets of some large enough size that can *only* be memorized by networks of depth $\Omega(L)$, but not by networks of depth $o(L)$.
 
@@ -68,7 +70,7 @@ The proof is elegant and will inform us also while proving memorization-style de
 
 
 **Proof sketch**{:.label #DepthSeparationProof}
-  High level idea: (a) observe that any ReLU network $g$ simulates a piecewise linear function. (b) prove that the number of pieces in the range of $g$ grows polynomially with width but exponentially in depth.
+  High level idea: (a) observe that any ReLU network $f$ simulates a piecewise linear function. (b) prove that the number of pieces in the range of $f$ grows polynomially with width but exponentially in depth. (c) construct a "hard" function $g$ which has exponentially many pieces, and therefore cannot be simulated with shallow-but-wide networks.
   **_(COMPLETE)_.**
 {:.proof}
 
