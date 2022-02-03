@@ -66,8 +66,7 @@ The proof is elegant and will inform us also while proving memorization-style de
   See this paper[^bengio] for an earlier depth-separation result for sum-product networks (which are somewhat less standard architectures).
 {:.remark}
 
-
-The proof uses the following high level ideas:
+Telgarsky's proof uses the following high level ideas:
 
   (a) observe that any ReLU network $g$ simulates a piecewise linear function.
 
@@ -77,7 +76,11 @@ The proof uses the following high level ideas:
 
   (d) but, from part (b), we know that a significantly shallower network cannot simulate so many pieces, thus giving our separation.
 
+Before diving into each of them, let us first define (and study) a simple "gadget" function which will be helpful throughout. Let
 
+$$
+m(x) = 
+$$
 
 
 **Proof**{:.label #DepthSeparationProof}
