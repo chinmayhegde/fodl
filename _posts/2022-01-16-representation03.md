@@ -45,8 +45,8 @@ We will explicitly construct a (univariate) function $g$ that can be exactly rep
   \int_0^1 |f(x) - g(x)| dx \geq \varepsilon
   $$
 
+  for constants $\varepsilon > \frac{1}{32}$ and $0 < \delta < 1$.
 {:.theorem}
-for constants $\varepsilon > \frac{1}{32}$ and $0 < \delta < 1$.
 
 The proof is elegant and will inform us also while proving memorization-style depth barriers. But let us make several remarks on the implications of the results.
 
@@ -67,8 +67,20 @@ The proof is elegant and will inform us also while proving memorization-style de
 {:.remark}
 
 
-**Proof sketch**{:.label #DepthSeparationProof}
-  High level idea: (a) observe that any ReLU network $g$ simulates a piecewise linear function. (b) prove that the number of pieces in the range of $g$ grows polynomially with width but exponentially in depth.
+The proof uses the following high level ideas:
+
+  (a) observe that any ReLU network $g$ simulates a piecewise linear function.
+
+  (b) prove that the number of pieces in the range of $g$ grows only polynomially with width but exponentially in depth.
+
+  (c) construct a "hard" function $g$ that has an exponential number of linear pieces, and that can be exactly computed by a deep network
+
+  (d) but, from part (b), we know that a significantly shallower network cannot simulate so many pieces, thus giving our separation.
+
+
+
+
+**Proof**{:.label #DepthSeparationProof}
   **_(COMPLETE)_.**
 {:.proof}
 
@@ -82,11 +94,9 @@ The plot on the left is the sawtooth function $g$, which, as we proved earlier, 
 
 All this to say: depth separation results can be rather elusive; they seem to only exist for very special cases; and progress in this direction would result in several fundamental breakthroughs in complexity theory.
 
-
 ## Depth-width tradeoffs in memorization
 {:.label}
 
-**(Under construction)**.
 
 
 
