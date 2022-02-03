@@ -76,11 +76,28 @@ Telgarsky's proof uses the following high level ideas:
 
   (d) but, from part (b), we know that a significantly shallower network cannot simulate so many pieces, thus giving our separation.
 
-Before diving into each of them, let us first define (and study) a simple "gadget" function which will be helpful throughout. Let
+Before diving into each of them, let us first define (and study) a simple "gadget" function, $m : \R \rightarrow \R$ which will be helpful throughout. It's easier to just draw it first:
+
+![The sawtooth gadget.](/fodl/assets/gadget.png)
+
+and then observe that:
 
 $$
-m(x) = 
+m(x) = \begin{cases}
+0, \qquad \quad ~~ x < 0, \\
+2x, \qquad \quad 0 \leq x < 1/2,\\
+2 - 2x,~ 1/2 \leq x < 1,\\
+0, \qquad \quad ~~ 1 \leq x.
+\end{cases}
 $$
+
+What happens when we compose $m$ with itself several times? Define:
+
+$$
+m^{(2)}(x) := m(m(x)), \ldots, m^{(L)}(x) := m(m^{(L-1)}(x)).
+$$
+
+
 
 
 **Proof**{:.label #DepthSeparationProof}
