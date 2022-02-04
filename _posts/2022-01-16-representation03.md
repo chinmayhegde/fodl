@@ -76,7 +76,7 @@ Telgarsky's proof uses the following high level ideas:
 
   (d) but, from part (b), we know that a significantly shallower network cannot simulate so many pieces, thus giving our separation.
 
-Before diving into each of them, let us first define (and study) a simple "gadget" function, $m : \R \rightarrow \R$ which will be helpful throughout. It's easier to just draw it first:
+Before diving into each of them, let us first define (and study) a simple "gadget" neural network that simulates a function $m : \R \rightarrow \R$ which will be helpful throughout. It's easier to just draw $m(x)$ first:
 
 ![The sawtooth gadget.](/fodl/assets/gadget.png)
 
@@ -97,8 +97,29 @@ $$
 m^{(2)}(x) := m(m(x)), \ldots, m^{(L)}(x) := m(m^{(L-1)}(x)).
 $$
 
+Then, we start seeing an actual sawtooth function. For example, for $L=2$, we see:
 
+![The sawtooth function with $L = 2$.](/fodl/assets/gadget2.png)
 
+Iterating this $L$ times, we get a sawtooth that oscillates a bunch of times over the interval $[0,1]$ and is zero outside[^fn1]. In fact, for any $L$, an easy induction will show that there will be $2^{L-1}$ "triangles", which are formed using $2^L$ pieces.
+
+But we also can observe that $m(x)$ can be written in terms of ReLUs. Specifically, if $\psi$ is the ReLU activation then:
+
+$$
+m(x) = 2\left(\psi(x) - 2\psi(x-\frac{1}{2}) + \psi(x-1)\right),
+$$
+
+which is a tiny (width-3, depth-2) ReLU network. Therefore, $m^{(L)}(x)$ is a univariate function that is exactly written out as width-3, depth-$2L$ ReLU network for any $L$.
+
+So: we have constructed a neural network with depth $O(L)$ which simulates a piecewise linear function over the real line with $2^L$ pieces. In fact, this observation can be generalized quite significantly as follows.
+
+**Lemma**{:.label #numpieces}
+    If $f$ and $g$ are univariate functions defined over $[0,1]$ with $s$ and $t$ pieces respectively, then:
+    (a) $\alpha f + \beta g$ has at most $s + t$ pieces.
+    (b) $f \circ g$ has at most $st$ pieces.
+{:.lemma}
+
+The proof of this lemma is an easy counting exercise over the number of "breakpoints" over $[0,1]$.
 
 **Proof**{:.label #DepthSeparationProof}
   **_(COMPLETE)_.**
@@ -145,6 +166,9 @@ All this to say: depth separation results can be rather elusive; they seem to on
 
 [^vardi2]:
     G. Vardi, D. Reichmann, T. Pitassi, and O. Shamir, [Size and Depth Separation in Approximating Benign Functions with Neural Networks](http://proceedings.mlr.press/v134/vardi21a/vardi21a.pdf), 2021.
+
+[^fn1]:
+    Somewhat curiously, these kinds of oscillatory ("sinusoidal"/periodic) functions are common occurrences while proving cryptographic lower bounds for neural networks. See, for example, [Song, Zadik, and Bruna](https://proceedings.neurips.cc/paper/2021/hash/f78688fb6a5507413ade54a230355acd-Abstract.html), 2021.
 
 [^hanin]:
     B. Hanin and D. Rolnick, [Complexity of Linear Regions in Deep Networks](https://arxiv.org/pdf/1901.09021.pdf), 2019.
