@@ -230,7 +230,7 @@ This result, while holding for general $L$-hidden-layer networks, doesn't unfort
 ### Lower bounds, extensions
 {:.label}
 
-The above results shows that depth-2, width-$\sqrt{N}$ networks are sufficient to memorize training sets of size $N$. But is this scaling in width necessary? Parameter counting suggests so; formally, Yun et al.[^yun] proved the (matching) lower bound:
+The above results shows that depth-2, width-$\sqrt{N}$ networks are sufficient to memorize training sets of size $N$. But is this width dependence on $N$ also *necessary*? Parameter counting suggests that this is indeed the case. formally, Yun et al.[^yun] have an elegant proof for a (matching) lower bound:
 
 **Theorem**{:.label #ThreeLayerLB}
   Suppose a depth-$3$ ReLU network has widths of hidden layers $d_1, d_2$. If
