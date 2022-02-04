@@ -152,7 +152,7 @@ We are now ready for the proof of the main [Theorem](#DepthSeparation).
   \frac{1}{2} \cdot \frac{1}{2} \cdot \frac{1}{2^{L^2 + 2}} = 2^{-L^2 - 4} .
   $$
 
-  But! *Any* linear piece of $f$ has to have *zero* intersection at least half of these triangles (since this linear piece can either be above the purple line or below, not both). Therefore, if we look at the absolute error $|f-g|$ restricted to this particular piece, the area under this curve should be *at least* the area of the missed triangles (shaded in blue). Therefore, the *total* error is lower bounded as follows:
+  But *any* linear piece of $f$ has to have *zero* intersection at least half of these triangles (since this linear piece can either be above the purple line or below, not both). Therefore, if we look at the absolute error $|f-g|$ restricted to this particular piece, the area under this curve should be *at least* the area of the missed triangles (shaded in blue). Therefore, the *total* error is lower bounded as follows:
 
   $$
   \begin{aligned}
@@ -167,7 +167,7 @@ We are now ready for the proof of the main [Theorem](#DepthSeparation).
 
 Let us reflect a bit more on the above proof. The key ingredient was the fact that superpositions (adding units, essentially increasing the "width") only have a polynomial increase on the number of pieces in the range of $g$, but compositions (essentially increasing the "depth") have an *exponential* increase in the number of pieces.
 
-But! This "hard" function $g$, which is the sawtooth over $[0,1]$, was *very carefully constructed*. To  achieve the exponential scaling law in the number of pieces, the breakpoints in $g$ *have* to be exactly equispaced, and therefore the weights in every layer in the network have to be identical. Even a tiny perturbation to $g$ dramatically reduces the number of linear pieces in the range of the network. See the following figure illustrated in Hanin and Rolnick (2019)[^hanin]:
+But! this "hard" function $g$, which is the sawtooth over $[0,1]$, was *very carefully constructed*. To  achieve the exponential scaling law in the number of pieces, the breakpoints in $g$ *have* to be exactly equispaced, and therefore the weights in every layer in the network have to be identical. Even a tiny perturbation to $g$ dramatically reduces the number of linear pieces in the range of the network. See the following figure illustrated in Hanin and Rolnick (2019)[^hanin]:
 
 ![(left) The sawtooth function $g$, representable via a depth-$O(L^2)$, width-3 ReLU net. (right) Range of the same network as $g$ but with a tiny amount of noise added to its weights.](/fodl/assets/sawtooth.png)
 
