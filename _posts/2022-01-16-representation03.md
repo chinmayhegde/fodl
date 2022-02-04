@@ -189,23 +189,47 @@ Several recent (very nice) papers have addressed this question. Let us start wit
   Let $X = \lbrace (x_i, y_i)_{i=1}^N \rbrace \subset \R^d \times \R$ be a dataset with distinct $x_i$ and $y_i \in [-1,1]$. Then, there exists a depth-3 ReLU network with hidden units $d_1, d_2$ where:
 
   $$
-  4 \lceil \frac{d_1}{2} \rceil \lceil \frac{d_2}{2} \rceil \geq N
+  N \leq 4 \lceil \frac{d_1}{2} \rceil \lceil \frac{d_2}{2} \rceil .
   $$
 
   that exactly memorizes $X$.
 {:.theorem}
 
-We will give a sketch of the proof at the bottom of this page, but let us first study several implications of this result. First, we get the following corollary:
+The proof is somewhat involved, so we will give a sketch at the bottom of this page. But let us study several implications of this result. First, we get the following corollary:
 
 **Corollary**{:.label #RootN}
   (Informal) A depth-3 ReLU network with width $d_1 = d_2 = O(\sqrt{N})$ is sufficient to memorize $N$ points.
 {:.corollary}
 
-Focus on the regime where $d \ll N$. For this case, we have achieved a polynomial reduction in the *number of hidden neurons* in the network from $O(N)$ in the depth-2 case to $O(\sqrt{N})$ in the depth-3 case. Notice that the number of *parameters* in the network still remains $\Theta(N)$ (and the condition in the above [Theorem](#ThreeLayerMemo) ensures this, since the "middle" layer has $d_1 \cdot d_2 \gtrapprox N$ connections.)
+This indicates a concrete separation in terms of memorization capacity between depth-2 and depth-3 networks. Suppose we focus on the regime where $d \ll N$. For this case, we have achieved a polynomial reduction in the *number of hidden neurons* in the network from $O(N)$ in the depth-2 case to $O(\sqrt{N})$ in the depth-3 case.
 
+Notice that the number of *parameters* in the network still remains $\Theta(N)$ (and the condition in the above [Theorem](#ThreeLayerMemo) ensures this, since the "middle" layer has $d_1 \cdot d_2 \gtrapprox N$ connections.) But there are ancillary benefits in reducing the number of neurons themselves (for example, in the context of hardware implementation) which we won't get into.
+
+**Remark**{:.label #multilabel}
+  A similar result on memorization capacity can be obtained for situations with multiple labels (e.g. in the multi-class classification setting). If the dimension of the label is $d_y > 1$, then the condition is that $d_1 d_2 \gtrapprox N d_y$.
+{:.remark}
+
+**Remark**{:.label #multilabel3}
+  The multi-label case can be directly applied to provide width-lower bounds on memorizing popular datasets. For example, the well-known ImageNet dataset has about 10M image samples and performs classification over 1000 classes. The width bound suggests that we need networks of width no smaller than $\sqrt{10^7 \times 10^3} \approx 10^5$ ReLUs.
+{:.remark}
+
+Yun et al.[^yun] also obtain a version of their result for depth-$L$ networks:
+
+**Theorem**{:.label #ThreeLayerMemo}
+  Suppose a depth-$L$ ReLU network has widths of hidden layers $d_1, d_2, \ldots, d_L$ then its memorization capacity is lower bounded by:
+
+  $$
+  N_l := d_1 d_2 + d_2 d_3 + \ldots d_{L-2}d_{L-1} ,
+  $$
+
+  i.e., a network with this architecture can memorize any dataset with at most $N_l$ data points.
+{:.theorem}
+
+This result, while holding for general $L$-hidden-layer networks, doesn't unfortunately paint a complete picture; the proof uses the result for $L = 2$ to show that all labels can be successively memorized "layer-by-layer". In particular, we don't seem to get an exponential improvement in memorization capacity as we add depth.
 
 
 ## Proof of 3-layer memorization
+{:.label}
 
 **_(COMPLETE)_**
 
