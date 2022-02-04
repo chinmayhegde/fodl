@@ -114,12 +114,16 @@ which is a tiny (width-3, depth-2) ReLU network. Therefore, $m^{(L)}(x)$ is a un
 So: we have constructed a neural network with depth $O(L)$ which simulates a piecewise linear function over the real line with $2^L$ pieces. In fact, this observation can be generalized quite significantly as follows.
 
 **Lemma**{:.label #numpieces}
-    If $f$ and $g$ are univariate functions defined over $[0,1]$ with $s$ and $t$ pieces respectively, then:
+  If $f$ and $g$ are univariate functions defined over $[0,1]$ with $s$ and $t$ pieces respectively, then:
     (a) $\alpha f + \beta g$ has at most $s + t$ pieces.
     (b) $f \circ g$ has at most $st$ pieces.
 {:.lemma}
 
-The proof of this lemma is an easy counting exercise over the number of "breakpoints" over $[0,1]$.
+The proof of this lemma is an easy counting exercise over the number of "breakpoints" over $[0,1]$. Most relevant to our discussion, we get the **important** corollary (somewhat informally stated here without any constants):
+
+**Corollary**{:.label #numpiecesrelu}
+  For any feedforward ReLU network $f$ with depth $\leq L$ and width $\leq 2^{L^\delta}$, then the total number of pieces  in the range of $f$ is strictly smaller than $2^$
+{:.corollary}
 
 **Proof**{:.label #DepthSeparationProof}
   **_(COMPLETE)_.**
