@@ -225,10 +225,28 @@ Yun et al.[^yun] also obtain a version of their result for depth-$L$ networks:
   i.e., a network with this architecture can memorize any dataset with at most $N_l$ data points.
 {:.theorem}
 
-This result, while holding for general $L$-hidden-layer networks, doesn't unfortunately paint a complete picture; the proof uses the result for $L = 2$ to show that all labels can be successively memorized "layer-by-layer". In particular, we don't seem to get an exponential improvement in memorization capacity as we add depth.
+This result, while holding for general $L$-hidden-layer networks, doesn't unfortunately paint a complete picture; the proof uses the result for $L = 2$ to show that all labels can be successively memorized "layer-by-layer". In particular, to memorize $N$ data points the width requirement remains $O(\sqrt{N})$.
 
+### Lower bounds, extensions
+{:.label}
 
-## Proof of 3-layer memorization
+The above results shows that depth-2, width-$\sqrt{N}$ networks are sufficient to memorize training sets of size $N$. But is this scaling in width necessary? Parameter counting suggests so; formally, Yun et al.[^yun] proved the (matching) lower bound:
+
+**Theorem**{:.label #ThreeLayerLB}
+  Suppose a depth-$3$ ReLU network has widths of hidden layers $d_1, d_2$. If
+
+  $$
+  2 d_1 d_2 + d_2 + 2 < N,
+  $$
+
+  then there exists a dataset with $N$ points that cannot be memorized.
+{:.theorem}
+
+**Proof**{:.label #ThreeLayerLBProof}
+  **_(Complete)_**.
+{:.proof}
+
+### Proof of 3-layer memorization
 {:.label}
 
 **_(COMPLETE)_**
