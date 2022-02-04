@@ -19,11 +19,13 @@ One, after all, this is a course on "deep" learning theory, so we cannot avoid t
 
 But two, for the last decade or so, a lot of folks have been trying very hard to replicate the success of deep networks with *highly* tuned shallow models (such as kernel machines), but so far have come up short. Understanding precisely why and where shallow models fall short (while deep models succeed) is therefore of importance.
 
-A full answer to the question that we posed above will remain elusive. See, for example, the last paragraph of Belkin's monograph[^belkin] for some speculation. To quote a recent paper by Shankar et al.[^shankar]:
+A full answer to the question that we posed above remains elusive, and indeed theory does not tell us too much about why depth in neural networks is important (or whether it is necessary at all!) See the last paragraph of Belkin's monograph[^belkin] for some speculation. To quote another paper by Shankar et al.[^shankar]:
 
 > "...the question remains open whether the performance gap between kernels and neural networks indicates a fundamental limitation of kernel methods or merely an engineering hurdle that can be overcome."  
 
-Nonetheless: in this note, we will derive several interesting results that highlight the importance of depth in the representation power of neural network architectures. Let us focus on "reasonable-width" networks of depth $L > 2$ (because we already know from universal approximation that exponential-width two-layer networks can represent pretty much anything we like.) There are two angles of inquiry:
+Nonetheless: progress *can* be made in some limited cases. In this note, we will visit several interesting results that highlight the importance of network depth in the context of representation power. Later we will revisit this in the context of optimization.
+
+Let us focus on "reasonable-width" networks of depth $L > 2$ (because we already know from universal approximation that exponential-width networks of depth-2 can represent pretty much anything we like.) There are two angles of inquiry:
 
 * Approach 1: prove that there exist datasets of some large enough size that can *only* be memorized by networks of depth $\Omega(L)$, but not by networks of depth $o(L)$.
 
@@ -114,19 +116,53 @@ which is a tiny (width-3, depth-2) ReLU network. Therefore, $m^{(L)}(x)$ is a un
 So: we have constructed a neural network with depth $O(L)$ which simulates a piecewise linear function over the real line with $2^L$ pieces. In fact, this observation can be generalized quite significantly as follows.
 
 **Lemma**{:.label #numpieces}
-  If $f$ and $g$ are univariate functions defined over $[0,1]$ with $s$ and $t$ pieces respectively, then:
-    (a) $\alpha f + \beta g$ has at most $s + t$ pieces.
-    (b) $f \circ g$ has at most $st$ pieces.
+  If $p(x)$ and $q(x)$ are univariate functions defined over $[0,1]$ with $s$ and $t$ linear pieces respectively, then:
+    (a) $\alpha p(x) + \beta q(x)$ has at most $s + t$ pieces over $[0,1]$.
+    (b) $q(p(x))$ has at most $st$ pieces over $[0,1]$.
 {:.lemma}
 
-The proof of this lemma is an easy counting exercise over the number of "breakpoints" over $[0,1]$. Most relevant to our discussion, we get the **important** corollary (somewhat informally stated here without any constants):
+The proof of this lemma is an easy counting exercise over the number of "breakpoints" over $[0,1]$. Most relevant to our discussion, we immediately get the **important** corollary (somewhat informally stated here, there may be hidden constants which I am ignoring):
 
 **Corollary**{:.label #numpiecesrelu}
-  For any feedforward ReLU network $f$ with depth $\leq L$ and width $\leq 2^{L^\delta}$, then the total number of pieces  in the range of $f$ is strictly smaller than $2^$
+  For any feedforward ReLU network $f$ with depth $\leq L$ and width $\leq 2^{L^\delta}$, then the total number of pieces  in the range of $f$ is strictly smaller than $2^{L^2}$.
 {:.corollary}
 
+We are now ready for the proof of the main [Theorem](#DepthSeparation).
+
 **Proof**{:.label #DepthSeparationProof}
-  **_(COMPLETE)_.**
+  Our target function $g$ will be the sawtooth function iterated $L^2 + 2$ times, i.e.,
+
+  $$
+  g(x) = m^{(L^2 + 2)}(x).
+  $$
+
+  Using [Corollary](#numpiecesrelu) we will show that that if $f$ is any feedforard ReLU net with depth $\leq L$ and sub-exponential width, then $f$ cannot approximate a significant fraction of the pieces in $g$. In terms of picture, let us consider the following figure:
+
+  ![Approximating the sawtooth.](/fodl/assets/triangleslice.png)
+
+  where $f$ is in red and $g$ (the target) is in navy blue. Let's draw the horizontal line $y = 1/2$ in purple. We can count the *total* number of (tiny) triangles in $g$ to be (exactly) equal to
+
+  $$
+  2^{L^2 + 2} - 1
+  $$  
+
+  (the -1 is because the two edge cases have only a half-triangle each). Each of these tiny triangles have height 1/2, so their area is:
+
+  $$
+  \frac{1}{2} \cdot \frac{1}{2} \cdot \frac{1}{2^{L^2 + 2}} = 2^{-L^2 - 4} .
+  $$
+
+  But! *Any* linear piece of $f$ has to have *zero* intersection at least half of these triangles (since this linear piece can either be above the purple line or below, not both). Therefore, if we look at the absolute error $|f-g|$ restricted to this particular piece, the area under this curve should be *at least* the area of the missed triangles (shaded in blue). Therefore, the *total* error is lower bounded as follows:
+
+  $$
+  \begin{aligned}
+  \int_0^1 |f - g | dx &\geq \text{\# missed triangles} \times \text{area of triangle} \\
+  &> \frac{1}{2} \cdot 2^{L^2} \cdot 2^{-L^2 - 4} \\
+  &= \frac{1}{32} .
+  \end{aligned}
+  $$
+
+  This completes the proof.
 {:.proof}
 
 Let us reflect a bit more on the above proof. The key ingredient was the fact that superpositions (adding units, essentially increasing the "width") only have a polynomial increase on the number of pieces in the range of $g$, but compositions (essentially increasing the "depth") have an *exponential* increase in the number of pieces.
