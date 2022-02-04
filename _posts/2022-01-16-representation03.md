@@ -195,8 +195,19 @@ Several recent (very nice) papers have addressed this question. Let us start wit
   that exactly memorizes $X$.
 {:.theorem}
 
+We will give a sketch of the proof at the bottom of this page, but let us first study several implications of this result. First, we get the following corollary:
+
+**Corollary**{:.label #RootN}
+  (Informal) A depth-3 ReLU network with width $d_1 = d_2 = O(\sqrt{N})$ is sufficient to memorize $N$ points.
+{:.corollary}
+
+Focus on the regime where $d \ll N$. For this case, we have achieved a polynomial reduction in the *number of hidden neurons* in the network from $O(N)$ in the depth-2 case to $O(\sqrt{N})$ in the depth-3 case. Notice that the number of *parameters* in the network still remains $\Theta(N)$ (and the condition in the above [Theorem](#ThreeLayerMemo) ensures this, since the "middle" layer has $d_1 \cdot d_2 \gtrapprox N$ connections.)
 
 
+
+## Proof of 3-layer memorization
+
+**_(COMPLETE)_**
 
 ---
 
