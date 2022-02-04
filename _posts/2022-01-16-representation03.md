@@ -173,10 +173,27 @@ But! this "hard" function $g$, which is the sawtooth over $[0,1]$, was *very car
 
 The plot on the left is the sawtooth function $g$, which, as we proved earlier, is representable via a depth-$O(L^2)$, width-3 ReLU net. The plot on the right is the function implemented by the same network as $g$ but with a tiny amount of noise added to its weights. So even when we did get a depth-separation result, it's not at all "robust".
 
-All this to say: depth separation results can be rather elusive; they seem to only exist for very special cases; and progress in this direction would result in several fundamental breakthroughs in complexity theory.
+All this to say: depth separation results for function approximation can be rather elusive; they seem to only exist for very special cases; and progress in this direction would result in several fundamental breakthroughs in complexity theory.
 
 ## Depth-width tradeoffs in memorization
 {:.label}
+
+We will now turn to Approach 1. Let's say that our goal was a bit more modest, and merely wanted to memorize a bunch of $n$ training data points with $d$ input features. Recall that we already showed that $O(n/d)$ neurons are sufficient to memorize these points using a "peeling"-style proof.
+
+In other words: for depth-2 networks with $m$ hidden neurons, the memorization capacity is of the order of $d\cdot h$. This is roughly the same as the number of parameters in the network, so parameter counting intuitively tells us that we cannot do much better. So what does depth give us really?
+
+Several recent (very nice) papers have addressed this question. Let us start with the following result by Yun et al.[^yun].
+
+
+**Theorem**{:.label #ThreeLayerMemo}
+  Let $X = \lbrace (x_i, y_i)_{i=1}^N \rbrace \subset \R^d \times \R$ be a dataset with distinct $x_i$ and $y_i \in [-1,1]$. Then, there exists a depth-3 ReLU network with hidden units $d_1, d_2$ where:
+
+  $$
+  4 \lceil \frac{d_1}{2} \rceil \lceil \frac{d_2}{2} \rceil \geq N
+  $$
+
+  that exactly memorizes $X$.
+{:.theorem}
 
 
 
@@ -212,3 +229,6 @@ All this to say: depth separation results can be rather elusive; they seem to on
 
 [^hanin]:
     B. Hanin and D. Rolnick, [Complexity of Linear Regions in Deep Networks](https://arxiv.org/pdf/1901.09021.pdf), 2019.
+
+[^yun]:
+    C. Yun, A. Jadbabaie, S. Sra, [Small ReLU Networks are Powerful Memorizers](https://arxiv.org/pdf/1810.07770.pdf), 2019.
