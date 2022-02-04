@@ -152,7 +152,7 @@ We are now ready for the proof of the main [Theorem](#DepthSeparation).
   \frac{1}{2} \cdot \frac{1}{2} \cdot \frac{1}{2^{L^2 + 2}} = 2^{-L^2 - 4} .
   $$
 
-  But *any* linear piece of $f$ has to have *zero* intersection at least half of these triangles (since this linear piece can either be above the purple line or below, not both). Therefore, if we look at the absolute error $|f-g|$ restricted to this particular piece, the area under this curve should be *at least* the area of the missed triangles (shaded in blue). Therefore, the *total* error is lower bounded as follows:
+  But *any* linear piece of $f$ has to have *zero* intersection at least half of these triangles (since this linear piece can either be above the purple line or below, not both). Therefore, if we look at the error restricted to this particular piece, the area under this curve should be *at least* the area of the missed triangles (shaded in blue). Therefore, the *total* error is lower bounded as follows:
 
   $$
   \begin{aligned}
