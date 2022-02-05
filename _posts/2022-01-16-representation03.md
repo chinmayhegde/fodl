@@ -78,6 +78,8 @@ Telgarsky's proof uses the following high level ideas:
 
   (d) but, from part (b), we know that a significantly shallower network cannot simulate so many pieces, thus giving our separation.
 
+---
+
 Before diving into each of them, let us first define (and study) a simple "gadget" neural network that simulates a function $m : \R \rightarrow \R$ which will be helpful throughout. It's easier to just draw $m(x)$ first:
 
 ![The sawtooth gadget.](/fodl/assets/gadget.png)
@@ -113,12 +115,18 @@ $$
 
 which is a tiny (width-3, depth-2) ReLU network. Therefore, $m^{(L)}(x)$ is a univariate function that is exactly written out as width-3, depth-$2L$ ReLU network for any $L$.
 
+**Remark**{:.label #bitextract}
+  One can view $m^{(L)}(x)$ as a "bit-extractor" function since we have the property that $m^{(L)}(x) = m(\text{frac}(2^{L-1} x))$, where $\text{frac}(x) = x - \lfloor x \rfloor$ is the fractional part of any real number $x$. (*Exercise: Prove this.*) It is interesting that similar "bit-extractor" gadgets can be found in some earlier universal approximation proofs[^sieg].
+{:.remark}
+
+---
+
 So: we have constructed a neural network with depth $O(L)$ which simulates a piecewise linear function over the real line with $2^L$ pieces. In fact, this observation can be generalized quite significantly as follows.
 
 **Lemma**{:.label #numpieces}
   If $p(x)$ and $q(x)$ are univariate functions defined over $[0,1]$ with $s$ and $t$ linear pieces respectively, then:
-    (a) $\alpha p(x) + \beta q(x)$ has at most $s + t$ pieces over $[0,1]$.
-    (b) $q(p(x))$ has at most $st$ pieces over $[0,1]$.
+      (a) $\alpha p(x) + \beta q(x)$ has at most $s + t$ pieces over $[0,1]$.
+      (b) $q(p(x))$ has at most $st$ pieces over $[0,1]$.
 {:.lemma}
 
 The proof of this lemma is an easy counting exercise over the number of "breakpoints" over $[0,1]$. Most relevant to our discussion, we immediately get the **important** corollary (somewhat informally stated here, there may be hidden constants which I am ignoring):
@@ -225,11 +233,11 @@ Yun et al.[^yun] also obtain a version of their result for depth-$L$ networks:
   i.e., a network with this architecture can memorize any dataset with at most $N_l$ data points.
 {:.theorem}
 
-This result, while holding for general $L$-hidden-layer networks, doesn't unfortunately paint a complete picture; the proof uses the result for $L = 2$ to show that all labels can be successively memorized "layer-by-layer". In particular, to memorize $N$ data points the width requirement remains $O(\sqrt{N})$.
+This result, while holding for general $L$-hidden-layer networks, doesn't unfortunately paint a full picture; the proof starts with the result for $L = 2$, and then proceeds to show that all labels can be successively memorized "layer-by-layer". In particular, to memorize $N$ data points, the width requirement remains $O(\sqrt{N})$ and it is not entirely clear if depth plays a role. We will come back to this shortly.
 
 ---
 
-There are several interesting ways to extend the above results. The above [Theorem](#ThreeLayerMemo) shows that depth-2, width-$\sqrt{N}$ networks are sufficient to memorize training sets of size $N$. But is this width dependence on $N$ also *necessary*? Parameter counting suggests that this is indeed the case. Formally, Yun et al.[^yun] provide an elegant proof for a (matching) lower bound:
+Several interesting questions arise. First, tightness. The above [Theorem](#ThreeLayerMemo) shows that depth-2, width-$\sqrt{N}$ networks are sufficient to memorize training sets of size $N$. But is this width dependence of $\sqrt{N}$ also *necessary*? Parameter counting suggests that this is indeed the case. Formally, Yun et al.[^yun] provide an elegant proof for a (matching) lower bound:
 
 **Theorem**{:.label #ThreeLayerLB}
   Suppose a depth-$3$ ReLU network has widths of hidden layers $d_1, d_2$. If
@@ -245,10 +253,41 @@ There are several interesting ways to extend the above results. The above [Theor
   **_(Complete)_**.
 {:.proof}
 
+Observe that this does not directly give lower bounds on the number of *parameters* needed to memorize data. We will come back to this question below.
+
+Next, extensions to other networks. The above results are for feedforward ReLU networks; Yun et al.[^yun] also showed this for "hard-tanh" activations (which is a "clipped" ReLU activation that saturates at +1 for $x \geq 1$). Similar results (with number of connections approximately equal to the number of data points) have been obtained for polynomial networks[^ge] and residual networks[^resnet].
+
+What about more exotic families of networks? Could it be that there is some yet-undiscovered model that may give better memorization?
+
+In a very nice (and surprisingly general) result, Vershynin[^vershynin] showed the following:
+
+**Theorem**{:.label #VershLLayer}
+  (Informal) Consider well-separated data of unit norm and binary labels. Consider depth-$L$ networks ($L \geq 3$) with arbitrary activations across neurons but without exponentially narrow bottlenecks. If the number of "wires" in the second layer of a network and later:
+
+  $$
+  W := d_1 d_2 + d_2 d_3 + \ldots + d_{L-1} d_L ,
+  $$
+
+  is slightly larger than $N$, specifically:
+
+  $$
+  W \geq N \log^5 N ,
+  $$
+
+  then some choice of weights can memorize this dataset.
+
+{:.theorem}
+
+The high level idea in the proof of this result is to use the first layer as a "preconditioner" that separates data points into an almost-orthogonal set (in fact, even a random Gaussian projection will do to achieve this), and then any sequence of final layers that will memorize label assignments.
+
+The precise definitions of "well-separatedness" and "bottlenecks" can be found in the paper, but the key here is that this bound is independent of depth, choice of activations (whether ReLU or threshold or some mixture of both), and any other architectural details. Again, we see that there doesn't seem to be a tangible impact of the depth parameter $L$ on network capacity.
+
+For a more precise discussion along these lines, see the review section of a very nice (and recent) paper by Rajput et al.[^rajput].
 
 ## Depth versus number of parameters
 {:.label}
 
+**_(COMPLETE)_**
 
 ## Proof of 3-layer memorization capacity
 {:.label}
@@ -284,8 +323,23 @@ There are several interesting ways to extend the above results. The above [Theor
 [^fn1]:
     Somewhat curiously, these kinds of oscillatory ("sinusoidal"/periodic) functions are common occurrences while proving cryptographic lower bounds for neural networks. See, for example, [Song, Zadik, and Bruna](https://proceedings.neurips.cc/paper/2021/hash/f78688fb6a5507413ade54a230355acd-Abstract.html), 2021.
 
+[^sieg]:
+    H. Siegelmann and D. Sontag, [On the Computational Power of Neural Networks](https://binds.cs.umass.edu/papers/1992_Siegelmann_COLT.pdf), 1992.
+
 [^hanin]:
     B. Hanin and D. Rolnick, [Complexity of Linear Regions in Deep Networks](https://arxiv.org/pdf/1901.09021.pdf), 2019.
 
 [^yun]:
     C. Yun, A. Jadbabaie, S. Sra, [Small ReLU Networks are Powerful Memorizers](https://arxiv.org/pdf/1810.07770.pdf), 2019.
+
+[^ge]:
+    R. Ge, R. Wang, H. Zhao, [Mildly Overparametrized Neural Nets can Memorize Training Data Efficiently](https://arxiv.org/pdf/1909.11837.pdf), 2019.
+
+[^resnet]:
+    M. Hardt and T. Ma, [Identity Matters in Deep Learning](https://openreview.net/forum?id=ryxB0Rtxx), 2017.
+
+[^vershynin]:
+    R. Vershynin, [Memory capacity of neural networks with threshold and ReLU activations](https://arxiv.org/pdf/2001.06938.pdf), 2020.
+
+[^rajput]:
+    S. Rajput, K. Sreenivasan, D. Papailiopoulos, A. Karbasi, [An Exponential Improvement on the Memorization Capacity of Deep Threshold Networks](https://proceedings.neurips.cc/paper/2021/file/69dd2eff9b6a421d5ce262b093bdab23-Paper.pdf), 2021.
