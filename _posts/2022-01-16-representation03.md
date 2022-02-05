@@ -299,7 +299,7 @@ The *VC-dimension* of any family of models is defined as the maximum number of d
 
 Can we reconcile this gap between the "best" and "worst" cases of memorization capacity? In a very recent result, Vardi et al.[^vardi] have been able to show that the $\sqrt{N}$ dependence is in fact tight (up to log factors). Under the assumption that the data is bounded norm and well-separated, then a width-12, depth-$\tilde{O}(\sqrt{N})$ network with $\tilde{O}(\sqrt{N})$ parameters can memorize any dataset. This result improves upon a previous result[^yun2] that had initially achieved a sub-linear upper bound of $O(N^{\frac{2}{3}})$ parameters.
 
-The proof of this result is somewhat combinatorial in nature. We see (again!) the bit-extractor gadget network being used here. There is another catch: the *bit complexity* of each weight network in the network is very large (it scales as $\sqrt{N}$), so the price to pay for a very small number of weights is that we end up stuffing many more bits in each weight.
+The proof of this result is somewhat combinatorial in nature. We see (again!) the bit-extractor gadget network being used here. There is another catch: the *bit complexity* of the network is very large (it scales as $\sqrt{N}$), so the price to pay for a very small number of weights is that we end up stuffing many more bits in each weight.
 
 ## Proof of 3-layer memorization capacity
 {:.label}
