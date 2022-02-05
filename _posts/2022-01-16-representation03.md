@@ -183,12 +183,12 @@ The plot on the left is the sawtooth function $g$, which, as we proved earlier, 
 
 All this to say: depth separation results for function approximation can be rather elusive; they seem to only exist for very special cases; and progress in this direction would result in several fundamental breakthroughs in complexity theory.
 
-## Depth-width tradeoffs in memorization
+## Depth and memorization
 {:.label}
 
-We will now turn to Approach 1. Let's say that our goal was a bit more modest, and merely wanted to memorize a bunch of $n$ training data points with $d$ input features. Recall that we already showed that $O(n/d)$ neurons are sufficient to memorize these points using a "peeling"-style proof.
+We will now turn to Approach 1. Let's say that our goal was a bit more modest, and merely wanted to memorize a bunch of $n$ training data points with $d$ input features. Recall that we already showed that $O(\frac{n}{d})$ neurons are sufficient to memorize these points using a "peeling"-style proof.
 
-In other words: for depth-2 networks with $m$ hidden neurons, the memorization capacity is of the order of $d\cdot h$. This is roughly the same as the number of parameters in the network, so parameter counting intuitively tells us that we cannot do much better. So what does depth give us really?
+Rephrasing: for depth-2 networks with $m$ hidden neurons, the memorization capacity is of the order of $d\cdot m$. This is roughly the same as the number of parameters in the network, so parameter counting intuitively tells us that we cannot do much better. What does depth $>2$ give us really?
 
 Several recent (very nice) papers have addressed this question. Let us start with the following result by Yun et al.[^yun].
 
@@ -227,10 +227,10 @@ Yun et al.[^yun] also obtain a version of their result for depth-$L$ networks:
   Suppose a depth-$L$ ReLU network has widths of hidden layers $d_1, d_2, \ldots, d_L$ then its memorization capacity is lower bounded by:
 
   $$
-  N_l := d_1 d_2 + d_2 d_3 + \ldots d_{L-2}d_{L-1} ,
+  N := d_1 d_2 + d_2 d_3 + \ldots d_{L-2}d_{L-1} ,
   $$
 
-  i.e., a network with this architecture can memorize any dataset with at most $N_l$ data points.
+  i.e., a network with this architecture can be tuned to memorize any dataset with at most $N$ points.
 {:.theorem}
 
 This result, while holding for general $L$-hidden-layer networks, doesn't unfortunately paint a full picture; the proof starts with the result for $L = 2$, and then proceeds to show that all labels can be successively memorized "layer-by-layer". In particular, to memorize $N$ data points, the width requirement remains $O(\sqrt{N})$ and it is not entirely clear if depth plays a role. We will come back to this shortly.
@@ -278,7 +278,7 @@ In a very nice (and surprisingly general) result, Vershynin[^vershynin] showed t
 
 {:.theorem}
 
-The high level idea in the proof of this result is to use the first layer as a "preconditioner" that separates data points into an almost-orthogonal set (in fact, even a random Gaussian projection will do to achieve this), and then any sequence of final layers that will memorize label assignments.
+The high level idea in the proof of this result is to use the first layer as a preconditioner that separates data points into an almost-orthogonal set (in fact, a simple random Gaussian projection layer will do), and then any sequence of final layers that will memorize label assignments.
 
 The precise definitions of "well-separatedness" and "bottlenecks" can be found in the paper, but the key here is that this bound is independent of depth, choice of activations (whether ReLU or threshold or some mixture of both), and any other architectural details. Again, we see that there doesn't seem to be a tangible impact of the depth parameter $L$ on network capacity.
 
