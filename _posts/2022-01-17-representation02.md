@@ -40,8 +40,8 @@ where $\mu$ is some measure defined over $\text{dom}(g)$. Likewise for the $L_\i
 
 We begin with the special case of $d=1$ (i.e., the prediction function $g$ is univariate). Let us first define a useful property to characterize univariate functions.
 
-**Definition (univariate Lipschitz)**{:.label #Lipschitz}
-  A function $g : \R \rightarrow \R$ is $L$-Lipschitz if for all $u,v \in \R$, we have that $|f(u) - f(v) | \leq L |u - v|$.
+**Definition**{:.label #Lipschitz}
+  (Univariate Lipschitz.) A function $g : \R \rightarrow \R$ is $L$-Lipschitz if for all $u,v \in \R$, we have that $|f(u) - f(v) | \leq L |u - v|$.
 {:.definition}
 
 Why is this an interesting property? Any smooth function with bounded derivative is Lipschitz; in fact, certain non-smooth functions (such as the ReLU) are also Lipschitz. Lipschitz-ness does not quite capture everything we care about (e.g. discontinuous functions are not Lipschitz, which can be somewhat problematic if there are "jumps" in the label space). But it serves as a large enough class of functions to prove interesting results.
@@ -89,8 +89,8 @@ We answer this question using two approaches. First, we give a construction usin
 
 First, we have to define Lipschitzness for $d$-variate functions.
 
-**Definition (multivariate Lipschitz)**{:.label #Lipschitz}
-  A function $g : \R^d \rightarrow \R$ is $L$-Lipschitz if for all $u,v \in \R^d$, we have that $|f(u) - f(v) | \leq L \lVert u - v \rVert_\infty$.
+**Definition**{:.label #Lipschitz}
+  (Multivariate Lipschitz.) A function $g : \R^d \rightarrow \R$ is $L$-Lipschitz if for all $u,v \in \R^d$, we have that $|f(u) - f(v) | \leq L \lVert u - v \rVert_\infty$.
 {:.definition}
 
 

@@ -227,10 +227,9 @@ Yun et al.[^yun] also obtain a version of their result for depth-$L$ networks:
 
 This result, while holding for general $L$-hidden-layer networks, doesn't unfortunately paint a complete picture; the proof uses the result for $L = 2$ to show that all labels can be successively memorized "layer-by-layer". In particular, to memorize $N$ data points the width requirement remains $O(\sqrt{N})$.
 
-### Lower bounds, extensions
-{:.label}
+---
 
-The above results shows that depth-2, width-$\sqrt{N}$ networks are sufficient to memorize training sets of size $N$. But is this width dependence on $N$ also *necessary*? Parameter counting suggests that this is indeed the case. formally, Yun et al.[^yun] have an elegant proof for a (matching) lower bound:
+There are several interesting ways to extend the above results. The above [Theorem](#ThreeLayerMemo) shows that depth-2, width-$\sqrt{N}$ networks are sufficient to memorize training sets of size $N$. But is this width dependence on $N$ also *necessary*? Parameter counting suggests that this is indeed the case. Formally, Yun et al.[^yun] provide an elegant proof for a (matching) lower bound:
 
 **Theorem**{:.label #ThreeLayerLB}
   Suppose a depth-$3$ ReLU network has widths of hidden layers $d_1, d_2$. If
@@ -246,7 +245,12 @@ The above results shows that depth-2, width-$\sqrt{N}$ networks are sufficient t
   **_(Complete)_**.
 {:.proof}
 
-### Proof of 3-layer memorization
+
+## Depth versus number of parameters
+{:.label}
+
+
+## Proof of 3-layer memorization capacity
 {:.label}
 
 **_(COMPLETE)_**
