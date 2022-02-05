@@ -103,10 +103,10 @@ First, we have to define Lipschitzness for $d$-variate functions.
 
   The key idea is to figure out how to realize "indicator functions" for every rectangle. We have seen that in the univariate case, indicators can be implemented using the difference of two threshold neurons. In the $d$-variate case, an indicator over a rectangle is the *Cartesian product* over the $d$ axis. however, Boolean/Cartesian products can be implemented by a layer of threshold activations *on top* of these differences.
 
-  Formally, consider any arbitrary piece with $[u_j,v_j], j=1,2,\ldots,d$ as sides. The domain can be written as the Cartesian product:
+  Formally, consider any arbitrary piece with $[u_j,v_j), j=1,2,\ldots,d$ as sides. The domain can be written as the Cartesian product:
 
   $$
-  S = \times_{j=1}^d (u_j, v_j).
+  S = \times_{j=1}^d [u_j, v_j).
   $$
 
   Therefore, we can realize an indicator function over this domain as follows. Localize within each coordinate by the "difference-of-threshold neurons":
