@@ -287,7 +287,19 @@ For a more precise discussion along these lines, see the review section of a ver
 ## Depth versus number of parameters
 {:.label}
 
-**_(COMPLETE)_**
+In the above discussion we saw that that moving from depth-2 to depth-3 networks helped significantly reduced the number of *neurons* needed to memorize $N$ arbitrary data points from $O(N)$ to $O(\sqrt{N})$ in several cases. The number of *parameters* in all these constructions remained $O(N)$ (but no better).
+
+Is this the best possible we can do, or does depth help? We already encountered the result by Sontag[^sontag] showing an $\Omega(N)$ lower bound; specifically, given any network with sub-linear ($o(N)$) parameters, there exists at least one "worst-case" dataset that cannot be memorized.
+
+Maybe our definition of memorization is too pessimistic, and we don't have to fret about worst case behavior? Let us contrast Sontag's result with other lower bounds from learning theory. Until now, we have quantified the memorization capacity of a network in terms of its ability to exactly interpolate *any* dataset. But we can weaken this definition a bit.
+
+The *VC-dimension* of any family of models is defined as the maximum number of data points that the model can "shatter" (i.e., exactly interpolate labels). Notice that this is a "best-case" definition; if the VC dimension is $N$ there should exist at least one dataset of $N$ points (with arbitrary labels) that the network is able to memorize. Existing VC dimension bounds state that if a network architecture has $W$ weights then the VC dimension is no greater than $O(W^2)$[^bartlett] *no matter the depth* -- so, in the "best-case" scenario, to memorize $N$ samples with arbitrary labels, would require at least $\Omega(\sqrt{N})$ parameters, and we could not really hope to do any better.
+
+(Aside: a sharper VC dimension bound of $O(WL \log W)$ can be obtained for depth-$L$ networks[^bartlett2].)
+
+Can we reconcile this gap between the "best" and "worst" cases of memorization capacity? In a very recent result, Vardi et al.[^vardi] have been able to show that the $\sqrt{N}$ dependence is in fact tight (up to log factors). Under the assumption that the data is bounded norm and well-separated, then a width-12, depth-$\tilde{O}(\sqrt{N})$ network with $\tilde{O}(\sqrt{N})$ parameters can memorize any dataset. This result improves upon a previous result[^yun2] that had initially achieved a sub-linear upper bound of $O(N^{\frac{2}{3}})$ parameters.
+
+The proof of this result is somewhat combinatorial in nature. We see (again!) the bit-extractor gadget network being used here. There is another catch: the *bit complexity* of each weight network in the network is very large (it scales as $\sqrt{N}$), so the price to pay for a very small number of weights is that we end up stuffing many more bits in each weight.
 
 ## Proof of 3-layer memorization capacity
 {:.label}
@@ -343,3 +355,18 @@ For a more precise discussion along these lines, see the review section of a ver
 
 [^rajput]:
     S. Rajput, K. Sreenivasan, D. Papailiopoulos, A. Karbasi, [An Exponential Improvement on the Memorization Capacity of Deep Threshold Networks](https://proceedings.neurips.cc/paper/2021/file/69dd2eff9b6a421d5ce262b093bdab23-Paper.pdf), 2021.
+
+[^sontag]:
+    E. Sontag, [Shattering All Sets of k Points in “General Position” Requires (k − 1)/2 Parameters](http://www.sontaglab.org/FTPDIR/generic.pdf), 1997.
+
+[^bartlett]:
+    P. Bartlett, V. Maiorov, R. Meir, [Almost Linear VC Dimension Bounds for Piecewise Polynomial Networks ](https://proceedings.neurips.cc/paper/1998/file/bc7316929fe1545bf0b98d114ee3ecb8-Paper.pdf), 1998.  
+
+[^bartlett2]:
+    P. Bartlett, N. Harvey, C. Liaw, A. Mehrobian, [Nearly-tight VC-dimension and Pseudodimension Bounds for Piecewise Linear Neural Networks](https://www.jmlr.org/papers/volume20/17-612/17-612.pdf), 2019.
+
+[^vardi]:
+    G. Vardi, G. Yehudai, O. Shamir, [On the Optimal Memorization Power of ReLU Neural Networks](https://arxiv.org/pdf/2110.03187.pdf), 2022.
+
+[^yun2]:
+    S. Park, J. Lee, C. Yun, J. Shin, [Provable Memorization via Deep Neural Networks using Sub-linear Parameters](https://arxiv.org/pdf/2010.13363.pdf), 2021.
