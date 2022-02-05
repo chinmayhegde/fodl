@@ -263,7 +263,7 @@ In a seminal paper[^barron], Barron identified an interesting class of functions
 {:.theorem}
 
 
-We will outline the proof of this theorem, but first some reflections. Notice now that $m$ does *not explicitly depend* on $d$; therefore, we escape the dreaded curse of dimensionality. As long as we control the Barron norm of $g$ to be something reasonable, we can succinctly approximate it using shallow networks.
+We will outline the proof of this theorem below, but first some reflections. Notice now that $m$ does *not explicitly depend* on $d$; therefore, we escape the dreaded curse of dimensionality. As long as we control the Barron norm of $g$ to be something reasonable, we can succinctly approximate it using shallow networks.
 
 In his paper[^barron], Barron shows that indeed Barron norms can be small for a large number of interesting target function classes -- polynomials, sufficiently smooth functions, families such as Gaussian mixture models, even functions over discrete domains (such as decision trees).
 
