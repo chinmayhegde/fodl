@@ -41,7 +41,7 @@ We will first prove a depth-separation result for dense feed-forward networks wi
 We will explicitly construct a (univariate) function $g$ that can be exactly represented by a deep neural network (with error $\varepsilon = 0$) but is provably inapproximable by a much shallower network. This result is by Telgarsky[^telgarsky].
 
 **Theorem**{:.label #DepthSeparation}
-  There exists a function $g : [0,1] \rightarrow \R$ that is exactly realized by a ReLU network of constant width and depth $O(L^2)$, but for *any* neural network $f$ with depth $\leq L$ and (sub-exponential) number of units, $\leq 2^{L^\delta}$ for any $0 < \delta \leq 1$, $f$ is at least $\varepsilon$-far from $g$, i.e.:
+  There exists a function $g : [0,1] \rightarrow \R$ that is exactly realized by a ReLU network of constant width and depth $O(L^2)$, but for *any* neural network $f$ with depth $\leq L$ and number of units, $\leq 2^{L^\delta}$ for any $0 < \delta \leq 1$, $f$ is at least $\varepsilon$-far from $g$, i.e.:
 
   $$
   \int_0^1 |f(x) - g(x)| dx \geq \varepsilon
@@ -50,7 +50,7 @@ We will explicitly construct a (univariate) function $g$ that can be exactly rep
   for some absolute constant $\varepsilon > \frac{1}{32}$.
 {:.theorem}
 
-The proof is elegant and will inform us also while proving memorization-style depth barriers. But let us make several remarks on the implications of the results.
+The proof of this theorem is elegant and will inform us also while proving memorization-style depth barriers. But let us first make several remarks on the implications of the results.
 
 **Remark**{:.label #DepthSepRem1}
   The "hard" example function $g$ constructed in the above Theorem is for scalar inputs. What happens for the general case of $d$-variate inputs? Eldan and Shamir[^eldan] showed that there exist 3-layer ReLU networks (and $\text{poly}(d)$ width) that cannot be $\varepsilon$-approximated by any two-layer ReLU network unless they have $\Omega(2^d)$ hidden nodes. Therefore, there is already a separation between depth=2 and depth=3 in the high-dimensional case.
