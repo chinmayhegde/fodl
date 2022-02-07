@@ -61,7 +61,7 @@ The proof of this theorem is elegant and will inform us also while proving memor
 {:.remark}
 
 **Remark**{:.label #DepthSepRem3}
-  The "hard" example function $g$ constructed in the above Theorem is highly oscillatory within $[0,1]$ (see proof below) and therefore has an unreasonably large (super-polynomial) Lipschitz constant. So, perhaps if we limited our attention to simple/natural Lipschitz functions, then it is easier to prove depth-separation results? Not so: even if we only focused on "benign" functions (easy-to-compute functions with polynomially large Lipschitz constant), proving depth lower bonds would similarly imply progress in long-standing problems in computational complexity. See the recent result by Vardi et al.[^vardi2].
+  The "hard" example function $g$ constructed in the above Theorem is highly oscillatory within $[0,1]$ (see proof below). Therefore, it has an unreasonably large (super-polynomial) Lipschitz constant. Perhaps if we limited our attention to simple/natural Lipschitz functions, then it could be easier to prove depth-separation results? Not so: even if we only focused on "benign" functions (easy-to-compute functions with polynomially large Lipschitz constant), proving depth lower bonds would similarly imply progress in long-standing problems in computational complexity. See the recent result by Vardi et al.[^vardi2].
 {:.remark}
 
 **Remark**{:.label #DepthSepRem4}
@@ -188,7 +188,7 @@ All this to say: depth separation results for function approximation can be rath
 
 We will now turn to Approach 1. Let's say that our goal was a bit more modest, and merely wanted to memorize a bunch of $n$ training data points with $d$ input features. Recall that we already showed that $O(\frac{n}{d})$ neurons are sufficient to memorize these points using a "peeling"-style proof.
 
-Rephrasing: for depth-2 networks with $m$ hidden neurons, the memorization capacity is of the order of $d\cdot m$. This is roughly the same as the number of parameters in the network, so parameter counting intuitively tells us that we cannot do much better. What does depth $>2$ give us really?
+Paraphrasing this fact: for depth-2 networks with $m$ hidden neurons, the memorization capacity is of the order of $d\cdot m$. This is roughly the same as the number of parameters in the network, so parameter counting intuitively tells us that we cannot do much better. What does depth $>2$ give us really?
 
 Several recent (very nice) papers have addressed this question. Let us start with the following result by Yun et al.[^yun].
 
@@ -203,7 +203,7 @@ Several recent (very nice) papers have addressed this question. Let us start wit
   that exactly memorizes $X$.
 {:.theorem}
 
-The proof is somewhat involved, so we will give a sketch at the bottom of this page. But let us study several implications of this result. First, we get the following corollary:
+The proof is somewhat involved, so we will give a brief sketch at the bottom of this page. But let us first study several implications of this result. First, we get the following corollary:
 
 **Corollary**{:.label #RootN}
   (Informal) A depth-3 ReLU network with width $d_1 = d_2 = O(\sqrt{N})$ is sufficient to memorize $N$ points.
@@ -211,10 +211,10 @@ The proof is somewhat involved, so we will give a sketch at the bottom of this p
 
 This indicates a concrete separation in terms of memorization capacity between depth-2 and depth-3 networks. Suppose we focus on the regime where $d \ll N$. For this case, we have achieved a polynomial reduction in the *number of hidden neurons* in the network from $O(N)$ in the depth-2 case to $O(\sqrt{N})$ in the depth-3 case.
 
-Notice that the number of *parameters* in the network still remains $\Theta(N)$ (and the condition in the above [Theorem](#ThreeLayerMemo) ensures this, since the "middle" layer has $d_1 \cdot d_2 \gtrapprox N$ connections.) But there are ancillary benefits in reducing the number of neurons themselves (for example, in the context of hardware implementation) which we won't get into.
+Notice that the number of *parameters* in the network still remains $\Theta(N)$ (and the condition in the above [Theorem](#ThreeLayerMemo) ensures this, since the "middle" layer has $d_1 \cdot d_2 \gtrsim N$ connections.) But there are ancillary benefits in reducing the number of neurons themselves (for example, in the context of hardware implementation) which we won't get into.
 
 **Remark**{:.label #multilabel}
-  A similar result on memorization capacity can be obtained for situations with multiple labels (e.g. in the multi-class classification setting). If the dimension of the label is $d_y > 1$, then the condition is that $d_1 d_2 \gtrapprox N d_y$.
+  A similar result on memorization capacity can be obtained for situations with multiple labels (e.g. in the multi-class classification setting). If the dimension of the label is $d_y > 1$, then the condition is that $d_1 d_2 \gtrsim N d_y$.
 {:.remark}
 
 **Remark**{:.label #multilabel3}
@@ -280,7 +280,7 @@ In a very nice (and surprisingly general) result, Vershynin[^vershynin] showed t
 
 The high level idea in the proof of this result is to use the first layer as a preconditioner that separates data points into an almost-orthogonal set (in fact, a simple random Gaussian projection layer will do), and then any sequence of final layers that will memorize label assignments.
 
-The precise definitions of "well-separatedness" and "bottlenecks" can be found in the paper, but the key here is that this bound is independent of depth, choice of activations (whether ReLU or threshold or some mixture of both), and any other architectural details. Again, we see that there doesn't seem to be a tangible impact of the depth parameter $L$ on network capacity.
+The precise definitions of "well-separatedness" and "bottlenecks" can be found in the paper, but the key here is that this bound is independent of depth, choice of activations (whether ReLU or threshold or some mixture of both), and any other architectural details. Again, we see that there doesn't seem to be a clear impact of the depth parameter $L$ on network capacity.
 
 For a more precise discussion along these lines, see the review section of a very nice (and recent) paper by Rajput et al.[^rajput].
 
@@ -295,7 +295,7 @@ Maybe our definition of memorization is too pessimistic, and we don't have to fr
 
 The *VC-dimension* of any family of models is defined as the maximum number of data points that the model can "shatter" (i.e., exactly interpolate labels). Notice that this is a "best-case" definition; if the VC dimension is $N$ there should exist at least one dataset of $N$ points (with arbitrary labels) that the network is able to memorize.
 
-Existing VC dimension bounds state that if a network architecture has $W$ weights then the VC dimension is no greater than $O(W^2)$[^bartlett] *no matter the depth* -- so, in the "best-case" scenario, to memorize $N$ samples with arbitrary labels, would require at least $\Omega(\sqrt{N})$ parameters, and we could not really hope to do any better. (Aside: a sharper VC dimension bound of $O(WL \log W)$ can be obtained for depth-$L$ networks[^bartlett2].)
+Existing VC dimension bounds state that if a network architecture has $W$ weights then the VC dimension is no greater than $O(W^2)$[^bartlett] *no matter the depth*. Therefore, in the "best-case" scenario, to memorize $N$ samples with arbitrary labels, we would require at least $\Omega(\sqrt{N})$ parameters, and we could not really hope to do any better[^bartlett2].
 
 Can we reconcile this gap between the "best" and "worst" cases of memorization capacity? In a very recent result, Vardi et al.[^vardi] have been able to show that the $\sqrt{N}$ dependence is in fact tight (up to log factors). Under the assumption that the data is bounded norm and well-separated, then a width-12, depth-$\tilde{O}(\sqrt{N})$ network with $\tilde{O}(\sqrt{N})$ parameters can memorize any dataset. This result improves upon a previous result[^yun2] that had initially achieved a sub-linear upper bound of $O(N^{\frac{2}{3}})$ parameters.
 
@@ -363,10 +363,10 @@ The proof of this result is somewhat combinatorial in nature. We see (again!) th
     P. Bartlett, V. Maiorov, R. Meir, [Almost Linear VC Dimension Bounds for Piecewise Polynomial Networks ](https://proceedings.neurips.cc/paper/1998/file/bc7316929fe1545bf0b98d114ee3ecb8-Paper.pdf), 1998.  
 
 [^bartlett2]:
-    P. Bartlett, N. Harvey, C. Liaw, A. Mehrobian, [Nearly-tight VC-dimension and Pseudodimension Bounds for Piecewise Linear Neural Networks](https://www.jmlr.org/papers/volume20/17-612/17-612.pdf), 2019.
+    Aside: this is not quite precise; a sharper VC dimension bound of $O(WL \log W)$ can be obtained for depth-$L$ networks. See P. Bartlett, N. Harvey, C. Liaw, A. Mehrobian, [Nearly-tight VC-dimension and Pseudodimension Bounds for Piecewise Linear Neural Networks](https://www.jmlr.org/papers/volume20/17-612/17-612.pdf), 2019.
 
 [^vardi]:
     G. Vardi, G. Yehudai, O. Shamir, [On the Optimal Memorization Power of ReLU Neural Networks](https://arxiv.org/pdf/2110.03187.pdf), 2022.
 
 [^yun2]:
-    S. Park, J. Lee, C. Yun, J. Shin, [Provable Memorization via Deep Neural Networks using Sub-linear Parameters](https://arxiv.org/pdf/2010.13363.pdf), 2021.
+    S. Park, J. Lee, C. Yun, J. Shin, [Provable Memorization via Deep Neural Networks using Sublinear Parameters](https://arxiv.org/pdf/2010.13363.pdf), 2021.
