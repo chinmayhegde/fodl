@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Chapter 5 - The infinite-width limit
+title: Chapter 5 - Optimizing wide networks
 categories: optimization
 date: 2022-01-14
 ---
@@ -9,10 +9,15 @@ date: 2022-01-14
 **Under construction**.
 
 ## Motivation
-{.label}
+{:.label}
+
+
+## Local vs.\ global minima
+
+
 
 ## The Neural Tangent Kernel
-{.label}
+{:.label}
 
 ## Extensions
-{.label}
+{:.label}
