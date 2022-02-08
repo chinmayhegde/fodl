@@ -161,7 +161,7 @@ The Weierstrass theorem showed that that the set of *all* polynomials is a unive
 **Theorem**{:.label #stoneweierstrass}
   (*Stone-Weierstrass, 1948.*) If the following hold:
 
-  1. (*Continuity*) Every $f \in F$ is continuous.
+  1. (*Continuity*) Every $f \in \f$ is continuous.
   2. (*Identity*) $\forall~x$, there exists $f \in \f$ s.t. $f(x) \neq 0$.
   3. (*Separation*) $\forall~x, x',~x\neq x',$ there exists $f \in \f$ s.t. $f(x) \neq f(x')$.
   4. (*Closure*) $\f$ is closed under additions and multiplications.
