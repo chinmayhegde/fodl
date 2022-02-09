@@ -9,10 +9,10 @@ date: 2022-01-15
 **Under construction**.
 
 ## Setup
-{.label}
+{:.label}
 
 ## Gradient descent
-{.label}
+{:.label}
 
 ## Stochastic gradient descent
-{.label}
+{:.label}
