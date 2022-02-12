@@ -272,7 +272,7 @@ We immediately get the following result.
 {:.theorem}
 
 **Proof**
-  Proof follows trivially. Let $\eta = \frac{1}{\beta}$. Then
+  Follows trivially. Let $\eta = \frac{1}{\beta}$. Then
 
   $$
   w_{t+1} = w_t - \frac{1}{\beta} \nabla L(w_t) .
