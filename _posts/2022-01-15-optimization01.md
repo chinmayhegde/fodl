@@ -73,12 +73,145 @@ Somewhat fascinatingly, however, it turns out that this intuition is incorrect. 
 
 We will revisit this fact in the next two chapters. But for now, we will limit ourselves to establishing the more modest claim:
 
-> (S)GD converges to (near) stationary points, provided $L$ is smooth.
+> (S)GD converges to (near) stationary points, provided $L(w)$ is smooth.
 
-The last caveat --- that $L$ is required to be smooth --- excludes several widely used architectures (such as ReLU networks). This should not deter us. The analysis is still very interesting and useful; it is still applicable to other widely used architectures; and extensions to ReLUs can be achieved with a bit more technical heavy lifting (which we won't cover here).
+The last caveat --- that $L(w)$ is required to be smooth --- excludes several widely used architectures (such as ReLU networks). This should not deter us. The analysis is still very interesting and useful; it is still applicable to other widely used architectures; and extensions to ReLUs can be achieved with a bit more technical heavy lifting (which we won't cover here).
 
 ## Gradient descent
 {:.label}
+
+We start with analyzing gradient descent for smooth loss functions. (As asides, we will also discuss application of our results to *convex* functions, but these functions are not common in deep learning and therefore not our focus.)
+
+Let us first define smoothness. (All norms below refer to the 2-norm, and all gradients are with respect to the parameters.)
+
+**Definition**{:.label #Smoothness}
+  $L$ is said to be $\beta$-smooth if $L$ has $\beta$-Lipschitz gradients:
+
+  $$
+  \lVert \nabla L(w) - \nabla L(u) \rVert \leq \beta \lVert w - u \rVert .
+  $$
+
+{:.definition}
+
+With [some algebra](https://xingyuzhou.org/blog/notes/Lipschitz-gradient), one can arrive at the following lemma.
+
+**Lemma**{:.label #Quadratic}
+  If $L$ is twice-differentiable and $\beta$-smooth, then the eigenvalues of its Hessian are less than $\beta$:
+
+  $$
+  \lVert \nabla^2 L(w) \rVert \preceq \beta I.
+  $$
+
+  Equivalently, $L(w)$ is *upper-bounded* by a quadratic function:
+
+  $$
+  L(w) \leq L(u) + \langle \nabla L(u), w-u \rangle + \frac{\beta}{2} \lVert w-u \rVert^2 .
+  $$
+
+{:.lemma}
+
+Basically, the smoothness condition (or its implications in the above [Lemma](#Quadratic)) says that if $\beta$ is reasonable, then the gradients of $L(w)$ are rather well-behaved.
+
+It is intuitive why something like this condition is needed to analyze GD: if the gradient was not well-behaved, then first-order methods such as GD are not likely to be very informative.
+
+There is a *second* natural reason why this definition is relevant to GD. Imagine, for a moment, not minimizing $L(w)$, but rather minimizing the *upper bound*:
+
+$$
+B(w) := L(u) + \langle \nabla L(u), w-u \rangle + \frac{\beta}{2} \lVert w-u \rVert^2 .
+$$
+
+This is a convex (in fact, quadratic) function of $w$. Therefore, it can be optimized very easily by setting $\nabla B(w)$ to zero and solving for $w$:
+
+$$
+\begin{aligned}
+\nabla B(w) &= 0, \\
+\nabla L(u) &+ \beta (w - u) = 0, \qquad \text{and thus} \\
+w &= u - \frac{1}{\beta} \nabla L(u) .
+\end{aligned}
+$$
+
+This is precisely the same as a *single* step of gradient descent starting from $u$ (with step size inversely proportional to the smoothness parameter). In other words, gradient descent is nothing but the successive optimization of a Lipschitz upper bound of *in every iteration*[^oco].
+
+We are now ready to prove our first result.
+
+**Theorem**{:.label #GDLipchitz}
+  If $L$ is $\beta$-smooth, then GD with fixed step size converges to stationary points.
+{:.theorem}
+
+**Proof**{:.label #GDLipchitzProof}
+  Consider any iteration of GD (with a step size $\eta$ which we will specify later):
+
+  $$
+  w = u - \eta \nabla L(u) .
+  $$
+
+  This means that:
+
+  $$
+  w - u = \eta \nabla L(u).
+  $$
+
+  Plug this value of $w-u$ into the quadratic upper bound to get:
+
+  $$
+  \begin{aligned}
+  L(w) &\leq L(u) - \eta \lVert \nabla L(u) \rVert^2 + \frac{\beta \eta^2}{2} \lVert \nabla L(u) \rVert^2, \quad \text{or} \\
+  L(w) &\leq L(u) - \eta \left( 1 - \frac{\beta \eta}{2} \right) \lVert \nabla L(u) \rVert^2 .
+  \end{aligned}
+  $$
+
+  This inequality already gives a proof of convergence. Suppose that the step size is small enough such that $\eta < \frac{2}{\beta}$. We are in one of two situations:
+
+  1. Either $\nabla L(u) = 0$, in which case we are done since $u$ is a stationary point.
+
+  2. Or $\nabla L(u) \neq 0$, in which case $\lVert \nabla L(u) \rVert > 0$ and the second term in the right hand side is strictly positive. Therefore GD makes progress (and decreases $L$ in the next step).
+
+  Since $L$ is lower bounded by 0 (since we have assumed a non-negative loss), we get [convergence](https://en.wikipedia.org/wiki/Monotone_convergence_theorem).
+
+  This argument does not quite tell us how *many* iterations are needed by GD. For that, let's just set $\eta = \frac{1}{\beta}$. This is not precisely necessary and some wiggle room is okay, but the algebra becomes simpler. Let's just rename $w_i := u$ and $w_{i+1} := w$. Then, the last inequality becomes:
+
+  $$
+  \frac{1}{2\beta} \lVert \nabla L(w_i) \rVert^2 \leq L(w_i) - L(w_{i+1}).
+  $$
+
+  Telescoping from $w_0, w_1, \ldots, w_t$, we get:
+
+  $$
+  \begin{aligned}
+  \frac{1}{2\beta} \sum_{i = 0}^{t-1} \lVert \nabla L(w_i) \rVert^2 &\leq L(w_0) - L(w_t) \\
+  &\leq L(w_0) - L_{\text{opt}} := L_0 - L_{\text{opt}}
+  \end{aligned}
+  $$
+
+  (since $L_\text{opt}$ is the smallest achievable loss.) Therefore, if we pick $i = \arg \min_{i < t} \nabla \lVert L(w_i) \rVert^2$ as the estimate with lowest gradient norm and set $\hat{w} = w_{i}$, then we get:
+
+  $$
+  \frac{t}{2\beta} \lVert L(w_t) \rVert^2 \leq L_0 - L_{\text{opt}},
+  $$
+
+  which implies that if $L_0$ is bounded (i.e.: we start somewhere reasonable) then GD finds a point $\hat{w}$ within $t$ iterations whose gradient norm is
+  $$
+  \lesssim \sqrt{\frac{\beta}{t}}
+  $$
+  at most. Alternatively, to find an $\varepsilon$-stationary point, GD needs:
+  $$
+  O\left( \frac{\beta}{\varepsilon^2} \right)
+  $$
+  iterations.
+{:.proof}
+
+This proof is very simple; we didn't use anything much beyond the definition of Lipschitz smoothness. But it already reveals a lot.
+
+First, step sizes can be constant, and should be chosen inversely proportional to $\beta$. This makes sense: if $\beta$ is large then gradients are wiggling around, and therefore it is prudent to take small steps.
+
+Second, we only get convergence in the "neighborhood" sense (in that there is some point along the trajectory which is close to the stationary point). It is harder to prove "last-iterate" convergence results. In fact, one can even show that GD can go near a stationary point, spend a very long time near this point, but then bounce away later[^leegd].
+
+Third, we get $\frac{1}{\sqrt{t}}$ error after $t$ iterations. The terminology is not very consistent here, but one might call this "sub-linear" convergence.
+
+---
+Aside: $L$ smooth *and convex*? Linear ($\frac{1}{t}$) convergence. 
+
+--
 
 ## Stochastic gradient descent
 {:.label}
@@ -96,3 +229,9 @@ The last caveat --- that $L$ is required to be smooth --- excludes several widel
 
 [^zhang]:
     C. Zhang, S. Bengio, M. Hardt, B. Recht, O. Vinyals, [Understanding deep learning requires rethinking generalization](https://arxiv.org/abs/1611.03530), 2017.
+
+[^oco]:
+    There is an entire literature on online optimization that uses this interpretation of gradient descent, but they call it the "Follow-the-leader" strategy. See [here](https://courses.cs.washington.edu/courses/cse599s/14sp/scribes/lecture3/lecture3.pdf) for an explanation.
+
+[^leegd]:
+    S. Du, C. Jin, J. Lee, M. Jordan, B. Poczos, A. Singh, [Gradient Descent Can Take Exponential Time to Escape Saddle Points](https://arxiv.org/abs/1705.10412), 2017.
