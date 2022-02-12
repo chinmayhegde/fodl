@@ -179,7 +179,7 @@ We are now ready to prove our first result.
   $$
   \begin{aligned}
   \frac{1}{2\beta} \sum_{i = 0}^{t-1} \lVert \nabla L(w_i) \rVert^2 &\leq L(w_0) - L(w_t) \\
-  &\leq L(w_0) - L_{\text{opt}} := L_0 - L_{\text{opt}}
+  &\leq L(w_0) - L_{\text{opt}}
   \end{aligned}
   $$
 
