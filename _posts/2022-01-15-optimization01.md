@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Chapter 4 - Optimization basics
+title: Chapter 4 - Optimization primer
 categories: optimization
 date: 2022-01-15
 ---
@@ -232,16 +232,94 @@ So the hierarchy of convergence rates is as follows:
 * GD assuming Lipschitz and strong convexity: $\exp(-t)$ rate .
 
 
-### Convergence under the PL condition
+### The PL condition
 {:.label}
 
-Definition, convergence proof.
+Above, we saw how leveraging smoothness, along with strong convexity, of the loss results in exponential convergence of GD. However (strong) convexity is not that relevant in the context of deep learning. This is because losses are very rarely convex in their parameters.
+
+However, there is a different characterization of functions (other than convexity) that also implies fast convergence rates of GD. This property was introduced by Polyak[^polyak] in 1963, but has somehow not been very widely publicized. It was re-introduced to the ML optimization literature by Karimi et al.[^karimi] and its relevance (particularly in the context of deep learning) is slowly becoming apparent.
+
+**Definition**{:.label #PLCondition}
+  A function $L$ (whose optimum is $L_{\text{opt}}$) is said to satisfy the Polyak-Lojasiewicz (PL) condition with parameter $\alpha$ if:
+
+  $$
+  \lVert \nabla L(u) \rVert^2 \geq 2 \alpha (L(u) - L_{\text{opt}} )
+  $$
+
+  for all $u$ in its domain.
+{:.definition}
+
+The reason for the "2" sitting before $\alpha$ will become clear. Intuitively, the PL condition says that if $L(u) \gg  L_{\text{opt}}$ then $\lVert \nabla L(u) \rVert$ is also large. More precisely, the norm of the gradient at any point grows at least as the square root of the (functional) distance to the optimum.
+
+Notice that there is no requirement of convexity in the definition of the PL condition. For example, the function:
+
+$$
+L(x) = x^2 + 3 \sin^2 x
+$$
+
+looks like
+
+![Plot of $L(x)$](/fodl/assets/pl-example.png)
+
+which is non-convex upon inspection, but nonetheless satisfies the PL condition with constant $\alpha = \frac{1}{32}$.
+
+(The converse is true. Strong convexity implies the PL condition, but PL is far more general. We return to this in Chapter 6 in the context of neural nets.)
+
+We immediately get the following result.
+
+**Theorem**{:.label #GDPL}
+  If $L$ is $\beta$-smooth and satisfies the PL condition with parameter $\alpha$, then GD exponentially converges to the optimum.
+{:.theorem}
+
+**Proof**
+  Proof follows trivially. Let $\eta = \frac{1}{\beta}$. Then
+
+  $$
+  w_{t+1} = w_t - \frac{1}{\beta} \nabla L(w_t) .
+  $$
+
+  Plug $w_{t+1} - w_t$ into the smoothness upper bound. We get:
+
+  $$
+  L(w_{t+1}) \leq L(w_t) - \frac{1}{2\beta} \lVert \nabla L(w_t) \rVert^2 .
+  $$
+
+  But since $L$ satisfies PL, we get:
+
+  $$
+  L(w_{t+1}) \leq L(w_t) - \frac{\alpha}{\beta} \left( L(w_{t+1}) - L(w_\text{opt}) \right).
+  $$
+
+  Simplifying notation, we get:
+
+  $$
+  L_{t+1} - L_{\text{opt}} \leq \left(1 - \frac{\alpha}{\beta} \right) \left( L_{t} - L_{\text{opt}} \right) .
+  $$
+
+  which implies that GD converges at $\exp(-\frac{\alpha}{\beta}t)$ rate.
+{:.proof}
 
 ## Stochastic gradient descent
 {:.label}
 
+How does the picture change with inexact (stochastic) gradients?
+
+Need to define "convergence" more carefully/liberally.
+
+Hierarchy:
+
+* SGD assuming Lipschitz smoothness: $\frac{1}{t^{1/4}}$
+
+* SGD assuming Lipschitz smoothness + convexity: $\frac{1}{\sqrt{t}}$
+
+Other rates?
+
 ## Extensions
 {:.label}
+
+* Nesterov momemtum
+
+
 
 ---
 
@@ -259,3 +337,9 @@ Definition, convergence proof.
 
 [^leegd]:
     S. Du, C. Jin, J. Lee, M. Jordan, B. Poczos, A. Singh, [Gradient Descent Can Take Exponential Time to Escape Saddle Points](https://arxiv.org/abs/1705.10412), 2017.
+
+[^polyak]:
+    B. Polyak, [ГРАДИЕНТНЫЕ МЕТОДЫ МИНИМИЗАЦИИ ФУНКЦИОНАЛОВ (Gradient methods for minimizing functionals)](http://www.mathnet.ru/links/b7971e9e07cc44b5d0e9fb6354f11988/zvmmf7813.pdf), 1963.
+
+[^karimi]:
+    H. Karimi, J. Nutini, M. Schmidt, [Linear Convergence of Gradient and Proximal-Gradient Methods Under the Polyak-Lojasiewicz Condition](https://arxiv.org/pdf/1608.04636.pdf), 2016.
