@@ -229,6 +229,14 @@ So the hierarchy of convergence rates is as follows:
 
 * Momentum accelerated GD: $\frac{1}{t^2}$ rate. Remarkably, this is the *best possible* one can do with first-order methods such as GD.
 
+* GD assuming Lipschitz and strong convexity: $\exp(-t)$ rate .
+
+
+### Convergence under the PL condition
+{:.label}
+
+Definition, convergence proof.
+
 ## Stochastic gradient descent
 {:.label}
 
