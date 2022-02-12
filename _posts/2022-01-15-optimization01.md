@@ -67,7 +67,7 @@ Before diving in to the details, let us qualitatively address the first couple o
 
 Intuition tells us that convergence to global minimizers seems unlikely. It is easy to prove that for anything beyond the simplest neural networks (single-layer networks with linear activations, which are really just linear models), the loss function $L(w)$ is *extremely non-convex*. Therefore the "loss landscape" of $L(w)$, viewed as a function of $w$, has many peaks, valleys, and ridges, and a myopic first-order approach such as GD may likely get stuck in local optima. A fantastic paper[^losslandscape] by Xu et al. proposes creative ways of visualizing these high-dimensional landscapes.
 
-![Loss landscapes of ResNet-56 (left) without skip connections (right) with skip connections.](/fodl/assets/landscape.png)
+![Loss landscapes of ResNet-56 (left) without skip connections (right) with skip connections.](/fodl/assets/losslandscape.png)
 
 Somewhat fascinatingly, however, it turns out that this intuition is incorrect. GD/SGD *can* be used to train models all the way down to *zero* train error (at least, this is common for deep networks used in classification.) This fact seems to have been folklore, but was systematically demonstrated in a series of interesting experiments by Zhang et al.[^zhang].
 
