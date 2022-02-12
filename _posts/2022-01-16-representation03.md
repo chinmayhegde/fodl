@@ -33,12 +33,12 @@ Let us focus on "reasonable-width" networks of depth $L > 2$ (because we already
 
 * Approach 2: prove that there exist classes of functions that can be $\varepsilon$-approximated *only* by networks of depth $\Omega(L)$, but not by networks of depth $o(L)$.
 
-Results of either type are *depth separation* results. Let us start with the latter.
+Theorems of either type are called *depth separation* results. Let us start with the latter.
 
 ## Depth separation in function approximation
 {:.label}
 
-We will first prove a depth-separation result for dense feed-forward networks with ReLU activations and univariate (scalar) inputs. This result will generally hold for other families of activations.
+We will first prove a depth separation result for dense feed-forward networks with ReLU activations and univariate (scalar) inputs. This result will generally hold for other families of activations, but for simplicity let's focus on the ReLU.
 
 We will explicitly construct a (univariate) function $g$ that can be exactly represented by a deep neural network (with error $\varepsilon = 0$) but is provably inapproximable by a much shallower network. This result is by Telgarsky[^telgarsky].
 
