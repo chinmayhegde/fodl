@@ -206,7 +206,7 @@ We are now ready to prove our first result.
 
 This proof is very simple; we didn't use anything much beyond the definition of Lipschitz smoothness. But it already reveals a lot.
 
-First, step sizes can be constant, and should be chosen inversely proportional to $\beta$. This makes sense: if $\beta$ is large then gradients are wiggling around, and therefore it is prudent to take small steps.
+First, step sizes in standard GD can be constant, and should be chosen inversely proportional to $\beta$. This makes intuitive sense: if $\beta$ is large then gradients are wiggling around, and therefore it is prudent to take small steps.
 
 Second, we only get convergence in the "neighborhood" sense (in that there is some point along the trajectory which is close to the stationary point). It is harder to prove "last-iterate" convergence results. In fact, one can even show that GD can go near a stationary point, spend a very long time near this point, but then bounce away later[^leegd].
 
