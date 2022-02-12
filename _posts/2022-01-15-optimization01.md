@@ -190,13 +190,17 @@ We are now ready to prove our first result.
   $$
 
   which implies that if $L_0$ is bounded (i.e.: we start somewhere reasonable) then GD finds a point $\hat{w}$ within $t$ iterations whose gradient norm is
+
   $$
   \lesssim \sqrt{\frac{\beta}{t}}
   $$
+
   at most. Alternatively, to find an $\varepsilon$-stationary point, GD needs:
+
   $$
   O\left( \frac{\beta}{\varepsilon^2} \right)
   $$
+
   iterations.
 {:.proof}
 
