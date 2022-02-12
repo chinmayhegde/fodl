@@ -299,6 +299,8 @@ We immediately get the following result.
   which implies that GD converges at $\exp(-\frac{\alpha}{\beta}t)$ rate.
 {:.proof}
 
+**_(COMPLETE; list applications of PL.)_**
+
 ## Stochastic gradient descent
 {:.label}
 
@@ -320,6 +322,7 @@ Other rates?
 * Nesterov momemtum
 
 
+**_(COMPLETE)_**.
 
 ---
 
