@@ -206,12 +206,24 @@ First, step sizes can be constant, and should be chosen inversely proportional t
 
 Second, we only get convergence in the "neighborhood" sense (in that there is some point along the trajectory which is close to the stationary point). It is harder to prove "last-iterate" convergence results. In fact, one can even show that GD can go near a stationary point, spend a very long time near this point, but then bounce away later[^leegd].
 
-Third, we get $\frac{1}{\sqrt{t}}$ error after $t$ iterations. The terminology is not very consistent here, but one might call this "sub-linear" convergence.
+Third, we get $\frac{1}{\sqrt{t}}$ error after $t$ iterations. The terminology to describe this error rate is not very consistent in the optimization literature, but one might call this a "sub-linear" rate of convergence.
 
 ---
-Aside: $L$ smooth *and convex*? Linear ($\frac{1}{t}$) convergence. 
+Aside: $L$ smooth *and convex*? Linear ($\frac{1}{t}$) rate of convergence.
 
---
+---
+
+Aside: $L$ smooth and *strongly convex*? Exponential ($e^{-t}$) rate of convergence.
+
+---
+
+So the hierarchy of convergence rates is as follows:
+
+* GD assuming Lipschitz smoothness: $\frac{1}{\sqrt{t}}$ rate
+
+* GD assuming Lipschitz smoothness + convexity: $\frac{1}{t}$ rate
+
+* Momentum accelerated GD: $\frac{1}{t^2}$ rate. Remarkably, this is the *best possible* one can do with first-order methods such as GD.
 
 ## Stochastic gradient descent
 {:.label}
