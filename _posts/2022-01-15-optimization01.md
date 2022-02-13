@@ -234,7 +234,7 @@ $$
 L(w) \geq L(u) + \langle \nabla L(u), w-u \rangle .
 $$
 
-This lets us control not just $\nabla L$ but $L$ itself. Formally, we have the  
+This lets us control not just $\nabla L$ but $L$ itself. Formally, we obtain:  
 
 **Theorem**{:.label #GDConvex}
   If $L$ is $\beta$-smooth and convex, then GD with fixed step size converges to a minimizer.
@@ -396,9 +396,38 @@ We immediately get the following result.
 ## Stochastic gradient descent
 {:.label}
 
-How does the picture change with inexact (stochastic) gradients?
+We have obtained a reasonable picture of how GD works, how many iterations it needs, etc. But how does the picture change with inexact (stochastic) gradients?
 
-Need to define "convergence" more carefully/liberally.
+This question is paramount in deep learning practice, since nobody really does full-batch GD. Datasets are massive, and since the loss is decomposable across all the data points, gradients of the loss require making a full sweep of the training dataset *for each iteration*, which no one really has time.
+
+Even more so, it seems that stochastic gradients (instead of full gradients) may influences *generalization* behavior. Anecdotally, it was observed that models trained by SGD typically improved over models trained with full-batch gradient descent. Therefore, there may be some hidden benefit of stochasticity.
+
+To explain this, there were a ton of papers discussing the distinction between "sharp" versus "flat" minima[^sharp], and how the latter type of minima generalize better, and how minibatch methods (such as SGD) favor flat minima, and therefore SGD gives better solutions period. Folks generally went along with this explanation.
+
+This common belief has since been somewhat upended. It is not really clear how "sharpness" or "flatness" should be formally defined. A paper by Dinh et al.[^dinh] showed that good generalization can be obtained even if the model corresponds to a very "sharp" minimum in the loss landscape (for most commonly accepted definitions of sharp). So even if SGD finds flatter minima, it is unclear whether such minima are somehow inherently better.
+
+A very recent paper by Geiping et al.[^gieping] in fact finds the opposite; performance by GD (with properly tuned hyperparameters and regularization) matches that of SGD. Theory is silent on this matter and I am not aware of any concrete separation-type between GD and SGD for neural networks.
+
+Still, independent of whether GD is theoretically better than SGD or not, it is instructive to analyze SGD (since everyone uses it.)
+
+Let us assume that our updates look like:
+
+$$
+w_{i+1} = w_i - \eta_i g_i
+$$
+
+We will prove:
+
+**Theorem**{:.label #SGDSmooth}
+  If $L$ is $\beta$-smooth, then SGD converges (in expectation) to an $\varepsilon$-approximate critical point in $O\left(\frac{\beta^2}{\varepsilon^4}\right)$ steps.
+{:.theorem}
+
+**Proof**
+  **(COMPLETE).**
+{:.proof}
+
+
+---
 
 Hierarchy:
 
@@ -444,3 +473,6 @@ Other rates?
 
 [^karimi]:
     H. Karimi, J. Nutini, M. Schmidt, [Linear Convergence of Gradient and Proximal-Gradient Methods Under the Polyak-Lojasiewicz Condition](https://arxiv.org/pdf/1608.04636.pdf), 2016.
+
+[^sharp]:
+    N. Keskar, D. Mudigere, J. Nocedal, P. Tang, [On Large-Batch Training for Deep Learning](https://openreview.net/pdf?id=H1oyRlYgg), 2017.
