@@ -401,7 +401,7 @@ Why is the PL condition interesting? It has been shown that several neural net t
 
 3. Linear residual networks (with square weight matrices).
 
-4. Others? **Complete**.
+4. Others? Wide networks? **Complete**.
 
 ## Stochastic gradient descent
 {:.label}
