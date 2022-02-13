@@ -391,7 +391,17 @@ We immediately get the following result.
   which implies that GD converges at $\exp(-\frac{\alpha}{\beta}t)$ rate.
 {:.proof}
 
-**_(COMPLETE; list applications of PL.)_**
+---
+
+Why is the PL condition interesting? It has been shown that several neural net training problems satisfy PL.
+
+1. Single neurons (with leaky ReLUs.)
+
+2. Linear neural networks.
+
+3. Linear residual networks (with square weight matrices).
+
+4. Others? **Complete**.
 
 ## Stochastic gradient descent
 {:.label}
