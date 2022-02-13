@@ -1,15 +1,15 @@
 ---
 layout: page
-title: Chapter 4 - Optimization primer
+title: Chapter 4 - A primer on optimization
 categories: optimization
 date: 2022-01-15
 ---
 
-In the first few chapters, we covered several results related to the representation power of (both shallow and deep) neural networks. We obtained estimates --- sometimes tight ones --- for the sizes of neural networks needed to memorize a given dataset, or to simulate a given function.
+In the first few chapters, we covered several results related to the representation power of neural networks. We obtained estimates --- sometimes tight ones --- for the sizes of neural networks needed to memorize a given dataset, or to simulate a target prediction function.
 
-However, most of our theoretical results used somewhat funny-looking constructions of neural networks. Our hypothetical networks are all either too wide or too narrow.
+However, most of our theoretical results used somewhat funny-looking constructions of neural networks. Our theoretically best-performing networks were all either too wide or too narrow, and didn't really look like the typical deep networks that we see in practice.
 
-But even beyond the issue of size, none of the (theoretically attractive) techniques that we used to memorize datasets resemble deep learning practice. When folks refer to "training models" they almost always are talking about fitting datasets via incremental, greedy, first-order algorithms such as gradient descent (GD), or stochastic variations (like SGD), or accelerations (like Adam), or some other similar approach.
+But even setting aside the issue of size, none of the (theoretically attractive) techniques that we used to memorize datasets resemble deep learning practice. When folks refer to "training models", they almost always are talking about fitting datasets to neural networks via local, greedy, first-order algorithms such as gradient descent (GD), or stochastic variations (like SGD), or accelerations (like Adam), or some other such approach.
 
 In the new few chapters, we address the question:
 
@@ -17,22 +17,23 @@ In the new few chapters, we address the question:
 Do practical approaches for model training work well?
 ```
 
-This question is once again somewhat ill-posed; we will have to be precise about what "work" and "well" mean in the above question. (An overwhelming amount of empirical evidence seems to suggest that they work just fine, as long as certain tricks/hacks are applied.)
+This question is once again somewhat ill-posed, and we will have to be precise about what "work" and "well" mean in the above question. (From the practical perspective: an overwhelming amount of empirical evidence seems to suggest that they work just fine, as long as certain tricks/hacks are applied.)
 
-While there is a very large variety of techniques that have been proposed for training deep networks, we will focus on a handful of the most canonical settings, analyze them, and derive precise bounds on their behavior. The hope is that such analysis can illuminate differences/tradeoffs between different choices and provide useful thumb rules to guide further practice.
+While there is very large variation in the way we train deep networks, we will focus on a handful of the most canonical settings, analyze them, and derive precise bounds on their behavior. The hope is that such analysis can illuminate differences/tradeoffs between different choices and provide useful thumb rules for practice.
 
 ## Setup
 {:.label}
 
 Most (all?) popular approaches in deep learning do the following:
 
-- Write down the loss (or empirical risk) in terms of the training data points and the weights. (Usually the loss is decomposable across the data points). So if the data is $(x_i,y_i)_{i=1}^n$ then the loss is something like:
+- Write down the loss (or empirical risk) in terms of the training data points and the weights. (Usually the loss is decomposable across the data points). So if the data is $(x_i,y_i)_{i=1}^n$ then the loss looks something like:
 
     $$
     L(w) = \frac{1}{n} \sum_{i=1}^n l(y_i,\hat{y_i}), \quad \hat{y_i} = f_w(x_i),
     $$
 
-    where $l(\cdot,\cdot) : \R \times \R \rightarrow \R_{\geq 0}$ is a non-negative measure of fit, and $f_w$ is the function represented by the neural network with weight/bias parameters $w$. (*We are abusing notation here since we previously used $R$ for the risk, but let's just use $L$ to denote loss.*)
+    where $l(\cdot,\cdot) : \R \times \R \rightarrow \R_{\geq 0}$ is a non-negative measure of label fit, and $f_w$ is the function represented by the neural network with weight/bias parameters $w$. We are abusing notation here since we previously used $R$ for the risk, but let's just use $L$ to denote loss.
+
 - Then, we seek the weights/biases $w$ that optimize the loss:
 
     $$
@@ -40,6 +41,7 @@ Most (all?) popular approaches in deep learning do the following:
     $$
 
     Sometimes, we throw in an extra regularization term defined on $w$ for kicks, but let's just stay simple for now.
+
 - Importantly, invariably, the above optimization is carried out using a *simple, iterative, first-order method*. For example, if gradient descent (GD) is the method of choice, then discovering $\hat{w}$ amounts to iterating the following recursion:
 
     $$
@@ -52,30 +54,32 @@ Most (all?) popular approaches in deep learning do the following:
     w \leftarrow w - \eta g_w
     $$
 
-    where $g_w$ is some (properly defined) stochastic approximation of $\nabla L(w)$. Or if Adam[^adam] is used, then discovering $\hat{w}$ amounts to iterating..a slightly more [complicated recursion](https://chinmayhegde.github.io/dl-notes/notes/lecture03/), but still a first-order method involving gradients and nothing more. You get the picture.
+    where $g_w$ is some (properly defined) stochastic approximation of $\nabla L(w)$. Or if Adam[^adam] is the method of choice, then discovering $\hat{w}$ amounts to iterating...a slightly more [complicated recursion](https://chinmayhegde.github.io/dl-notes/notes/lecture03/), but still a first-order method involving gradients and nothing more. You get the picture.
 
 In this chapter, let us focus on GD and SGD. The following questions come to mind:
 
-* Do GD and SGD converge.
+* Do GD and SGD converge at all.
 * If so, do they converge to the set (or *a* set?) of globally optimal weights.
-* How many steps do they take.
+* How many steps do they need to converge reliably.
 * How to pick step size, or (in the case of SGD) batch size, or other parameters.
 
 among many others.
 
 Before diving in to the details, let us qualitatively address the first couple of questions.  
 
-Intuition tells us that convergence to global minimizers seems unlikely. It is easy to prove that for anything beyond the simplest neural networks (single-layer networks with linear activations, which are really just linear models), the loss function $L(w)$ is *extremely non-convex*. Therefore the "loss landscape" of $L(w)$, viewed as a function of $w$, has many peaks, valleys, and ridges, and a myopic first-order approach such as GD may likely get stuck in local optima. A fantastic paper[^losslandscape] by Xu et al. proposes creative ways of visualizing these high-dimensional landscapes.
+Intuition tells us that convergence in a *local* sense is to be expected, but converegence to *global* minimizers seems unlikely. Indeed, it is easy to prove that for anything beyond the simplest neural networks, the loss function $L(w)$ is *extremely non-convex*. Therefore the "loss landscape" of $L(w)$, viewed as a function of $w$, has many peaks, valleys, and ridges, and a myopic first-order approach such as GD may be very prone to get stuck in local optima, or saddle points, or other stationary points. A fantastic paper[^losslandscape] by Xu et al. proposes creative ways of visualizing these high-dimensional landscapes.
 
-![Loss landscapes of ResNet-56 (left) without skip connections (right) with skip connections.](/fodl/assets/losslandscape.png)
+![Loss landscapes of ResNet-56. Adding skips significantly influences ease of optimization, since the landscape is much better behaved.](/fodl/assets/losslandscape.png)
 
-Somewhat fascinatingly, however, it turns out that this intuition is incorrect. GD/SGD *can* be used to train models all the way down to *zero* train error (at least, this is common for deep networks used in classification.) This fact seems to have been folklore, but was systematically demonstrated in a series of interesting experiments by Zhang et al.[^zhang].
+Somewhat fascinatingly, however, it turns out that this intuition may not be correct. GD/SGD *can* be used to train models all the way down to *zero* train error (at least, this is common for deep networks used in classification.) This fact seems to have been folklore, but was systematically demonstrated in a series of interesting experiments by Zhang et al.[^zhang].
 
-We will revisit this fact in the next two chapters. But for now, we will limit ourselves to establishing the more modest claim:
+We will revisit this fact in the next two chapters. But for now, we limit ourselves to analyzing the local convergence behavior of GD/SGD. We establish the more modest claim:
 
 > (S)GD converges to (near) stationary points, provided $L(w)$ is smooth.
 
-The last caveat --- that $L(w)$ is required to be smooth --- excludes several widely used architectures (such as ReLU networks). This should not deter us. The analysis is still very interesting and useful; it is still applicable to other widely used architectures; and extensions to ReLUs can be achieved with a bit more technical heavy lifting (which we won't cover here).
+The last caveat --- that $L(w)$ is required to be smooth --- is actually a rather significant one, and excludes several widely used architectures used in practice. For example, the ubiquitous ReLU activation function, $\psi(z) = \max(z,0)$, is not smooth, and therefore neural networks involving ReLUs don't lead to smooth losses.  
+
+This should not deter us. The analysis is still very interesting and useful; it is still applicable to other widely used architectures; and extensions to ReLUs can be achieved with a bit more technical heavy lifting (which we won't cover here). For a more formal treatment of local convergence in networks with nonsmooth activations, see, for example, the paper by Ji and Telgarsky[^ji], or these lecture notes[^mjt].
 
 ## Gradient descent
 {:.label}
@@ -110,11 +114,11 @@ With [some algebra](https://xingyuzhou.org/blog/notes/Lipschitz-gradient), one c
 
 {:.lemma}
 
-Basically, the smoothness condition (or its implications in the above [Lemma](#Quadratic)) says that if $\beta$ is reasonable, then the gradients of $L(w)$ are rather well-behaved.
+Basically, the smoothness condition (or its implications according to the above [Lemma](#Quadratic)) says that if $\beta$ is not unreasonably big, then the gradients of $L(w)$ are rather well-behaved.
 
-It is intuitive why something like this condition is needed to analyze GD: if the gradient was not well-behaved, then first-order methods such as GD are not likely to be very informative.
+It is natural to see why something like this condition is needed to analyze GD. If smoothness did not hold and the gradient was not well-behaved, then first-order methods such as GD are not likely to be very informative.
 
-There is a *second* natural reason why this definition is relevant to GD. Imagine, for a moment, not minimizing $L(w)$, but rather minimizing the *upper bound*:
+There is a second natural reason why this definition is relevant to GD. Imagine, for a moment, not minimizing $L(w)$, but rather minimizing the *upper bound*:
 
 $$
 B(w) := L(u) + \langle \nabla L(u), w-u \rangle + \frac{\beta}{2} \lVert w-u \rVert^2 .
@@ -130,7 +134,7 @@ w &= u - \frac{1}{\beta} \nabla L(u) .
 \end{aligned}
 $$
 
-This is precisely the same as a *single* step of gradient descent starting from $u$ (with step size inversely proportional to the smoothness parameter). In other words, gradient descent is nothing but the successive optimization of a Lipschitz upper bound of *in every iteration*[^oco].
+This is the same as a *single* step of gradient descent starting from $u$ (with step size inversely proportional to the smoothness parameter). In other words, gradient descent is nothing but the successive optimization of a Lipschitz upper bound of *in every iteration*[^oco].
 
 We are now ready to prove our first result.
 
@@ -139,7 +143,7 @@ We are now ready to prove our first result.
 {:.theorem}
 
 **Proof**{:.label #GDLipchitzProof}
-  Consider any iteration of GD (with a step size $\eta$ which we will specify later):
+  Consider any iteration of GD (with a step size $\eta$ which we will specify shortly):
 
   $$
   w = u - \eta \nabla L(u) .
@@ -162,13 +166,13 @@ We are now ready to prove our first result.
 
   This inequality already gives a proof of convergence. Suppose that the step size is small enough such that $\eta < \frac{2}{\beta}$. We are in one of two situations:
 
-  1. Either $\nabla L(u) = 0$, in which case we are done since $u$ is a stationary point.
+  1. Either $\nabla L(u) = 0$, in which case we are done --- since $u$ is a stationary point.
 
   2. Or $\nabla L(u) \neq 0$, in which case $\lVert \nabla L(u) \rVert > 0$ and the second term in the right hand side is strictly positive. Therefore GD makes progress (and decreases $L$ in the next step).
 
   Since $L$ is lower bounded by 0 (since we have assumed a non-negative loss), we get [convergence](https://en.wikipedia.org/wiki/Monotone_convergence_theorem).
 
-  This argument does not quite tell us how *many* iterations are needed by GD. For that, let's just set $\eta = \frac{1}{\beta}$. This is not precisely necessary and some wiggle room is okay, but the algebra becomes simpler. Let's just rename $w_i := u$ and $w_{i+1} := w$. Then, the last inequality becomes:
+  This argument does not quite tell us how *many* iterations are needed by GD. To estimate this, let us just set $\eta = \frac{1}{\beta}$. This choice is not precisely necessary to get similar bounds, but the algebra becomes simpler. Let's just rename $w_i := u$ and $w_{i+1} := w$. Then, the last inequality becomes:
 
   $$
   \frac{1}{2\beta} \lVert \nabla L(w_i) \rVert^2 \leq L(w_i) - L(w_{i+1}).
@@ -186,16 +190,16 @@ We are now ready to prove our first result.
   (since $L_\text{opt}$ is the smallest achievable loss.) Therefore, if we pick $i = \arg \min_{i < t} \nabla \lVert L(w_i) \rVert^2$ as the estimate with lowest gradient norm and set $\hat{w} = w_{i}$, then we get:
 
   $$
-  \frac{t}{2\beta} \lVert L(w_t) \rVert^2 \leq L_0 - L_{\text{opt}},
+  \frac{t}{2\beta} \lVert L(\hat{w}) \rVert^2 \leq L_0 - L_{\text{opt}},
   $$
 
-  which implies that if $L_0$ is bounded (i.e.: we start somewhere reasonable) then GD finds a point $\hat{w}$ within $t$ iterations whose gradient norm is
+  which implies that if $L_0$ is bounded (i.e.: we start somewhere reasonable) then GD reaches a point $\hat{w}$ within at most $t$ iterations whose gradient norm is
 
   $$
   \lesssim \sqrt{\frac{\beta}{t}}
   $$
 
-  at most. Alternatively, to find an $\varepsilon$-stationary point, GD needs:
+  at most. To put it a different way, to find an $\varepsilon$-stationary point, GD needs:
 
   $$
   O\left( \frac{\beta}{\varepsilon^2} \right)
@@ -204,38 +208,126 @@ We are now ready to prove our first result.
   iterations.
 {:.proof}
 
-This proof is very simple; we didn't use anything much beyond the definition of Lipschitz smoothness. But it already reveals a lot.
+Notice that the proof is simple: we didn't use much information beyond the definition of Lipschitz smoothness. But it already reveals a lot.
 
-First, step sizes in standard GD can be constant, and should be chosen inversely proportional to $\beta$. This makes intuitive sense: if $\beta$ is large then gradients are wiggling around, and therefore it is prudent to take small steps.
+First, step sizes in standard GD can be set to a constant. Later, we will analyze SGD (where step sizes have to be variable.)
 
-Second, we only get convergence in the "neighborhood" sense (in that there is some point along the trajectory which is close to the stationary point). It is harder to prove "last-iterate" convergence results. In fact, one can even show that GD can go near a stationary point, spend a very long time near this point, but then bounce away later[^leegd].
+Second, step sizes should be chosen inversely proportional to $\beta$. This makes intuitive sense: if $\beta$ is large then gradients are wiggling around, and therefore it is prudent to take small steps. On the other hand, it is not easy to estimate Lipschitz smoothness constants (particularly for neural networks), so in practice $\eta$ is just tuned by hand.
 
-Third, we get $\frac{1}{\sqrt{t}}$ error after $t$ iterations. The terminology to describe this error rate is not very consistent in the optimization literature, but one might call this a "sub-linear" rate of convergence.
+Third, we only get convergence in the "neighborhood" sense (in that there is some point along the trajectory which is close to the stationary point). It is harder to prove "last-iterate" convergence results. In fact, one can even show that GD can go near a stationary point, spend a very long time near this point, but then bounce away later[^leegd].
 
----
-Aside: $L$ smooth *and convex*? Linear ($\frac{1}{t}$) rate of convergence.
-
----
-
-Aside: $L$ smooth and *strongly convex*? Exponential ($e^{-t}$) rate of convergence.
+Fourth, we get $\frac{1}{\sqrt{t}}$ error after $t$ iterations. The terminology to describe this error rate is not very consistent in the optimization literature, but one might call this a "sub-linear" rate of convergence.
 
 ---
 
-So the hierarchy of convergence rates is as follows:
+Let us now take a lengthy detour into classical optimization. What if $L$ were smooth *and convex*? As mentioned above, convex losses (as a function of the weights) are not common in deep learning; but it is instructive to understand how much convexity can buy us.
 
-* GD assuming Lipschitz smoothness: $\frac{1}{\sqrt{t}}$ rate
+Life is much simpler now, since we can expect GD to find a *global* minimizer if $L$ is convex (i.e., not just a point where $\nabla L \approx 0$, but actually a point where $L \approx L_{\text{opt}}$).
 
-* GD assuming Lipschitz smoothness + convexity: $\frac{1}{t}$ rate
+How do we show this? While smoothness shows that $L$ is upper bounded by a quadratic function, convexity implies that $L$ is also *lower bounded* by tangents at every point. The picture looks like this:
 
-* Momentum accelerated GD: $\frac{1}{t^2}$ rate. Remarkably, this is the *best possible* one can do with first-order methods such as GD.
+![Smoothness and convexity.](/fodl/assets/smoothconvex.png)
 
-* GD assuming Lipschitz and strong convexity: $\exp(-t)$ rate .
+and mathematically, we have:
 
+$$
+L(w) \geq L(u) + \langle \nabla L(u), w-u \rangle .
+$$
+
+This lets us control not just $\nabla L$ but $L$ itself. Formally, we have the  
+
+**Theorem**{:.label #GDConvex}
+  If $L$ is $\beta$-smooth and convex, then GD with fixed step size converges to a minimizer.
+{:.theorem}
+
+**Proof**{:.label #GDConvexProof}
+
+  Let $w^*$ be some minimizer, which achieves loss $L_{\text{opt}}$.
+
+  (*Q. What if there is more than one minimizer? Good question!*)
+
+  Set $\eta = \frac{1}{\beta}$, as before. We will bound the error in weight space as follows:
+
+  $$
+  \begin{aligned}
+  \lVert w_{i+1} - w^* \rVert^2 &= \lVert w_i - \frac{1}{\beta} \nabla L(w_i) - w^* \rVert^2 \\
+  &= \lVert w_i - w^* \rVert^2 - \frac{2}{\beta} \langle \nabla L(w_i), w_i - w^* \rangle + \frac{1}{\beta^2} \lVert \nabla L(w_i) \rVert^2 . \\
+  \end{aligned}
+  $$
+
+  From the smoothness proof above, we already showed that
+
+  $$
+  \lVert \nabla L(w_i) \rVert^2 \leq 2 \beta \left(L(w_i) - L(w_{i+1})\right).
+  $$
+
+  Moreover, plugging in $u = w_i$ and $w = w^*$ in the convexity lower bound, we get:
+
+  $$
+  \langle \nabla L(w_i), w^* - w_i \rangle \leq L_{\text{opt}} - L(w_i) .
+  $$
+
+  Therefore, we can bound both the rightmost terms in the weight error:
+
+  $$
+  \begin{aligned}
+  \lVert w_{i+1} - w^* \rVert^2 &\leq \lVert w_i - w^* \rVert^2 + \frac{2}{\beta} \left(L(w_i) - L(w_{i+1}) + L_{\text{opt}} - L(w_i) \right) \\
+  &= \lVert w_i - w^* \rVert^2 - \frac{2}{\beta} (L_{i+1} - L_{\text{opt}}).
+  \end{aligned}
+  $$
+
+  Therefore, we can invoke a similar argument as in the smoothness proof. One of two situations:
+
+  1. Either $L_{i+1} = L_{\text{opt}}$, which means we have achieved a point with optimal loss.
+
+  2. Or, $L_{i+1} > L_{\text{opt}}$, which means GD decreases weight error.
+
+  Therefore, we get convergence. In order to estimate the number of iterations, rearrange terms:
+
+  $$
+  L_{i+1} - L_{\text{opt}} \leq \frac{\beta}{2} \left( \lVert w_i - w^* \rVert^2 - \lVert w_{i+1} - w^* \rVert^2 \right)  
+  $$
+
+  and telescope $i$ from 0 to $t-1$ to get:
+
+  $$
+  \sum_{i=0}^{t-1} L_i - t L_{\text{opt}} \leq \frac{\beta}{2} \left( \lVert w_0 - w^* \rVert^2 - \lVert w_t - w^* \rVert^2 \right)
+  $$
+
+  which gives:
+
+  $$
+  \begin{aligned}
+  L_t &\leq \frac{1}{t} \sum_{i=0}^{t-1} L_i \\
+  &\leq L_{\text{opt}} + \frac{\beta}{2t} \lVert w_0 - w^* \rVert^2 .
+  \end{aligned}
+  $$
+
+  Therefore, the optimality gap decreases as $1/t$ and to find an $\varepsilon$-approximate point (assuming we start somewhere reasonable), GD needs $O(\frac{\beta}{\varepsilon})$ iterations.
+{:.proof}
+
+Similar conclusions as above. Constant step size suffices for GD. Step size should be inversely proportional to smoothness constant. Convexity gives us a "last-iterate" bound, as well as parameter estimation guarantees.
+
+---
+
+Another aside: $L$ smooth and *strongly convex*? Then $L$ is both lower and upper bounded by quadratics. Therefore, optimization is easy; exponential ($e^{-t}$) rate of convergence. *Fill this in*.
+
+---
+
+So the hierarchy is as follows:
+
+* GD assuming smoothness: $\frac{1}{\sqrt{t}}$ rate
+
+* GD assuming smoothness + convexity: $\frac{1}{t}$ rate
+
+* Momentum accelerated GD: $\frac{1}{t^2}$ rate. We won't prove this; see the paper by Nesterov. Remarkably, this is the *best possible* one can do with first-order methods such as GD.
+
+* GD assuming smoothness and strong convexity: $\exp(-t)$ rate .
 
 ### The PL condition
 {:.label}
 
-Above, we saw how leveraging smoothness, along with strong convexity, of the loss results in exponential convergence of GD. However (strong) convexity is not that relevant in the context of deep learning. This is because losses are very rarely convex in their parameters.
+Above, we saw how leveraging smoothness, along with (strong) convexity, of the loss results in exponential convergence of GD. However (strong) convexity is not that relevant in the context of deep learning. This is because losses are very rarely convex in their parameters.
 
 However, there is a different characterization of functions (other than convexity) that also implies fast convergence rates of GD. This property was introduced by Polyak[^polyak] in 1963, but has somehow not been very widely publicized. It was re-introduced to the ML optimization literature by Karimi et al.[^karimi] and its relevance (particularly in the context of deep learning) is slowly becoming apparent.
 
@@ -334,6 +426,12 @@ Other rates?
 
 [^zhang]:
     C. Zhang, S. Bengio, M. Hardt, B. Recht, O. Vinyals, [Understanding deep learning requires rethinking generalization](https://arxiv.org/abs/1611.03530), 2017.
+
+[^ji]:
+    Z. Ji and M. Telgarsky, [Directional convergence and alignment in deep learning](https://arxiv.org/pdf/2006.06657.pdf), 2020.
+
+[^mjt]:
+    M. Telgarsky, [Deep Learning Theory](https://mjt.cs.illinois.edu/dlt/), 2021.
 
 [^oco]:
     There is an entire literature on online optimization that uses this interpretation of gradient descent, but they call it the "Follow-the-leader" strategy. See [here](https://courses.cs.washington.edu/courses/cse599s/14sp/scribes/lecture3/lecture3.pdf) for an explanation.
