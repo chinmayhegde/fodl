@@ -103,7 +103,7 @@ With [some algebra](https://xingyuzhou.org/blog/notes/Lipschitz-gradient), one c
   If $L$ is twice-differentiable and $\beta$-smooth, then the eigenvalues of its Hessian are less than $\beta$:
 
   $$
-  \lVert \nabla^2 L(w) \rVert \preceq \beta I.
+  \nabla^2 L(w) \beta I.
   $$
 
   Equivalently, $L(w)$ is *upper-bounded* by a quadratic function:
