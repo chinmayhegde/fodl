@@ -429,7 +429,7 @@ $$
 We will prove:
 
 **Theorem**{:.label #SGDSmooth}
-  If $L$ is $\beta$-smooth, then SGD converges (in expectation) to an $\varepsilon$-approximate critical point in $O\left(\frac{\beta^2}{\varepsilon^4}\right)$ steps.
+  If $L$ is $\beta$-smooth, then SGD converges (in expectation) to an $\varepsilon$-approximate critical point in $O\left(\frac{\beta}{\varepsilon^4}\right)$ steps.
 {:.theorem}
 
 **Proof**
@@ -486,3 +486,9 @@ Other rates?
 
 [^sharp]:
     N. Keskar, D. Mudigere, J. Nocedal, P. Tang, [On Large-Batch Training for Deep Learning](https://openreview.net/pdf?id=H1oyRlYgg), 2017.
+
+[^dinh]:
+    L. Dinh, R. Pascanu, S. Bengio, Y. Bengio, [Sharp Minima Can Generalize For Deep Nets](https://arxiv.org/pdf/1703.04933.pdf), 2017.
+
+[^gieping]:
+    J. Geiping, M. Goldblum, P. Pope, M. Moeller, T. Goldstein, [Stochastic Training is Not Necessary for Generalization](https://arxiv.org/abs/2109.14119), 2021.
