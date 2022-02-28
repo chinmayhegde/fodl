@@ -489,7 +489,7 @@ Assuming the above two properties, we will prove:
   Plugging this in, ignoring all other constants, we get:
 
   $$
-  \min_{t < T} \mathbb{E} \lVert L(w_t) \rVert^2 \lesssim \frac{1}{\sqrt{t}}, \quad \text{or} \quad  \mathbb{E} \lVert L(w_t) \rVert \lesssim \frac{1}{t^{1/4}}.
+  \min_{t < T} \mathbb{E} \lVert L(w_t) \rVert^2 \lesssim \frac{1}{\sqrt{T}}, \quad \text{or} \quad  \mathbb{E} \lVert L(w_t) \rVert \lesssim \frac{1}{T^{1/4}}.
   $$
 
   This concludes the proof.
