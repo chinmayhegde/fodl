@@ -325,7 +325,7 @@ So the hierarchy is as follows:
 
 * GD assuming smoothness and strong convexity: $\exp(-t)$ rate .
 
-### The PL condition
+### The Polyak-Lojasiewicz (PL) condition
 {:.label}
 
 Above, we saw how leveraging smoothness, along with (strong) convexity, of the loss results in exponential convergence of GD. However (strong) convexity is not that relevant in the context of deep learning. This is because losses are very rarely convex in their parameters.
@@ -404,7 +404,7 @@ Why is the PL condition interesting? It has been shown that several neural net t
 
 4. Others? Wide networks? **Complete**.
 
-## Stochastic gradient descent
+## Stochastic gradient descent (SGD)
 {:.label}
 
 We have obtained a reasonable picture of how GD works, how many iterations it needs, etc. But how does the picture change with inexact (stochastic) gradients?
@@ -413,15 +413,15 @@ This question is paramount in deep learning practice, since nobody really does f
 
 Even more so, it seems that stochastic gradients (instead of full gradients) may influences *generalization* behavior. Anecdotally, it was observed that models trained by SGD typically improved over models trained with full-batch gradient descent. Therefore, there may be some hidden benefit of stochasticity.
 
-To explain this, there were a ton of papers discussing the distinction between "sharp" versus "flat" minima[^sharp], and how the latter type of minima generalize better, and how minibatch methods (such as SGD) favor flat minima, and therefore SGD gives better solutions period. Folks generally went along with this explanation.
+To explain this, there were a ton of papers discussing the distinction between "sharp" versus "flat" minima[^sharp], and how the latter type of minima generalize better, and how minibatch methods (such as SGD) favor flat minima, and therefore SGD gives better solutions period. Folks generally went along with this explanation. However, since this initial flurry of papers this common belief has since been somewhat upended.
 
-This common belief has since been somewhat upended. It is not really clear how "sharpness" or "flatness" should be formally defined. A paper by Dinh et al.[^dinh] showed that good generalization can be obtained even if the model corresponds to a very "sharp" minimum in the loss landscape (for most commonly accepted definitions of sharp). So even if SGD finds flatter minima, it is unclear whether such minima are somehow inherently better.
+First off, it is not really clear how "sharpness" or "flatness" should be formally defined. A paper by Dinh et al.[^dinh] showed that good generalization can be obtained even if the model corresponds to a very "sharp" minimum in the loss landscape (for most commonly accepted definitions of "sharp"). So even if SGD finds flatter minima, it is unclear whether such minima are somehow inherently better.
 
 A very recent paper by Geiping et al.[^gieping] in fact finds the opposite; performance by GD (with properly tuned hyperparameters and regularization) matches that of SGD. Theory is silent on this matter and I am not aware of any concrete separation-type between GD and SGD for neural networks.
 
-Still, independent of whether GD is theoretically better than SGD or not, it is instructive to analyze SGD (since everyone uses it.)
+Still, independent of whether GD is theoretically better than SGD or not, it is instructive to analyze SGD (since everyone uses it.) Let us derive an analogous bound on the error rates of SGD.
 
-Let us assume that our updates look like:
+In SGD, our updates look like:
 
 $$
 w_{i+1} = w_i - \eta_i g_i
