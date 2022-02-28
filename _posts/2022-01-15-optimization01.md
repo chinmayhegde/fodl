@@ -477,7 +477,7 @@ Assuming the above two properties, we will prove:
   Telescope from 0 through $T$, and divide by $\eta T$. Then we get:
 
   $$
-  \min{t < T} \mathbb{E} \lVert L(w_t) \rVert^2 \leq \frac{L_0 - L_T}{\eta T} + \frac{\beta \eta G^2}{2}.
+  \min_{t < T} \mathbb{E} \lVert L(w_t) \rVert^2 \leq \frac{L_0 - L_T}{\eta T} + \frac{\beta \eta G^2}{2}.
   $$
 
   This is true for all $\eta$. In order to get the tightest upper bound and minimize the right hand side, we need to balance the two terms on the right. This is achieved if:
@@ -489,7 +489,7 @@ Assuming the above two properties, we will prove:
   Plugging this in, ignoring all other constants, we get:
 
   $$
-  \min{t < T} \mathbb{E} \lVert L(w_t) \rVert^2 \lesssim \frac{1}{\sqrt{t}}, \quad \text{or}  \mathbb{E} \lVert L(w_t) \rVert \lesssim \frac{1}{t^{1/4}}.
+  \min_{t < T} \mathbb{E} \lVert L(w_t) \rVert^2 \lesssim \frac{1}{\sqrt{t}}, \quad \text{or} \quad  \mathbb{E} \lVert L(w_t) \rVert \lesssim \frac{1}{t^{1/4}}.
   $$
 
   This concludes the proof.
