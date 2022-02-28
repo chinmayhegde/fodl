@@ -103,7 +103,7 @@ With [some algebra](https://xingyuzhou.org/blog/notes/Lipschitz-gradient), one c
   If $L$ is twice-differentiable and $\beta$-smooth, then the eigenvalues of its Hessian are less than $\beta$:
 
   $$
-  \nabla^2 L(w) \beta I.
+  \nabla^2 L(w) \preceq \beta I.
   $$
 
   Equivalently, $L(w)$ is *upper-bounded* by a quadratic function:
@@ -112,6 +112,7 @@ With [some algebra](https://xingyuzhou.org/blog/notes/Lipschitz-gradient), one c
   L(w) \leq L(u) + \langle \nabla L(u), w-u \rangle + \frac{\beta}{2} \lVert w-u \rVert^2 .
   $$
 
+  for all $w,u$.
 {:.lemma}
 
 Basically, the smoothness condition (or its implications according to the above [Lemma](#Quadratic)) says that if $\beta$ is not unreasonably big, then the gradients of $L(w)$ are rather well-behaved.
@@ -349,13 +350,13 @@ $$
 L(x) = x^2 + 3 \sin^2 x
 $$
 
-looks like
+has a plot that looks like
 
 ![Plot of $L(x)$](/fodl/assets/pl-example.png)
 
 which is non-convex upon inspection, but nonetheless satisfies the PL condition with constant $\alpha = \frac{1}{32}$.
 
-(The converse is true. Strong convexity implies the PL condition, but PL is far more general. We return to this in Chapter 6 in the context of neural nets.)
+(However, the converse is true. Strong convexity implies the PL condition, but PL is far more general. We return to this in Chapter 6.)
 
 We immediately get the following result.
 
@@ -426,14 +427,72 @@ $$
 w_{i+1} = w_i - \eta_i g_i
 $$
 
-We will prove:
+Here $g_i$ is a noisy version to the full gradient $\nabla L(w_i)$ (where the "noise" here is due to minibatch sampling). Due to stochasticity, $g_i$ (and therefore, $w_i$) are random variables, and we should analyze convergence in terms of their expected value.
+
+Intuitively, meaningful progress is possible only when the noise variance is not too large; this is achieved if the minibatch size is not too small.
+The following assumptions are somewhat standard (although rigorously proving this takes some effort.)
+
+*Property 1: Unbiased gradients*: We will assume that in expectation, $g_i$ is an unbiased estimate of the true gradient. In other words, if $\varepsilon_i = g_i - \nabla L(w_i)$, then
+
+$$
+\mathbb{E}{\varepsilon_i} = 0 .
+$$
+
+*Property 2: Bounded gradients*: We will assume that the gradients are uniformly bounded in magnitude by a constant:
+
+$$
+\max_i \lVert g_i \rVert \leq G.
+$$
+
+**Remark**{:.label #RemBounded}
+Property 1 is fine if we sample the terms in the gradient uniformly at random. Property 2 is hard to justify in practice. (In fact, for convex functions this is not even true!) But better proofs such as this[^bottou] and this[^nguyen] have shown that similar rates of convergence for SGD are possible even if we relax this assumption, so let's just go with this for now and assume it can be fixed.
+{:.remark}
+
+
+Assuming the above two properties, we will prove:
 
 **Theorem**{:.label #SGDSmooth}
   If $L$ is $\beta$-smooth, then SGD converges (in expectation) to an $\varepsilon$-approximate critical point in $O\left(\frac{\beta}{\varepsilon^4}\right)$ steps.
 {:.theorem}
 
 **Proof**
-  **(COMPLETE).**
+  Let's run SGD with *fixed* step-size $\eta$ for $t$ steps. From the smoothness upper bound, we get:
+
+  $$
+  L(w_{t+1}) \leq L(w_t) + \langle \nabla L(w_t), w_{t+1} - w_t \rangle + \frac{\beta}{2} \lVert w_{t+1} - w_t \rVert^2 .
+  $$
+
+  But $w_{t+1} - w_t = - \eta g_t$. Plugging into the above bound and rearranging terms:
+
+  $$
+  \eta \langle L(w_t), g_t \rangle \leq L(w_t) - L(w_{t+1}) + \frac{\beta}{2} \eta^2 \lVert g_t \rVert^2 .
+  $$
+
+  Take expectation on both sides. Property 1 and 2 give us:
+
+  $$
+  \eta \mathbb{E} \lVert L(w_t) \rVert^2 \leq \mathbb{E} \left( L(w_t) - L(w_{t+1}) \right) + \frac{\beta}{2} \eta^2 G^2 .
+  $$
+
+  Telescope from 0 through $T$, and divide by $\eta T$. Then we get:
+
+  $$
+  \min{t < T} \mathbb{E} \lVert L(w_t) \rVert^2 \leq \frac{L_0 - L_T}{\eta T} + \frac{\beta \eta G^2}{2}.
+  $$
+
+  This is true for all $\eta$. In order to get the tightest upper bound and minimize the right hand side, we need to balance the two terms on the right. This is achieved if:
+
+  $$
+  \eta = O(\frac{1}{T}).
+  $$
+
+  Plugging this in, ignoring all other constants, we get:
+
+  $$
+  \min{t < T} \mathbb{E} \lVert L(w_t) \rVert^2 \lesssim \frac{1}{\sqrt{t}}, \quad \text{or}  \mathbb{E} \lVert L(w_t) \rVert \lesssim \frac{1}{t^{1/4}}.
+  $$
+
+  This concludes the proof.
 {:.proof}
 
 
@@ -492,3 +551,9 @@ Other rates?
 
 [^gieping]:
     J. Geiping, M. Goldblum, P. Pope, M. Moeller, T. Goldstein, [Stochastic Training is Not Necessary for Generalization](https://arxiv.org/abs/2109.14119), 2021.
+
+[bottou]:
+    L. Bottou, F. Curtis, J. Nocedal, [Optimization Methods for Large-Scale Machine Learning](https://leon.bottou.org/publications/pdf/tr-optml-2016.pdf), 2018.
+
+[nguyen]:
+    L. Nguyen, P. Ha Nguyen, M. van Dijk, P. Richtarik, K. Scheinberg, M. Takac, [SGD and Hogwild! Convergence Without the Bounded Gradients Assumption](https://arxiv.org/pdf/1802.03801.pdf), 2018.
