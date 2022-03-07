@@ -266,6 +266,7 @@ Our first theoretical result will be a bound on the width of the network that en
   $$
   m \geq \tilde{O} \left( \frac{n^4}{\varepsilon^2} \right)
   $$
+  
   neurons.
 {:.theorem}
 
@@ -284,6 +285,7 @@ Our second theoretical result will be a width bound that ensures that $H(t)$ rem
   $$
   m \geq \tilde{O} \left( \frac{n^6 t^2}{\varepsilon^2} \right)
   $$
+
   neurons.
 {:.theorem}
 
