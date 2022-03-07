@@ -290,7 +290,22 @@ Our second theoretical result will be a width bound that ensures that $H(t)$ rem
 
 ---
 
+Before providing proofs of the above statements, let us make several more remarks.
 
+* The above results show that the width requirement scales polynomially with the number of samples. (In fact, it is a rather high degree polynomial.) Subsequent works have tightened this dependence; these[^os20] papers[^sy19] were able to achieve a quadratic scaling of $m = \tilde{O}(n^2)$ hidden neurons for GD to provably succeed. As far as I know, the current best bound is sub-quadratic  ($O(n^{\frac{3}{2}})$), using similar arguments as above; see here[^efth].
+
+* The above derivation is silent on the *dimension* and the *geometry* of the input data. If we assume additional structure on the data, we can improve the dependence to $O(nd)$; see our paper[^benefits]. However, the big-oh here hides several data-dependent constants that could become polynomially large themselves.
+
+* For $L$-layer networks, the best available bounds are rather weak; widths need to scale as $m = \text{poly}(n, L)$. See here[^allenzhu2019] and here[^zougu2020].
+
+
+
+---
+
+### Lazy training
+{:.label}
+
+** _(Complete)_ **
 
 ## Proofs
 {:.label}
@@ -325,3 +340,18 @@ Our second theoretical result will be a width bound that ensures that $H(t)$ rem
 
 [^arorabook]:
     R. Arora, S. Arora, J. Bruna. N. Cohen, S. Du. R. Ge, S. Gunasekar, C. Jin, J. Lee, T. Ma, B. Neyshabur, Z. Song, [Theory of Deep Learning](http://simonshaoleidu.com/teaching/cs599tdl/DLbook.pdf),  2021.
+
+[^os20]:
+    S. Oymak, M. Soltanolkotabi, [Overparameterized Nonlinear Learning: Gradient Descent Takes the Shortest Path?](http://proceedings.mlr.press/v97/oymak19a/oymak19a.pdf), 2019.
+
+[^sy19]:
+    Z. Song and X. Yang, [Over-parametrization for Learning and Generalization in Two-Layer Neural Networks](https://arxiv.org/pdf/1906.03593.pdf), 2020.
+
+[^efth]:
+    C. Song, A. Ramezani-Kebrya, T. Pethick, A. Eftekhari, V. Cevher, [Subquadratic Overparameterization for Shallow Neural Networks](https://arxiv.org/pdf/2111.01875.pdf), 2021.
+
+[^benefits]:
+    T. Nguyen, R. Wong, C. Hegde, [Benefits of Jointly Training Autoencoders: An Improved Neural Tangent Kernel Analysis](https://arxiv.org/pdf/1911.11983.pdf), 2020.
+
+[^zougu2020]:
+    D. Zou, Y. Cao, D. Zhou, Q. Gu, [Gradient descent optimizes over-parameterized deep ReLU networks](https://link.springer.com/article/10.1007/s10994-019-05839-6), 2020.
