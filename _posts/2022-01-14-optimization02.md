@@ -39,7 +39,112 @@ We will pursue Explanation 3, and derive (mathematically) fairly precise justifi
 ## The Neural Tangent Kernel
 {:.label}
 
-## Extensions
+Our goal will be to understand what level of over-parameterization enables gradient descent to train neural network models to zero loss. So if the network contains $p$ parameters, we would like to derive scaling laws of $p$ in terms of $n$ and $d$. Since the number of parameters is greater than the number of samples, proving generalization bounds will be challenging. But let's set aside such troubling thoughts for now.
+
+When we think of modern neural networks and their size, we typically associate "growing" the size of networks in terms of their *depth*. However, our techniques below will instead focus on the *width* of the network (mirroring our theoretical treatment of network representation capacity). Many results below apply to deep networks, but the key controlling factor is the width (*note: actually, not even the width but other strange properties; more later.*) The impact of depth will continue to remain elusive.
+
+Here's a high level intuition of the path forward:
+
+1. We know that if the loss landscape is convex, then the dynamics of training algorithms such as GD or SGD ensures that we always converge to a global optimum.
+
+2. We know that linear/kernel models exhibit convex loss landscapes.
+
+3. We will *prove* that *for wide enough networks*, the loss landscape *looks like that of a kernel model*.
+
+So in essence, establishing the last statement triggers the chain of implications:
+
+$$
+(3) \implies (2) \implies (1)
+$$
+
+and we are done.
+
+---
+
+Some history. The above idea is called the *Neural Tangent Kernel*, or the NTK, approach. The term itself first appeared in a landmark paper by Jacot et al.[^jacot], which first established the global convergence of NN training in the infinite-width limit. Roughly around the same time, several papers emerged that also provided global convergence guarantees in certain specialized families of neural network models. See here[^du2019], here[^allenzhu2019], and here[^lee2019]. All of them involved roughly the same chain of implications as described above, so now can be dubbed as "NTK-style" papers.
+
+---
+
+### Gradient dynamics for linear models
+{:.label}
+
+As a warmup, let's first examine how GD over the squared-error loss learns the parameters of linear models. Most of this should be classical. For a given training dataset $(x_i, y_i)$, define the linear model using weights $w$, so that the predicted labels enjoy the form:
+
+$$
+u_i = \langle x_i, w \rangle, \qquad u = Xw
+$$
+
+where $X$ is a matrix with the data points stacked row-wise. This leads to the familiar loss:
+
+$$
+L(w) = \frac{1}{2} \sum_{i=1}^n \left( y_i - \langle x_i, w \rangle \right)^2 = \frac{1}{2} \lVert y - Xw \rVert^2 .
+$$
+
+We optimize this loss via GD:
+
+$$
+w^+ = w - \eta \nabla L(w)
+$$
+
+where the gradient of the loss looks like:
+
+$$
+\nabla L(w) = - \sum_{i=1}^n x_i (y_i - u_i) =  - X^T (y - u)
+$$
+
+and so far everything is good. Now, imagine that we execute gradient descent *with infinitesimally small step size* $\eta \rightarrow 0$, which means that we can view the evolution of the weights as the output of the following ordinary differential equation (ODE):
+
+$$
+\frac{dw}{dt} = - \nabla L(w) = X^T (y - u).
+$$
+
+This is sometimes called *Gradient Flow* (GF), and standard GD is rightfully viewed as a finite-time discretization of this ODE. Moreover, due to linearity of the model, the evolution of the *output labels* $u$ follows the ODE:
+
+$$
+\begin{aligned}
+\frac{du}{dt} &= X \frac{dw}{dt}, \\
+\frac{du}{dt} &= XX^T (y-u) \\
+&= H (y - u).
+\end{aligned}
+$$
+
+Several remarks are pertinent at this point:
+
+* ODEs of this nature can be solved in closed form. If $r = y-u$ is the "residual" then the equation becomes:
+
+$$
+\frac{dr}{dt} = - H r
+$$
+
+whose solution, informally, is the (matrix) exponential:
+
+$$
+r(t) = \exp(-Ht) r(0)
+$$
+
+which *immediately* gives that if $H$ is *full-rank* with $\lambda_{\text{min}} (H) >0$, then GD converges at an exponential rate with zero loss.
+
+* Following up from the first point: the matrix $H = X X^T$, which principally governs the dynamics of GD, is *constant*, and is entirely determined by the *geometry* of the data. Configurations of data points which push $\lambda_{\text{min}} (H)$ as high as possible enable GD to converge quicker, and vice versa.
+
+* The data points themselves don't matter very much; all that matters is the set of their *pairwise dot products*:
+
+$$
+H_{ij} = \langle x_i, x_j \rangle .
+$$
+
+This immediately gives rise to an alternate way to introduce the well-known [kernel trick](https://en.wikipedia.org/wiki/Kernel_method#Mathematics:_the_kernel_trick): simply replace $H$ by *any* other easy-to-compute kernel function:
+
+$$
+K_{ij} = \langle \phi(x_i), \phi(x_j) \rangle
+$$
+
+where $\phi$ is some feature map. We now suddenly have acquired the superpower of being able to model non-linear features of the data. This derivation also shows that training kernel models is no more challenging than training linear models (provided $K$ is easy to write down.)
+
+### Gradient dynamics for general models
+{:.label}
+
+
+## Proofs
 {:.label}
 
 ---
@@ -55,3 +160,15 @@ We will pursue Explanation 3, and derive (mathematically) fairly precise justifi
 
 [^explearn]:
     Z. Li and S. Arora, [An exponential learning rate schedule for deep learning](https://arxiv.org/pdf/1910.07454.pdf), 2019.
+
+[^jacot]:
+    A. Jacot, F. Gabriel. C. Hongler, [Neural Tangent Kernel: Convergence and Generalization in Neural Networks](https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf), 2018.
+
+[^du2019]:
+    S. Du, X. Zhai, B. Poczos, A. Singh, [Gradient Descent Provably Optimizes Over-parameterized Neural Networks](https://openreview.net/pdf?id=S1eK3i09YQ), 2019.
+
+[^allenzhu2019]:
+    Z. Allen-Zhu, Y. Li, Z. Song, [Learning and Generalization in Overparameterized Neural Networks, Going Beyond Two Layers](https://proceedings.neurips.cc/paper/2019/file/62dad6e273d32235ae02b7d321578ee8-Paper.pdf), 2019.
+
+[^lee2019]:
+    J. Lee, L. Xiao, S. Schoenholz, Y. Bahri, R. Novak, J. Sohl-Dickstein, J. Pennington, [Wide Neural Networks of Any Depth Evolve as Linear Models Under Gradient Descent](https://proceedings.neurips.cc/paper/2019/file/0d1a9651497a38d8b1c3871c84528bd4-Paper.pdf), 2019.
