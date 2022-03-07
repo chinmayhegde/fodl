@@ -112,37 +112,98 @@ Several remarks are pertinent at this point:
 
 * ODEs of this nature can be solved in closed form. If $r = y-u$ is the "residual" then the equation becomes:
 
-$$
-\frac{dr}{dt} = - H r
-$$
+    $$
+    \frac{dr}{dt} = - H r
+    $$
 
-whose solution, informally, is the (matrix) exponential:
+    whose solution, informally, is the (matrix) exponential:
 
-$$
-r(t) = \exp(-Ht) r(0)
-$$
+    $$
+    r(t) = \exp(-Ht) r(0)
+    $$
 
-which *immediately* gives that if $H$ is *full-rank* with $\lambda_{\text{min}} (H) >0$, then GD converges at an exponential rate with zero loss.
+    which *immediately* gives that if $H$ is *full-rank* with $\lambda_{\text{min}} (H) >0$, then GD converges at an exponential rate with zero loss.
 
-* Following up from the first point: the matrix $H = X X^T$, which principally governs the dynamics of GD, is *constant*, and is entirely determined by the *geometry* of the data. Configurations of data points which push $\lambda_{\text{min}} (H)$ as high as possible enable GD to converge quicker, and vice versa.
+* Following up from the first point: the matrix $H = X X^T$, which principally governs the dynamics of GD, is *constant with respect to time*, and is entirely determined by the *geometry* of the data. Configurations of data points which push $\lambda_{\text{min}} (H)$ as high as possible enable GD to converge quicker, and vice versa.
 
 * The data points themselves don't matter very much; all that matters is the set of their *pairwise dot products*:
 
-$$
-H_{ij} = \langle x_i, x_j \rangle .
-$$
+    $$
+    H_{ij} = \langle x_i, x_j \rangle .
+    $$
 
-This immediately gives rise to an alternate way to introduce the well-known [kernel trick](https://en.wikipedia.org/wiki/Kernel_method#Mathematics:_the_kernel_trick): simply replace $H$ by *any* other easy-to-compute kernel function:
+    This immediately gives rise to an alternate way to introduce the well-known [kernel trick](https://en.wikipedia.org/wiki/Kernel_method#Mathematics:_the_kernel_trick): simply replace $H$ by *any* other easy-to-compute kernel function:
 
-$$
-K_{ij} = \langle \phi(x_i), \phi(x_j) \rangle
-$$
+    $$
+    K_{ij} = \langle \phi(x_i), \phi(x_j) \rangle
+    $$
 
-where $\phi$ is some feature map. We now suddenly have acquired the superpower of being able to model non-linear features of the data. This derivation also shows that training kernel models is no more challenging than training linear models (provided $K$ is easy to write down.)
+    where $\phi$ is some feature map. We now suddenly have acquired the superpower of being able to model non-linear features of the data. This derivation also shows that training kernel models is no more challenging than training linear models (provided $K$ is easy to write down.)
+
+
 
 ### Gradient dynamics for general models
 {:.label}
 
+Let us now derive the gradient dynamics for a general deep network $f(w)$. We mirror the above steps. For a given input $x_i$, the predicted label obeys the form:
+
+$$
+u_i = f_{x_i}(w)
+$$
+
+where the subscript of $f$ here makes the dependence on the input features explicit. The squared-error loss becomes:
+
+$$
+L(w) = \frac{1}{2} \sum_{j=1}^n \left( y_j - f_{x_j}(w) \right)^2
+$$
+
+and its gradient with respect to any one weight becomes:
+
+$$
+\nabla L(w) \vert_{\text{one coordinate}} = - \sum_{j=1}^n \frac{\partial f_{x_j}(w)}{\partial w} \left( y_j - u_j \right) .
+$$
+
+Therefore, the dynamics of any one output label -- which, in general, depends on all the weights -- can be calculated by summing over the partial derivatives over all the weights:
+
+$$
+\begin{aligned}
+\frac{du_i}{dt} &= \sum_w \frac{\partial u_i}{\partial w} \frac{dw}{dt} \\
+& = \sum_w \frac{\partial f_{x_i}(w)}{\partial w} \left( \sum_{j=1}^n \frac{\partial f_{x_j}(w)}{\partial w} \left( y_j - u_j \right) \right) \\
+&= \sum_{j=1}^n \Big\lang \frac{\partial f_{x_i}(w)}{\partial w}, \frac{\partial f_{x_j}(w)}{\partial w} \Big\rang \left(y_j - u_j \right) \\
+&= \sum_{j=1}^n H_{ij} (y_j - u_j) ,
+\end{aligned}
+$$
+
+where in the last step we switched the orders of summation, and defined:
+
+$$
+H_{ij} := \Big\lang \frac{\partial f_{x_i}(w)}{\partial w}, \frac{\partial f_{x_j}(w)}{\partial w} \Big\rang = \sum_w \frac{\partial f_{x_i}(w)}{\partial w}  \frac{\partial f_{x_j}(w)}{\partial w} .
+$$
+
+We have used angular brackets to denote dot products. In the case of an infinite number of parameters, the same relation holds. But we have to replace summations by expectations over a measure (and perform additional algebra book-keeping, so let's just take it as true).
+
+Once again, we make several remarks:
+
+* Observe that the dynamics is *very similar in appearance* to that of a linear model! in vector form, we get the evolution of all $n$ labels as
+
+    $$
+    \frac{du}{dt} = H_t (y - u)
+    $$
+
+    where $H_t$ is an $n \times n$ matrix governing the dynamics.
+
+* But! There is a crucial twist! The governing matrix $H_t$ is *no longer constant*: it depends on the current set of weights $w$, and therefore is a function of time --- hence the really pesky subscript $t$.
+
+* One can check that $H_t$ is symmetric and positive semi-definite; therefore, we can view the above equation as the dynamics induced by a (time-varying) kernel mapping. Moreover, the corresponding feature map is nothing but:
+
+    $$
+    \phi : x \mapsto \frac{\partial f_{x}(w)}{\partial w }
+    $$
+
+    which can be viewed as the "tangent model" of $f$ at $w$. This is a long-winded explanation of the origin of the name "NTK" for the above analysis.
+
+### The role of width
+{:.label}
 
 ## Proofs
 {:.label}
