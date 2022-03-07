@@ -213,7 +213,84 @@ The above calculations give us a mechanism to understand how (and under what con
 
 3. For large widths, we will show that $H_t \approx H_0$, i.e., the NTK matrix *stays approximately constant*. In particular, the dynamics always remains full rank.
 
-Combining $1+2+3$ gives the overall proof.
+Combining $1+2+3$ gives the overall proof. This proof appeared in Du et al.[^du2019] and the below derivations are adapted from this fantastic book [^arorabook].
+
+---
+
+Concretely, we consider two-layer networks with $m$ hidden neurons with twice-differentiable activations $\psi$ with bounded first and second derivatives. This again means that ReLU doesn't count, but other analogous proofs can be derived for ReLUs; see[^du2019].
+
+For ease of derivation, let us assume that the *second layer weights* are fixed and equal to $\pm 1$ chosen equally at random, and that we only train the first layer. This assumption may appear strange, but (a) all proofs will go through if we train both layers, and (b) the first layer weights are really the harder ones in terms of theoretical analysis. (*Exercise*: Show that if we flip things around and train only the second layer, then really we are fitting a linear model to the data.)
+
+Therefore, the model assumes the form:
+
+$$
+f_x(w) = \frac{1}{\sqrt{m}} \sum_{r=1}^m a_r \psi(\langle w_r, x \rangle) .
+$$
+
+where $a_r = \pm 1$ and the scaling $\frac{1}{\sqrt{m}}$ is chosen to make the algebra below nice. (Somewhat curiously, this *exact* scaling turns out to be crucial, and we will revisit this point later.)
+
+We initialize all weights $w_1(0), w_2(0), \ldots, w_r(0)$ according to a standard normal distribution. In neural network Since we are only using 2-layer feedforward networks, the gradient at time $t=0$ becomes:
+
+$$
+\frac{\partial f_{x_i}(w(0))}{\partial w_r} = \frac{1}{\sqrt{m}} a_r x_i \psi'( \langle w_r(0), x_i \rangle )
+$$
+
+with respect to the weights of the $r^{th}$ neuron. As  per our above derivation, at time $t=0$, we get that the NTK has entries:
+
+$$
+\begin{aligned}
+[H(0)]_{ij} &= \Big\lang \frac{\partial f_{x_i}}{\partial w_r}, \frac{\partial f_{x_j}}{\partial w_r} \Big\rang \\
+&= x_i^T x_j\Big[ \frac{1}{m} \sum_{r=1}^m a_r^2 \psi'( \langle w_r(0), x_i \rangle ) \psi'( \langle w_r(0), x_j \rangle ) \Big]
+\end{aligned}
+$$
+
+There is quite a bit to parse here. The main point here is to note that each entry of $H(0)$ is the average of $m$ random variables whose expectation equals:
+
+$$
+ x_i^T x_j \mathbb{E}_{w \sim \mathcal{N}(0,I)} \psi'(x_i^T w) \psi'(x_j^T w) := H^*_{ij}.
+$$
+
+In other words, if we had infinitely many neurons in the hidden layer then the NTK at time $t=0$ would equal its expected value, given by the matrix $H^*$. (*Exercise*: It is not hard to check that for $m = \Omega(n)$ and for data in general position, $H^*$ is full rank; prove this.)
+
+Our first theoretical result will be a bound on the width of the network that ensures that $H(0)$ and $H^*$ are close.
+
+**Theorem**{:.label #NTKInit}
+  Fix $\varepsilon >0$. Then, with high probability we have
+
+  $$
+  \lVert H(0) - H^* \rVert_2 \leq \varepsilon
+  $$
+
+  provided the hidden layer has at least
+
+  $$
+  m \geq \tilde{O} \left( \frac{n^4}{\varepsilon^2} \right)
+  $$
+  neurons.
+{:.theorem}
+
+Our second theoretical result will be a width bound that ensures that $H(t)$ remains close to $H(0)$ throughout training.
+
+
+**Theorem**{:.label #NTKDynamics}
+  Suppose that $y_i = \pm 1$ and $u_i(\tau)$ remains bounded throughout training, i.e., for $0 \leq \tau < t$. Fix $\varepsilon >0$. Then, with high probability we have
+
+  $$
+  \lVert H(0) - H^* \rVert_2 \leq \varepsilon
+  $$
+
+  provided the hidden layer has at least
+
+  $$
+  m \geq \tilde{O} \left( \frac{n^6 t^2}{\varepsilon^2} \right)
+  $$
+  neurons.
+{:.theorem}
+
+
+---
+
+
 
 ## Proofs
 {:.label}
@@ -245,3 +322,6 @@ Combining $1+2+3$ gives the overall proof.
 
 [^lee2019]:
     J. Lee, L. Xiao, S. Schoenholz, Y. Bahri, R. Novak, J. Sohl-Dickstein, J. Pennington, [Wide Neural Networks of Any Depth Evolve as Linear Models Under Gradient Descent](https://proceedings.neurips.cc/paper/2019/file/0d1a9651497a38d8b1c3871c84528bd4-Paper.pdf), 2019.
+
+[^arorabook]:
+    R. Arora, S. Arora, J. Bruna. N. Cohen, S. Du. R. Ge, S. Gunasekar, C. Jin, J. Lee, T. Ma, B. Neyshabur, Z. Song, [Theory of Deep Learning](http://simonshaoleidu.com/teaching/cs599tdl/DLbook.pdf),  2021.
