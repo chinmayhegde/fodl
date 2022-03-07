@@ -110,7 +110,7 @@ $$
 
 Several remarks are pertinent at this point:
 
-* ODEs of this nature can be solved in closed form. If $r = y-u$ is the "residual" then the equation becomes:
+* Linear ODEs of this nature can be solved in closed form. If $r = y-u$ is the "residual" then the equation becomes:
 
     $$
     \frac{dr}{dt} = - H r
@@ -122,7 +122,7 @@ Several remarks are pertinent at this point:
     r(t) = \exp(-Ht) r(0)
     $$
 
-    which *immediately* gives that if $H$ is *full-rank* with $\lambda_{\text{min}} (H) >0$, then GD converges at an exponential rate with zero loss.
+    which *immediately* gives that if $H$ is *full-rank* with $\lambda_{\text{min}} (H) >0$, then GD is extremely well-behaved; it provably converges at an exponential rate towards a set of weights with zero loss.
 
 * Following up from the first point: the matrix $H = X X^T$, which principally governs the dynamics of GD, is *constant with respect to time*, and is entirely determined by the *geometry* of the data. Configurations of data points which push $\lambda_{\text{min}} (H)$ as high as possible enable GD to converge quicker, and vice versa.
 
@@ -192,7 +192,7 @@ Once again, we make several remarks:
 
     where $H_t$ is an $n \times n$ matrix governing the dynamics.
 
-* But! There is a crucial twist! The governing matrix $H_t$ is *no longer constant*: it depends on the current set of weights $w$, and therefore is a function of time --- hence the really pesky subscript $t$.
+* But! There is a crucial twist! The governing matrix $H_t$ is *no longer constant*: it depends on the current set of weights $w$, and therefore is a function of time --- hence the really pesky subscript $t$. This also means that the ODE is no longer linear; $H_t$ interacts with $u(t)$, and therefore the picture is far more complex.
 
 * One can check that $H_t$ is symmetric and positive semi-definite; therefore, we can view the above equation as the dynamics induced by a (time-varying) kernel mapping. Moreover, the corresponding feature map is nothing but:
 
@@ -202,11 +202,23 @@ Once again, we make several remarks:
 
     which can be viewed as the "tangent model" of $f$ at $w$. This is a long-winded explanation of the origin of the name "NTK" for the above analysis.
 
-### The role of width
+### Wide networks exhibit linear model dynamics
 {:.label}
+
+The above calculations give us a mechanism to understand how (and under what conditions) gradient dynamics of general networks resemble those of linear models. Basically, our strategy will be as follows:
+
+1. We will *randomly* initialize weights at $t=0$.
+
+2. At $t=0$, we will prove that the corresponding NTK matrix, $H_0$, is full-rank and that its eigenvalues are bounded away from zero.
+
+3. For large widths, we will show that $H_t \approx H_0$, i.e., the NTK matrix *stays approximately constant*. In particular, the dynamics always remains full rank.
+
+Combining $1+2+3$ gives the overall proof.
 
 ## Proofs
 {:.label}
+
+** _(COMPLETE)_ **.
 
 ---
 
