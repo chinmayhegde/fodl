@@ -483,7 +483,7 @@ Assuming the above two properties, we will prove:
   This is true for all $\eta$. In order to get the tightest upper bound and minimize the right hand side, we need to balance the two terms on the right. This is achieved if:
 
   $$
-  \eta = O(\frac{1}{T}).
+  \eta = O(\frac{1}{\sqrt{T}}).
   $$
 
   Plugging this in, ignoring all other constants, we get:
