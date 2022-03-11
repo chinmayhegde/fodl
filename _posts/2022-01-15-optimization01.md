@@ -552,8 +552,8 @@ Other rates?
 [^gieping]:
     J. Geiping, M. Goldblum, P. Pope, M. Moeller, T. Goldstein, [Stochastic Training is Not Necessary for Generalization](https://arxiv.org/abs/2109.14119), 2021.
 
-[bottou]:
+[^bottou]:
     L. Bottou, F. Curtis, J. Nocedal, [Optimization Methods for Large-Scale Machine Learning](https://leon.bottou.org/publications/pdf/tr-optml-2016.pdf), 2018.
 
-[nguyen]:
+[^nguyen]:
     L. Nguyen, P. Ha Nguyen, M. van Dijk, P. Richtarik, K. Scheinberg, M. Takac, [SGD and Hogwild! Convergence Without the Bounded Gradients Assumption](https://arxiv.org/pdf/1802.03801.pdf), 2018.
