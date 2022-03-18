@@ -11,7 +11,7 @@ However, most of our theoretical results used somewhat funny-looking constructio
 
 But even setting aside the issue of size, none of the (theoretically attractive) techniques that we used to memorize datasets resemble deep learning practice. When folks refer to "training models", they almost always are talking about fitting datasets to neural networks via local, greedy, first-order algorithms such as gradient descent (GD), or stochastic variations (like SGD), or accelerations (like Adam), or some other such approach.
 
-In the new few chapters, we address the question:
+In the next few chapters, we address the question:
 
 ```
 Do practical approaches for model training work well?
