@@ -1,15 +1,20 @@
 ---
 layout: page
-title: Chapter 6 - Beyond NTK
-categories: optimization
-date: 2022-01-13
+title: Chapter 8 - Uniform stability
+categories: generalization
+date: 2022-01-11
 ---
 
 
-**Under construction**.
+
+Central hypothesis:
+
+```
+Stable learning implies generalization.
+```
 
 ## Setup
-{.label}
+{:.label}
 
 ## The PL condition
 {.label}

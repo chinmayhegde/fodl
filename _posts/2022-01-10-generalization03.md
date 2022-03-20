@@ -1,8 +1,8 @@
 ---
 layout: page
-title: Chapter 6 - Beyond NTK
-categories: optimization
-date: 2022-01-13
+title: Chapter 9 - Double Descent
+categories: generalization
+date: 2022-01-10
 ---
 
 
@@ -11,5 +11,5 @@ date: 2022-01-13
 ## Setup
 {.label}
 
-## The PL condition
+## Bias-varianc tradeoffs
 {.label}
