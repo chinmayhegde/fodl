@@ -11,7 +11,7 @@ However, most of our theoretical results used somewhat funny-looking constructio
 
 But even setting aside the issue of size, none of the (theoretically attractive) techniques that we used to memorize datasets resemble deep learning practice. When folks refer to "training models", they almost always are talking about fitting datasets to neural networks via local, greedy, first-order algorithms such as gradient descent (GD), or stochastic variations (like SGD), or accelerations (like Adam), or some other such approach.
 
-In the new few chapters, we address the question:
+In the next few chapters, we address the question:
 
 ```
 Do practical approaches for model training work well?
@@ -483,7 +483,7 @@ Assuming the above two properties, we will prove:
   This is true for all $\eta$. In order to get the tightest upper bound and minimize the right hand side, we need to balance the two terms on the right. This is achieved if:
 
   $$
-  \eta = O(\frac{1}{T}).
+  \eta = O(\frac{1}{\sqrt{T}}).
   $$
 
   Plugging this in, ignoring all other constants, we get:
@@ -552,8 +552,8 @@ Other rates?
 [^gieping]:
     J. Geiping, M. Goldblum, P. Pope, M. Moeller, T. Goldstein, [Stochastic Training is Not Necessary for Generalization](https://arxiv.org/abs/2109.14119), 2021.
 
-[bottou]:
+[^bottou]:
     L. Bottou, F. Curtis, J. Nocedal, [Optimization Methods for Large-Scale Machine Learning](https://leon.bottou.org/publications/pdf/tr-optml-2016.pdf), 2018.
 
-[nguyen]:
+[^nguyen]:
     L. Nguyen, P. Ha Nguyen, M. van Dijk, P. Richtarik, K. Scheinberg, M. Takac, [SGD and Hogwild! Convergence Without the Bounded Gradients Assumption](https://arxiv.org/pdf/1802.03801.pdf), 2018.
