@@ -144,7 +144,7 @@ We have the following:
   $$
   w^* =  X^T (XX^T)^{-1} y
   $$
-  which is the [Moore-Pensore inverse], or pseudo-inverse, of $X$ applied to $y$. From basic linear algebra we know that the pseudo-inverse gives the minimum-norm solution to the linear system $y = Xw$.
+  which is the [Moore-Pensore inverse](https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse), or pseudo-inverse, of $X$ applied to $y$. From basic linear algebra we know that the pseudo-inverse gives the minimum-norm solution to the linear system $y = Xw$.
 {:.proof}
 
 **Remark**{:.label #flowlines}
