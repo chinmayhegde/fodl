@@ -13,7 +13,7 @@ However, training is not the end goal. Recall in the Introduction that we want t
 Over the next few lectures, we address the central question:
 
 ```
-When (and why) do highly over-parameterized networks trained using (S)GD generalize?  
+When (and why) do networks trained using (S)GD generalize?  
 ```
 
 As we work through different aspects of this question, we will find that
