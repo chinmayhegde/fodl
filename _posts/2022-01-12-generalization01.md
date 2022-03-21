@@ -133,7 +133,7 @@ We have the following:
 
   which is always a vector in the *span* of the data points. This means that if $w(0) = 0$, then the weights at any time $t$ continues to remain in this span. (Geometrically, the span of the data forms an $n$-dimensional subspace in the $d$-dimensional weight space, so the invariance being preserved here is that the path of gradient descent always lies within this subspace.)
 
-  Now, *assume* that GF converges to a global minimizer, $w^*$. We need to be a bit careful and actually prove that global convergence happens. But we already know that GF/GD minimizes convex loss functions, so let us not repeat the calculations from Chapter 4. Therefore, $w^* = X^T \alpha$ for some set of coefficients $\alpha$. But we also know that since $w^*$ is a global minimizer, $Xw^* = y$, which means that
+  Now, *assume* that GF converges to a global minimizer, $w^* $. We need to be a bit careful and actually prove that global convergence happens. But we already know that GF/GD minimizes convex loss functions, so let us not repeat the calculations from Chapter 4. Therefore, $w^* = X^T \alpha$ for some set of coefficients $\alpha$. But we also know that since $w^* $ is a global minimizer, $Xw^* = y$, which means that
 
   $$
   XX^T \alpha = y, \quad \text{or} \quad \alpha = (XX^T)^{-1} y.
