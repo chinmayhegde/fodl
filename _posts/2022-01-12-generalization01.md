@@ -231,4 +231,4 @@ More pertinently, what about other choices of *architecture* (beyond linear mode
     Z. Ji, M. Telgarsky, [Directional convergence and alignment in deep learning](https://arxiv.org/pdf/2006.06657.pdf), 2020.
 
 [^ji2020]:
-    Z. Ji, M. Dudik, R. Schapire, M. Telgarsky, [http://proceedings.mlr.press/v125/ji20a/ji20a.pdf](http://proceedings.mlr.press/v125/ji20a/ji20a.pdf), 2020.
+    Z. Ji, M. Dudik, R. Schapire, M. Telgarsky, [Gradient descent follows the regularization path for general losses](http://proceedings.mlr.press/v125/ji20a/ji20a.pdf), 2020.
