@@ -146,7 +146,7 @@ We have the following:
 {:.proof}
 
 **Remark**{:.label #flowlines}
-  The above proof is algebraic, but there is a simple geometric intuition. Gradient flowlines are [orthogonal](https://dsgissin.github.io/blog/assets/images/implicit_regularization/line_identity_param_grad_bw.png) to the subspace of all possible solutions. (Complete this.)
+  The above proof is algebraic, but there is a simple geometric intuition. Gradient flowlines are [orthogonal](https://dsgissin.github.io/blog/assets/images/implicit_regularization/line_identity_param_grad_bw.png) to the subspace of all possible solutions. Therefore, if we start gradient flow from the origin, then the shortest path to the set of feasible solutions is the straight line segment orthogonal to this subspace, which means that the final answer is the interpolator with minimum $L_2$ norm.
 {:.remark}
 
 Great! For the squared error loss, the path of gradient descent always leads to the lowest-norm solution, regardless of the training dataset.
@@ -205,7 +205,7 @@ More pertinently, what about other choices of *architecture* (beyond linear mode
 ## Nonlinear models and incremental learning
 {:.label}
 
-The picture becomes much more murky (and, frankly, really fascinating) when we move beyond linear models. For nonlinear models, the span argument that we used in the above proofs is no longer valid. Moreover, as we will show below the architecture plays a fundamental role in the gradient dynamics, which further goes to show that *both* representation and optimization method play a crucial role in inducin algorithmic bias.
+The picture becomes much more murky (and, frankly, really fascinating) when we move beyond linear models. For nonlinear models, the span argument that we used in the above proofs is no longer valid. Moreover, as we will show below the architecture plays a fundamental role in the gradient dynamics, which further goes to show that *both* representation and optimization method play a crucial role in inducing algorithmic bias.
 
 A linear model of the form $u = \lang w, x \rang$ can be viewed as a *single* neuron with linear activation. Let us persist with linear activations for some more time, but graduate to *multiple layers of neurons*. One such model is called a *diagonal linear network model*:
 
@@ -216,9 +216,9 @@ $$
 where the weights $(u_j, v_j)$ are trainable. This model, of course, is merely a re-parameterization of a single neuron and can only express linear functions. However, the weights interact multiplicatively, and therefore the output is a *nonlinear function of the weights*. This re-parameterization makes a world of difference in the context of gradient dynamics, and leads to a *very* different form of algorithmic bias.
 
 ### Diagonal linear models
+{:.label}
 
-
-For simplicity, let's just assume that $u_i = v_i$ for $i \in [d]$. (I don't believe this is important, and similar conclusions should hold even if no weight tying occurs.)
+For simplicity, let's just assume that $u_i = v_i$ for $i \in [d]$. (I don't believe that this assumption is important; similar conclusions should hold even if no weight tying occurs.)
 
 Then, the prediction for any data point $x \in \R^d$ becomes
 
@@ -236,20 +236,22 @@ where $\circ$ denotes the element-wise (Hadamard) product. This is called a "two
 
 (*Actually, not quite true; square reparameterization only expresses linear models $y = Xw$ with the restriction that $w \geq 0$. But this can be fixed easily as follows: introduce 2 sets of variables $u$ and $v$, and write $y = X(u\circ u - v\circ v)$.*)
 
-However, this simple variable switch induces a curious algorithmic bias. Let's stick with the squared error loss:
+Let's stick with the squared error loss:
 
 $$
 L(u) = \frac{1}{2} \lVert y - X(u \circ u) \rVert^2
 $$
 
-and suppose we perform gradient flow over this loss. Since $L$ is a fourth-order polynomial (quartic) function of $u$, the gradient at any $u$ is a bit more complicated. It's in fact a *cubic* function of $u$:
+and suppose we perform gradient flow over this loss. Since $L$ is a fourth-order polynomial (quartic) function of $u$, the gradient at any $u$ is a bit more complicated:
 
 $$
 \frac{du}{dt} = - \nabla_u L(u) = 2 u \circ X^T (y - X (u \circ u)) .
 $$
 
-We get the following:
+Notice now that the gradient in fact is now a *cubic* function of $u$.
+Suppose that we initialize $u = \alpha \mathbf{1}$, where $\mathbf{1}$ is the all-ones vector and $\alpha > 0$ is a scalar. (This is fine since in the end we will only be interested in models with positive coefficients.)
 
+Somewhat curiously, we can prove that if $\alpha$ is small enough then the algorithmic bias corresponding to gradient flow corresponds to $\ell_1$-regularization (i.e., we recover the familiar *basis pursuit* or [Lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) formulation. Formally, we get the following:
 
 **Theorem**{:.label #GFLasso}
   Let $w^*$ be the (non-negative) interpolator with minimum $\ell_1$-norm:
@@ -260,11 +262,30 @@ We get the following:
   \end{aligned}
   $$
 
-  Then, if gradient flow for diagonal linear networks converges to $\bar{u}$, then $\bar{w} = \bar{u} \circ \bar{u}$ converges to $w^*$.
+  Suppose that gradient flow for diagonal linear networks converges to an esstimate $\bar{u}$. Then $\bar{w} = \bar{u} \circ \bar{u}$ converges to $w^*$ as $\alpha \rightarrow 0$.
 {:.theorem}
 
 **Proof sketch**{:.label #GFLassoProof}
-  (Complete.)
+  It all comes down to the optimization dynamics. It will be helpful to understand two types of dynamics: one in the original (canonical) linear parameterization in terms of $w$, and the other in the square re-parameterization (in terms of $u$). By definition, we have $w_j = u_j^2$, and therefore
+
+  $$
+  \frac{dw_j}{dt} = 2u_j \frac{du_j}{dt} .
+  $$
+
+  By plugging in the definition of gradient flow, we get:
+
+  $$
+  \begin{aligned}
+  \frac{dw}{dt} &= - 2 u(t) \circ \nabla_u L(u(t)) \\
+  & =2 u(t) \circ 2 u(t) \circ X^T(y - X(u(t) \circ u(t))) \\
+  & = 4 w(t) \circ X^T(y - Xw(t)).
+  \end{aligned}
+  $$
+
+  Aside: This resembles gradient flow over the standard $\ell_2$-loss, *except* that each coordinate is multiplied with $w_i(t)$. Intuitively, this induces a "rich-get-richer" phenomenon: a bigger coefficient in $w(t)$ is assigned a larger gradient update (relative to the other coefficients) and therefore "moves" towards its final destination faster. Gissin et al.[^gissin] call this *incremental learning*: large coefficients are learned (approximately) in decreasing order of their magnitude.
+
+  
+
 {:.proof}
 
 ## Implicit bias of ReLU networks
@@ -292,3 +313,6 @@ We get the following:
 
 [^ji2020]:
     Z. Ji, M. Dudik, R. Schapire, M. Telgarsky, [Gradient descent follows the regularization path for general losses](http://proceedings.mlr.press/v125/ji20a/ji20a.pdf), 2020.
+
+[^gissin]:
+    D. Gissin, S. Shalev-Shwartz, A. Daniely, [The Implicit Bias of Depth: How Incremental Learning Drives Generalization](https://openreview.net/pdf?id=H1lj0nNFwB), 2020.
