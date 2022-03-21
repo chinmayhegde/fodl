@@ -192,7 +192,7 @@ A bit of reflection will suggest that the infimum of $L$ is indeed 0, but 'zero-
 {:.proof}
 
 **Remark**{:.label #convergence rate}
-  Convergence happens, but at a very slow rate of $\frac{1}{\log (t)}$, which is way slower than all the results we showed in Chapter 4.
+  Convergence happens, but at rate $\frac{1}{\log (t)}$, which is way slower than all the rates we showed in Chapter 4. (Prove this?)
 {:.remark}
 
 Therefore, we have seen that in linear models, gradient flow induces implicit $\ell_2$-bias for:
@@ -202,7 +202,7 @@ Therefore, we have seen that in linear models, gradient flow induces implicit $\
 
 What about other choices of loss? Ji et al.[^ji2020] showed a similar directional convergence result for general *exponentially tailed* loss functions, while clarifying that the limit direction may differ across different losses.
 
-More pertinently, what about other choices of *architecture*? We examine this next.
+More pertinently, what about other choices of *architecture* (beyond linear models)? We examine this next.
 
 ## Nonlinear models and incremental learning
 {:.label}
