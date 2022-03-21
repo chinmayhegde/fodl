@@ -114,13 +114,11 @@ We have the following:
 
 **Lemma**{:.label #GFL2}
   Gradient flow over the squared error loss converges to the minimum $\ell_2$-norm interpolator:
-
   $$
   \begin{aligned}
   w^* = \arg \min_w \lVert w \rVert^2,~\text{s.t.}~y = Xw.
   \end{aligned}
   $$
-
   In other words, GF provides an implicit bias towards an $\ell_2$-regularized solution.
 {:.lemma}
 
