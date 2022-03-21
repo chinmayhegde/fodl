@@ -205,6 +205,16 @@ More pertinently, what about other choices of *architecture* (beyond linear mode
 ## Nonlinear models and incremental learning
 {:.label}
 
+The picture becomes much more murky (and, frankly, really fascinating) when we move beyond linear models. For nonlinear models, the span argument that we used in the above proofs is no longer valid. Moreover, as we will show below the architecture plays a fundamental role in the gradient dynamics, which further goes to show that *both* representation and optimization method play a crucial role in inducin algorithmic bias.
+
+A linear model of the form $u = \lang w, x \rang$ can be viewed as a *single* neuron with linear activation. Let us persist with linear activations for some more time, but graduate to *multiple layers of neurons*. One such model is called a *diagonal linear network model*:
+
+$$
+u = \sum_{j=1}^d v_j u_j x_j ,
+$$
+
+where the weights $(u_j, v_j)$ are trainable. This model, of course, is merely a re-parameterization of a single neuron and can only express linear functions. However, the weights interact multiplicatively, and therefore the output is a *nonlinear function of the weights*. This re-parameterization makes a world of difference in the context of gradient dynamics, and leads to a *very* different form of algorithmic bias.
+
 ## Implicit bias of ReLU networks
 {:.label}
 
