@@ -131,7 +131,7 @@ We have the following:
 
   which is always a vector in the *span* of the data points. This means that if $w(0) = 0$, then the weights at any time $t$ continues to remain in this span. (Geometrically, the span of the data forms an $n$-dimensional subspace in the $d$-dimensional weight space, so the invariance being preserved here is that the path of gradient descent always lies within this subspace.)
 
-  Now, *assume* that GF converges to a global minimizer, $w^* $. We need to be a bit careful and actually prove that global convergence happens. But we already know that GF/GD minimizes convex loss functions, so let us not repeat the calculations from Chapter 4. Therefore, $w^* = X^T \alpha$ for some set of coefficients $\alpha$. But we also know that since $w^* $ is a global minimizer, $Xw^* = y$, which means that
+  Now, *assume* that GF converges to a global minimizer, $\bar{w}$. We need to be a bit careful and actually prove that global convergence happens. But we already know that GF/GD minimizes convex loss functions, so let us not repeat the calculations from Chapter 4. Therefore, $\bar{w} = X^T \alpha$ for some set of coefficients $\alpha$. But we also know that since $\bar{w}$ is a global minimizer, $X\bar{w} = y$, which means that
 
   $$
   XX^T \alpha = y, \quad \text{or} \quad \alpha = (XX^T)^{-1} y.
@@ -140,7 +140,7 @@ We have the following:
   where the inverse exists since the data is in general position. Therefore,
 
   $$
-  w^* =  X^T (XX^T)^{-1} y
+  \bar{w} =  X^T (XX^T)^{-1} y
   $$
   which is the [Moore-Penrose inverse](https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse), or pseudo-inverse, of $X$ applied to $y$. From basic linear algebra we know that the pseudo-inverse gives the minimum-norm solution to the linear system $y = Xw$.
 {:.proof}
@@ -159,7 +159,7 @@ $$
 L(w) = \sum_{i=1}^n \exp(- y_i \lang w, x_i \rang) .
 $$
 
-A bit of reflection will suggest that the infimum of $L$ is indeed 0, but 'zero-loss' is attained only when the norm of $w$ diverges to infinity. (**Exercise**: Prove this.) Therefore, we will need to define 'convergence' a bit more carefully. The right way to think about it is to look at convergence *in direction*; for linear classification, the norm of $w$ does not really matter --- so we can examine the properties of $\lim w(t)/\lVert w(t) \rVert$ as $t \rightarrow \infty$. We obtain:
+A bit of reflection will suggest that the infimum of $L$ is indeed 0, but 'zero-loss' is attained only when the norm of $w$ diverges to infinity. (**Exercise**: Prove this.) Therefore, we will need to define 'convergence' a bit more carefully. The right way to think about it is to look at convergence *in direction*; for linear classification, the norm of $w$ does not really matter --- so we can examine the properties of $\lim w(t)/\lVert w(t) \rVert$ as $t \rightarrow \infty$. We obtain the following:
 
 **Theorem**{:.label #GFexp}
   Let $w^*$ be the hard-margin SVM solution, or the minimum $\ell_2$-norm interpolator:
@@ -204,6 +204,59 @@ More pertinently, what about other choices of *architecture* (beyond linear mode
 
 ## Nonlinear models and incremental learning
 {:.label}
+
+
+### Diagonal linear models
+
+
+For simplicity, let's just assume that $u_i = v_i$ for $i \in [d]$. (I don't believe this is important, and similar conclusions should hold even if no weight tying occurs.)
+
+Then, the prediction for any data point $x \in \R^d$ becomes
+
+$$
+y = \sum_{j=1}^d x_j u_j^2
+$$
+
+or if we stack up the training data then
+
+$$
+y = X (u \circ u)
+$$
+
+where $\circ$ denotes the element-wise (Hadamard) product. This is called a "two-layer diagonal linear network", and the extension to $L$-layers is analogous. Notice that by using this re-parameterization, we have not done very much in terms of expressiveness.
+
+(*Actually, not quite true; square reparameterization only expresses linear models $y = Xw$ with the restriction that $w \geq 0$. But this can be fixed easily as follows: introduce 2 sets of variables $u$ and $v$, and write $y = X(u\circ u - v\circ v)$.*)
+
+However, this simple variable switch induces a curious algorithmic bias. Let's stick with the squared error loss:
+
+$$
+L(u) = \frac{1}{2} \lVert y - X(u \circ u) \rVert^2
+$$
+
+and suppose we perform gradient flow over this loss. Since $L$ is a fourth-order polynomial (quartic) function of $u$, the gradient at any $u$ is a bit more complicated. It's in fact a *cubic* function of $u$:
+
+$$
+\frac{du}{dt} = - \nabla_u L(u) = 2 u \circ X^T (y - X (u \circ u)) .
+$$
+
+We get the following:
+
+
+**Theorem**{:.label #GFLasso}
+  Let $w^*$ be the (non-negative) interpolator with minimum $\ell_1$-norm:
+
+  $$
+  \begin{aligned}
+  w^* = \arg \min_w \lVert w \rVert_1,~\text{s.t.}~y = Xw,~w \geq 0.
+  \end{aligned}
+  $$
+
+  Then, if gradient flow for diagonal linear networks converges to $\bar{u}$, then $\bar{w} = \bar{u} \circ \bar{u}$ converges to $w^*$.
+{:.theorem}
+
+**Proof sketch**{:.label #GFLassoProof}
+  (Complete.)
+{:.proof}
 
 ## Implicit bias of ReLU networks
 {:.label}
