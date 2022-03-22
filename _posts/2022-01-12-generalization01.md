@@ -213,12 +213,12 @@ $$
 u = \sum_{j=1}^d v_j u_j x_j ,
 $$
 
-where the weights $(u_j, v_j)$ are trainable. This model, of course, is merely a re-parameterization of a single neuron and can only express linear functions. However, the weights interact multiplicatively, and therefore the output is a *nonlinear function of the weights*. This re-parameterization makes a world of difference in the context of gradient dynamics, and leads to a *very* different form of algorithmic bias.
+where the weights $(u_j, v_j)$ are trainable. This model, of course, is merely a re-parameterization of a single neuron and can only express linear functions. However, the weights interact multiplicatively, and therefore the output is a *nonlinear function of the weights*. This re-parameterization makes a world of difference in the context of gradient dynamics, and leads to a *very* different form of algorithmic bias, as we will show below.
 
 ### Diagonal linear models
 {:.label}
 
-For simplicity, let's just assume that $u_i = v_i$ for $i \in [d]$. (I don't believe that this assumption is important; similar conclusions should hold even if no weight tying occurs.)
+For simplicity, let's just assume that the *weights are tied* across layers, i.e., $u_i = v_i$ for $i \in [d]$. (I don't believe that this assumption is important; similar conclusions should hold even if no weight tying occurs.)
 
 Then, the prediction for any data point $x \in \R^d$ becomes
 
@@ -242,7 +242,7 @@ $$
 L(u) = \frac{1}{2} \lVert y - X(u \circ u) \rVert^2
 $$
 
-and suppose we perform gradient flow over this loss. Since $L$ is a fourth-order polynomial (quartic) function of $u$, the gradient at any $u$ is a bit more complicated:
+and suppose we perform gradient flow over this loss. Since $L$ is a fourth-order polynomial (quartic) function of $u$, the ODE governing the gradient at any time instant is a bit more complicated:
 
 $$
 \frac{du}{dt} = - \nabla_u L(u) = 2 u \circ X^T (y - X (u \circ u)) .
@@ -262,11 +262,11 @@ Somewhat curiously, we can prove that if $\alpha$ is small enough then the algor
   \end{aligned}
   $$
 
-  Suppose that gradient flow for diagonal linear networks converges to an esstimate $\bar{u}$. Then $\bar{w} = \bar{u} \circ \bar{u}$ converges to $w^*$ as $\alpha \rightarrow 0$.
+  Suppose that gradient flow for diagonal linear networks converges to an estimate $\bar{u}$. Then $\bar{w} = \bar{u} \circ \bar{u}$ converges to $w^*$ as $\alpha \rightarrow 0$.
 {:.theorem}
 
 **Proof sketch**{:.label #GFLassoProof}
-  It all comes down to the optimization dynamics. It will be helpful to understand two types of dynamics: one in the original (canonical) linear parameterization in terms of $w$, and the other in the square re-parameterization (in terms of $u$). By definition, we have $w_j = u_j^2$, and therefore
+  This proof is by Woodworth et al.[^woodworth] Let us give high level intuition first. It will be helpful to understand two types of dynamics: one in the original (canonical) linear parameterization in terms of $w$, and the other in the square re-parameterization (in terms of $u$). By definition, we have $w_j = u_j^2$, and therefore
 
   $$
   \frac{dw_j}{dt} = 2u_j \frac{du_j}{dt} .
@@ -282,11 +282,83 @@ Somewhat curiously, we can prove that if $\alpha$ is small enough then the algor
   \end{aligned}
   $$
 
-  Aside: This resembles gradient flow over the standard $\ell_2$-loss, *except* that each coordinate is multiplied with $w_i(t)$. Intuitively, this induces a "rich-get-richer" phenomenon: a bigger coefficient in $w(t)$ is assigned a larger gradient update (relative to the other coefficients) and therefore "moves" towards its final destination faster. Gissin et al.[^gissin] call this *incremental learning*: large coefficients are learned (approximately) in decreasing order of their magnitude.
+  This resembles gradient flow over the standard $\ell_2$-loss, *except* that each coordinate is multiplied with $w_i(t)$. Intuitively, this induces a "rich-get-richer" phenomenon: a bigger coefficient in $w(t)$ is assigned a larger gradient update (relative to the other coefficients) and therefore "moves" towards its final destination faster.
 
-  
+  Gissin et al.[^gissin] call this *incremental learning*: large coefficients are learned (approximately) in decreasing order of their magnitude. (See their paper/website for some terrific visualizations of the dynamics.)
 
+  ---
+
+  To rigorously argue that the bias indeed is the $\ell_1$-regularizer, let $e(t) = y - X w(t)$ denote the prediction error at any time instant. Then, as shown above, we have the ODE:
+
+  $$
+  \frac{du}{dt} = 2 u(t) \circ X^T e(t) .
+  $$
+
+  Solving this equation coordinate-wise, we get the closed form solution:
+
+  $$
+  u(t) = u(0) \circ \exp\left( 2 X^T \int_0^t e(s) ds \right) .
+  $$
+
+  Plugging in the initialization $u(0) = \alpha \mathbf{1}$ and $w(t) = u(t) \circ u(t)$, we get:
+
+  $$
+  w(t) = \alpha^2 \mathbf{1} \circ \exp\left( 4 X^T \int_0^t e(s) ds \right).
+  $$
+
+  Therefore, *assuming* the dynamics converges (technically we need to prove this, but let's sweep that under the rug for now), we get that the limit of gradient flow gives:
+
+  $$
+  \bar{w} = f(X^T \lambda)
+  $$
+
+  where $f$ is a coordinate-wise function such that $f(z):= \alpha^2 \exp(z)$ and $\lambda := 4 \int_0^\infty e(s) ds$. Since $\alpha > 0$, $f$ is bijective and therefore
+
+  $$
+  X^T \lambda = f^{-1}(\bar{w}) = \log \frac{\bar{w}}{\alpha^2} .
+  $$
+
+  Now, *assume* that the algorithmic bias of GF can be expressed by some unique regularizer $Q(w)$. (Again, we are making a major assumption here that the bias is expressible in the form of a well-defined function of $w$, but let's do more rug+sweeping here.) We will show that $Q(w)$ approximately equals the $\ell_1$-norm of $w$. We get:
+
+  $$
+  \bar{w} = \arg \min_w Q(w), \quad y = Xw.
+  $$
+
+  KKT optimality tells us that the optimum ($\bar{w}$) should satisfy:
+
+  $$
+  y = X\bar{w}, \quad \nabla_w Q(\bar{w}) = X^T \lambda.
+  $$
+
+  for some vector $\lambda$. Therefore, we can reverse-engineer $Q$ by solving the differential equation:
+
+  $$
+  \nabla_w Q(w) = \frac{1}{\alpha^2} \log w .
+  $$
+
+  This (again) has the closed form solution:
+
+  $$
+  \begin{aligned}
+  Q(w) &= \sum_{i=1}^d \int_{0}^{w_i} \log \frac{w_i}{\alpha^2} dw_i \\
+  &= \sum_{i=1}^d w_i \log \frac{w_i}{\alpha^2} - w_i \\
+  &= \sum_{i=1}^d 2w_i \log \frac{1}{\alpha} +  \sum_{i=1}^d (w_i \log w_i - w_i) .
+  \end{aligned}
+  $$
+
+  Therefore, as $\alpha \rightarrow 0$, the first term starts to (significantly) dominate the second, and we can therefore write:
+
+  $$
+  Q(w) \approx C_\alpha \sum_{i=1}^d w_i \propto \lVert w \rVert_1 ,
+  $$
+
+  due to the fact that $w$ is non-negative by definition.
 {:.proof}
+
+
+**Remark**{:.label #kernelvsrich}
+  The above proof shows (again) that the algorithmic bias of gradient descent *highly* depends on the initialization; the fact that $\alpha \rightarrow 0$ was crucial in establishing $\ell_1$-bias.  
+{:.remark}
 
 ## Implicit bias of ReLU networks
 {:.label}
@@ -316,3 +388,6 @@ Somewhat curiously, we can prove that if $\alpha$ is small enough then the algor
 
 [^gissin]:
     D. Gissin, S. Shalev-Shwartz, A. Daniely, [The Implicit Bias of Depth: How Incremental Learning Drives Generalization](https://openreview.net/pdf?id=H1lj0nNFwB), 2020.
+
+[^woodworth]:
+    B. Woodworth, S. Gunasekar, J. Lee, E. Moroshko, P. Savarse, I. Golan, D. Soudry, N. Srebro, [Kernel and Rich Regimes in Overparametrized Models](http://proceedings.mlr.press/v125/woodworth20a/woodworth20a.pdf), 2020.
