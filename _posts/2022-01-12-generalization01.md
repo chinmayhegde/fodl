@@ -202,12 +202,12 @@ What about other choices of loss? Ji et al.[^ji2020] showed a similar directiona
 
 More pertinently, what about other choices of *architecture* (beyond linear models)? We examine this next.
 
-## Nonlinear models and incremental learning
+## Implicit bias in multilinear models
 {:.label}
 
-The picture becomes much more murky (and, frankly, really fascinating) when we move beyond linear models. For nonlinear models, the span argument that we used in the above proofs is no longer valid. Moreover, as we will show below the architecture plays a fundamental role in the gradient dynamics, which further goes to show that *both* representation and optimization method play a crucial role in inducing algorithmic bias.
+The picture becomes much more murky (and, frankly, really fascinating) when we move beyond linear models. As we will show below the architecture plays a fundamental role in the gradient dynamics, which further goes to show that *both* representation and optimization method play a crucial role in inducing algorithmic bias.
 
-A linear model of the form $u = \lang w, x \rang$ can be viewed as a *single* neuron with linear activation. Let us persist with linear activations for some more time, but graduate to *multiple layers of neurons*. One such model is called a *diagonal linear network model*:
+A linear model of the form $u = \lang w, x \rang$ can be viewed as a *single* neuron with linear activation. Let us persist with linear activations for some more time, but graduate to *multiple layers of neurons*. One such model is called a *two-layer diagonal linear network model*:
 
 $$
 u = \sum_{j=1}^d v_j u_j x_j ,
@@ -218,7 +218,7 @@ where the weights $(u_j, v_j)$ are trainable. This model, of course, is merely a
 ### Diagonal linear models
 {:.label}
 
-For simplicity, let's just assume that the *weights are tied* across layers, i.e., $u_i = v_i$ for $i \in [d]$. (I don't believe that this assumption is important; similar conclusions should hold even if no weight tying occurs.)
+For simplicity, let's just assume that the *weights are tied* across layers, i.e., $u_i = v_i$ for $i \in [d]$. I don't believe that this assumption is important; similar conclusions should hold even if no weight tying occurs.
 
 Then, the prediction for any data point $x \in \R^d$ becomes
 
@@ -234,7 +234,7 @@ $$
 
 where $\circ$ denotes the element-wise (Hadamard) product. This is called a "two-layer diagonal linear network", and the extension to $L$-layers is analogous. Notice that by using this re-parameterization, we have not done very much in terms of expressiveness.
 
-(*Actually, not quite true; square reparameterization only expresses linear models $y = Xw$ with the restriction that $w \geq 0$. But this can be fixed easily as follows: introduce 2 sets of variables $u$ and $v$, and write $y = X(u\circ u - v\circ v)$.*)
+(*Actually, the last statement is not very precise; square reparameterization only expresses linear models $y = Xw$, but with the added restriction that $w \geq 0$. But this can be fixed easily as follows: introduce 2 sets of variables $u$ and $v$, and write $y = X(u\circ u - v\circ v)$.*)
 
 Let's stick with the squared error loss:
 
@@ -248,8 +248,7 @@ $$
 \frac{du}{dt} = - \nabla_u L(u) = 2 u \circ X^T (y - X (u \circ u)) .
 $$
 
-Notice now that the gradient in fact is now a *cubic* function of $u$.
-Suppose that we initialize $u = \alpha \mathbf{1}$, where $\mathbf{1}$ is the all-ones vector and $\alpha > 0$ is a scalar. (This is fine since in the end we will only be interested in models with positive coefficients.)
+Notice now that the gradient in fact is now a *cubic* function of $u$. Suppose that we initialize $u = \alpha \mathbf{1}$, where $\mathbf{1}$ is the all-ones vector and $\alpha > 0$ is a scalar. (This is fine since in the end we will only be interested in models with positive coefficients.)
 
 Somewhat curiously, we can prove that if $\alpha$ is small enough then the algorithmic bias corresponding to gradient flow corresponds to $\ell_1$-regularization (i.e., we recover the familiar *basis pursuit* or [Lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) formulation. Formally, we get the following:
 
@@ -369,11 +368,41 @@ Somewhat curiously, we can prove that if $\alpha$ is small enough then the algor
 {:.remark}
 
 **Remark**{:.label #noise}
-  All of the above assume that the limit of gradient flow admits an exact interpolation. In the presence of *noise* in the labels the situation is a bit more subtle, and a more careful analysis of the ODEs is necessary; for example, see this paper[^li].
+  All of the above assume that the limit of gradient flow admits an exact interpolation. In the presence of *noise* in the labels the situation is a bit more subtle, and a more careful analysis of the ODEs is necessary; in some cases, for consistent generalization, *early stopping* may be necessary. See our paper for details[^li].
 {:.remark}
 
-## Implicit bias of ReLU networks
+**Remark**{:.label #matrixfactorization}
+  (Two-layer dense nets and nuclear norm regularization) (**complete**).
+{:.remark}
+
+## Implicit bias of gradient descent in nonlinear networks
 {:.label}
+
+As we saw above, changing the architecture fundamentally changes the gradient dynamics (and therefore the implicit regularization induced during training.) But our discussion above focused on networks with linear activations. How does the picture change with more standard networks (such as those with ReLU activations?)
+
+Not surprisingly, life becomes harder when dealing with nonlinearities. Yet, the tools above pave a way to understand algorithmic bias for such networks. Let's start simple and work our way up.
+
+### Single neurons
+{:.label}
+
+Consider a single neuron with nonlinear activation $\psi : \R \rightarrow \R$. The model becomes:
+
+$$
+u = \psi(\langle w,x \rangle),
+$$
+
+and we will use the squared error loss to train it:
+
+$$
+L(w) = \frac{1}{2} \lVert y - \psi(Xw) \rVert^2
+$$
+
+where $X$ is the data matrix.
+
+### Multiple layers
+{:.label}
+
+Two-layer nets. **complete**.
 
 ---
 
