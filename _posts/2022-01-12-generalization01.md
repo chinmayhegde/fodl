@@ -357,7 +357,19 @@ Somewhat curiously, we can prove that if $\alpha$ is small enough then the algor
 
 
 **Remark**{:.label #kernelvsrich}
-  The above proof shows (again) that the algorithmic bias of gradient descent *highly* depends on the initialization; the fact that $\alpha \rightarrow 0$ was crucial in establishing $\ell_1$-bias.  
+  The above proof shows (again) that the algorithmic bias of gradient descent *highly* depends on the initialization; the fact that $\alpha \rightarrow 0$ was crucial in establishing $\ell_1$-bias. On the other hand, a *different* initialization with $\alpha \rightarrow \infty$ leads to a completely different bias: GF automatically provides $\ell_2$-regularization.[^woodworth] Woodworth et al. categorize these two distinct behaviors of gradient descent as respectively operating in the "rich" and "kernel" regimes.
+{:.remark}
+
+**Remark**{:.label #shape}
+  The fact that $u(0)$ was initialized with a constant vector (with magnitude $\alpha$) is unimportant; one can impose different forms of bias with varying choices (or "shapes") of the initialization[^woodworth2].
+{:.remark}
+
+**Remark**{:.label #shape}
+  At its core, the net effect of square reparameterization is to alter the *optimization geometry* of gradient descent. This can be connected to classical optimization theory in general Banach spaces, and indeed the dynamics of diagonal linear networks can be viewed as a form of *mirror descent* (MD). See here[^optgeom] and here[^mirror] for a more thorough treatment.
+{:.remark}
+
+**Remark**{:.label #noise}
+  All of the above assume that the limit of gradient flow admits an exact interpolation. In the presence of *noise* in the labels the situation is a bit more subtle, and a more careful analysis of the ODEs is necessary; for example, see this paper[^li].
 {:.remark}
 
 ## Implicit bias of ReLU networks
@@ -391,3 +403,15 @@ Somewhat curiously, we can prove that if $\alpha$ is small enough then the algor
 
 [^woodworth]:
     B. Woodworth, S. Gunasekar, J. Lee, E. Moroshko, P. Savarse, I. Golan, D. Soudry, N. Srebro, [Kernel and Rich Regimes in Overparametrized Models](http://proceedings.mlr.press/v125/woodworth20a/woodworth20a.pdf), 2020.
+
+[^woodworth2]:
+    S. Azulay, E. Moroshko, M. Naczon, N. Srebro, B. Woodworth, A. Globerson, D. Soudry, [On the Implicit Bias of Initialization Shape: Beyond Infinitesimal Mirror Descent](http://proceedings.mlr.press/v139/azulay21a/azulay21a.pdf), 2021.
+
+[^optgeom]:
+    S. Gunasekar, J. Lee, D. Soudry, N. Srebro, [Characterizing Implicit Bias in Terms of Optimization Geometry](http://proceedings.mlr.press/v80/gunasekar18a/gunasekar18a.pdf), 2018.
+
+[^mirror]:
+    S. Gunasekar, B. Woodworth, N. Srebro, [Mirrorless Mirror Descent: A Natural Derivation of Mirror Descent](http://proceedings.mlr.press/v130/gunasekar21a/gunasekar21a.pdf), 2021.
+
+[^li]:
+    J. Li, T. Nguyen, C. Hegde, R. Wong, [Implicit Sparse Regularization: The Impact of Depth and Early Stopping](https://arxiv.org/pdf/2108.05574.pdf), 2021.
