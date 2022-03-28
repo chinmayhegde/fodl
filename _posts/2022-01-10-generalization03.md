@@ -1,15 +1,23 @@
 ---
 layout: page
-title: Chapter 9 - Double Descent
+title: Chapter 9 - Uniform stability
 categories: generalization
 date: 2022-01-10
 ---
 
 
-**Under construction**.
+
+Central hypothesis:
+
+```
+Stable learning implies generalization.
+```
 
 ## Setup
-{.label}
+{:.label}
 
-## Bias-varianc tradeoffs
-{.label}
+## Algorithmic regularization of SGD
+{:.label}
+
+## Connections to differential privacy
+{:.label}
