@@ -385,7 +385,7 @@ Not surprisingly, life becomes harder when dealing with nonlinearities. Yet, the
 ### Single neurons
 {:.label}
 
-Consider a single neuron with nonlinear activation $\psi : \R \rightarrow \R$. The model becomes:
+Consider a network consisting of a single neuron with nonlinear activation $\psi : \R \rightarrow \R$. The model becomes:
 
 $$
 u = \psi(\langle w,x \rangle),
@@ -397,7 +397,24 @@ $$
 L(w) = \frac{1}{2} \lVert y - \psi(Xw) \rVert^2
 $$
 
-where $X$ is the data matrix.
+where $X$ is the data matrix. We train the above (single-neuron) network using gradient flow. The following proof is by Vardi and Shamir[^vardi3].
+
+**Theorem**{:.label #GFNeuron}
+  Suppose that $\psi : \R \rightarrow \R$ is a monotonic function. If gradient flow over $L(w)$ converges to zero loss, then the limit $\bar{w}$ automatically satisfies:
+
+  $$
+  \begin{aligned}
+  w^* = \arg \min_w \lVert w \rVert^2,~\text{s.t.}~y = \psi(Xw).
+  \end{aligned}
+  $$
+
+  In other words, GF provides an implicit bias towards an $\ell_2$-regularized solution.  
+{:.theorem}
+**Proof**{:.label #GFNeuronProof}
+  Reduce to linear case using monotonicity. **(complete)**
+{:.proof}
+
+Activation functions such as leaky-ReLU, sigmoid etc do satisfy monotonicity. (For sigmoid, convergence to zero loss is a bit tricky because of non-convexity.) What about the regular ReLU? This is more difficult, and there does not appear to be a clean "norm"-based regularizer.  
 
 ### Multiple layers
 {:.label}
@@ -444,3 +461,6 @@ Two-layer nets. **complete**.
 
 [^li]:
     J. Li, T. Nguyen, C. Hegde, R. Wong, [Implicit Sparse Regularization: The Impact of Depth and Early Stopping](https://arxiv.org/pdf/2108.05574.pdf), 2021.
+
+[^vardi3]:
+    G. Vardi and O. Shamir, [Implicit Regularization in ReLU Networks with the Square Loss](https://arxiv.org/pdf/2012.05156.pdf), 2020.
