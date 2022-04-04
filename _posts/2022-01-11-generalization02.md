@@ -45,19 +45,62 @@ macros["\\f"] = "\\mathscr{F}"
 {:.remark}
 
 **Remark**{:.label #GenRemark1}
-  The scaling of the sample complexity looks like $n \approx \log |\f|$, which basically is the number of "bits" needed to encode any particular hypothesis. 
+  The scaling of the sample complexity looks like $n \approx \log |\f|$, which basically is the number of "bits" needed to encode any particular hypothesis.
 {:.remark}
 
 
 ## Complexity measures
 {:.label}
 
+Long list of ways to extend the above reasoning to
+
 ### Agnostic (PAC) learning
 
 ### Data-dependent bounds
 
-## Error bounds for deep networks
+### PAC-Bayes bounds
+
+Possibly first approach to produce "non-vacuous" bounds, at least for small networks. Key results: basic approach[^mcallester], application to DL[^dzuigateroy18].
+
+## Error bounds for (deep) neural networks
 {:.label}
 
-## PAC-Bayes
+Key results: here[^bartlett97], here[^bartlett98], here[^bartlett19].
+
+## Possible roadblocks?
 {:.label}
+
+All of the above bounds lead to generalization bounds of the form:
+
+$$
+\text{Test error} \leq \text{train error}~+~O \left(\frac{\text{complexity measure}}{\sqrt{n}}\right),
+$$
+
+and progress has been focused on defining better and better complexity measures. However, two issues with this:
+
+* Usually, the complexity measure in the numerator is far too large anyway, leading to "vacuous" bounds. For example, in [^bartlett19] it reduces to $\text{depth} \times \text{width}$, which is too large in the overparameterized setting.
+
+* This also (seemingly) means that error bounds should decrease with dataset size, for a fixed model class. Not the case :( .
+
+
+A recent result provides evidence[^nagarajan19] to show that *any* result that uses uniform convergence may suffer from this kind of looseness. We likely need alternate techniques, which we will do next.
+
+---
+
+[^bartlett97]:
+    P. Bartlett, [For Valid Generalization the Size of the Weights is More Important than the Size of the Network](https://proceedings.neurips.cc/paper/1996/file/fb2fcd534b0ff3bbed73cc51df620323-Paper.pdf), 1997.
+
+[^bartlett98]:
+    P. Bartlett, V. Maiorov, R. Meir, [Almost Linear VC Dimension Bounds for Piecewise Polynomial Networks](https://proceedings.neurips.cc/paper/1998/file/bc7316929fe1545bf0b98d114ee3ecb8-Paper.pdf), 1998.
+
+[^bartlett19]:
+    P. Bartlett, N. Harvey, C. Liaw, A. Mehrabian,  [Nearly-tight VC-dimension and Pseudodimension Bounds for Piecewise Linear Neural Networks](https://www.jmlr.org/papers/volume20/17-612/17-612.pdf), 2019.
+
+[^dzuigateroy18]:
+    G. K. Dziugaite, D. Roy, [Computing Nonvacuous Generalization Bounds for Deep (Stochastic) Neural Networks with Many More Parameters than Training Data](https://arxiv.org/pdf/1703.11008.pdf), 2017.
+
+[^mcallester]:
+    D. Mcallester, [Some PAC-Bayesian Theorems](https://link.springer.com/article/10.1023/A:1007618624809), 1999.
+
+[^nagarajan19]:
+    V. Nagarajan, Z. Kolter, [Uniform convergence may be unable to explain generalization in deep learning](https://arxiv.org/pdf/1902.04742.pdf), 2019.
