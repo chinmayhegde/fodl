@@ -191,7 +191,7 @@ We are now ready to prove our first result.
   (since $L_\text{opt}$ is the smallest achievable loss.) Therefore, if we pick $i = \arg \min_{i < t} \nabla \lVert L(w_i) \rVert^2$ as the estimate with lowest gradient norm and set $\hat{w} = w_{i}$, then we get:
 
   $$
-  \frac{t}{2\beta} \lVert L(\hat{w}) \rVert^2 \leq L_0 - L_{\text{opt}},
+  \frac{t}{2\beta} \lVert \nabla L(\hat{w}) \rVert^2 \leq L_0 - L_{\text{opt}},
   $$
 
   which implies that if $L_0$ is bounded (i.e.: we start somewhere reasonable) then GD reaches a point $\hat{w}$ within at most $t$ iterations whose gradient norm is
