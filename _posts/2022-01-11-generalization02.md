@@ -52,11 +52,17 @@ macros["\\f"] = "\\mathscr{F}"
 ## Complexity measures
 {:.label}
 
-Long list of ways to extend the above reasoning to
+Long list of ways to extend the above reasoning. The major drawback is that the above bound is meaningful only for hypothesis classes $\f$ with finite cardinality.  Alternatives:
+
+* Covering number
+* VC-dimension
+* Pseudo-dimension
 
 ### Agnostic (PAC) learning
 
 ### Data-dependent bounds
+
+Definition of Rademacher complexity, upper bounds for NN.
 
 ### PAC-Bayes bounds
 
