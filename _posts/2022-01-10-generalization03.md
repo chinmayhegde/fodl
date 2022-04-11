@@ -45,12 +45,23 @@ Further refined in the context of empirical risk minimization by Shalev-Schwartz
 
 ### Beyond convexity
 
-Stability under smoothness + PL-condition. Key paper: 
+Stability under smoothness + PL-condition. Key paper: here[^plstability].
 
 ## Connections to differential privacy
 {:.label}
 
+Fascinating parallels between
 
+* generalization via uniform stability
+* differential privacy (DP)
+
+which has a different origin story, dating back to several papers by Dwork and co-authors [^dwork1] [^dwork2] [^dwork3].
+
+In DP the goal is to protect "data leakage" -- nothing about the user's identity (as far as possible) should be revealed from the model parameters. But the *method* to achieve is the same as the ones we discussed above: make sure the model does not depend on any one data point too much.
+
+Upshot: DP implies uniform stability (and DP-style algorithm design gives a way to control generalization.)
+
+_**Complete**_.
 
 ---
 
@@ -62,3 +73,15 @@ Stability under smoothness + PL-condition. Key paper:
 
 [^ermstability]:
     S. Shalev-Schwartz, O. Shamir, K. Sridharan, N. Srebro, [Learnability, Stability and Uniform Convergence](https://jmlr.csail.mit.edu/papers/volume11/shalev-shwartz10a/shalev-shwartz10a.pdf), 2010.
+
+[^plstability]:
+    Z. Charles and D. Papailiopoulos, [Stability and Generalization of Learning Algorithms that Converge to Global Optima](http://proceedings.mlr.press/v80/charles18a/charles18a.pdf), 2018.
+
+[^dwork1]:
+    C. Dwork, [Differential Privacy](https://link.springer.com/chapter/10.1007/11787006_1), 2006.
+
+[^dwork2]:
+    C. Dwork, F. McSherry, K. Nissim, A. Smith, [Calibrating Noise to Sensitivity in Private Data Analysis](https://link.springer.com/chapter/10.1007/11681878_14), 2006.
+
+[^dwork3]:
+    C. Dwork and A. Roth, [The Algorithmic Foundations of Differential Privacy](https://www.cis.upenn.edu/~aaroth/Papers/privacybook.pdf), 2014.
