@@ -153,7 +153,7 @@ We are now ready to prove our first result.
   This means that:
 
   $$
-  w - u = \eta \nabla L(u).
+  w - u = - \eta \nabla L(u).
   $$
 
   Plug this value of $w-u$ into the quadratic upper bound to get:
